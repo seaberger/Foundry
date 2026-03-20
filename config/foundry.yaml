@@ -1,0 +1,40 @@
+# Foundry Configuration
+
+# Server
+server:
+  host: "0.0.0.0"
+  port: 8080
+
+# Inference
+inference:
+  # Backend for character chat/debate: "modal" or "local"
+  backend: "modal"
+  modal_endpoint: ""  # Set after deploying modal_serve.py
+  local_endpoint: "http://localhost:1234/v1"
+  timeout: 120
+
+# Debate settings
+debate:
+  max_turns_per_side: 10
+  moderator_model: ""  # Uses inference backend if empty
+  turn_time_limit: 0   # 0 = no limit
+
+# Default sampler settings
+samplers:
+  temperature: 0.85
+  top_p: 0.92
+  max_tokens: 1024
+
+# Context management
+context:
+  max_length: 16384
+  compaction_threshold: 0.75
+
+# Session storage
+storage:
+  db_path: "data/foundry.db"
+
+# Voice (ElevenLabs)
+voice:
+  enabled: false
+  api_key_env: "ELEVENLABS_API_KEY"
