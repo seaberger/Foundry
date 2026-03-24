@@ -6,10 +6,17 @@ dist/
 build/
 .venv/
 
-# Data
-data/
+# Runtime data (SQLite, images)
+data/foundry.db
+data/images/
 *.db
 *.sqlite
+
+# Training artifacts (large, regenerable)
+data/training/teacher-responses.jsonl
+data/training/student-responses.jsonl
+data/training/madison-dpo.jsonl
+data/training/madison-introspection-sft.jsonl
 
 # IDE
 .vscode/
