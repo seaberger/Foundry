@@ -1,0 +1,293 @@
+/* The Foundry — Period-appropriate modern design */
+
+:root {
+    --parchment: #f5f0e8;
+    --parchment-dark: #e8e0d0;
+    --ink: #2c2416;
+    --ink-light: #5a4e3c;
+    --accent: #8b6914;
+    --accent-hover: #a07a1a;
+    --user-bg: #e3ddd0;
+    --assistant-bg: #f9f6f0;
+    --border: #d4c9b5;
+    --shadow: rgba(44, 36, 22, 0.08);
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-heading: Georgia, 'Times New Roman', serif;
+    --font-mono: 'Courier New', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--parchment);
+    color: var(--ink);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* --- Header --- */
+
+.site-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    border-bottom: 2px solid var(--border);
+    background: var(--parchment-dark);
+}
+
+.site-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+}
+
+.site-subtitle {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    font-style: italic;
+}
+
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* --- Sessions page --- */
+
+.sessions-page h2 {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--ink);
+}
+
+.session-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px var(--shadow);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--ink-light);
+}
+
+.optional {
+    font-weight: normal;
+    font-style: italic;
+}
+
+.form-group select,
+.form-group input {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--parchment);
+    color: var(--ink);
+}
+
+.btn-primary {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding: 0.6rem 1.5rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background 0.15s;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.session-list {
+    margin-top: 1rem;
+}
+
+.session-card {
+    display: block;
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.5rem;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: box-shadow 0.15s;
+}
+
+.session-card:hover {
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.session-character {
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+}
+
+.session-name {
+    margin-top: 0.2rem;
+}
+
+.session-meta {
+    font-size: 0.8rem;
+    color: var(--ink-light);
+    margin-top: 0.2rem;
+}
+
+/* --- Chat page --- */
+
+.chat-page {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 5rem);
+}
+
+.chat-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.back-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.chat-header h2 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+}
+
+.chat-header .session-name {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    font-style: italic;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.message {
+    max-width: 80%;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    line-height: 1.5;
+}
+
+.message-user {
+    align-self: flex-end;
+    background: var(--user-bg);
+    border: 1px solid var(--border);
+}
+
+.message-assistant {
+    align-self: flex-start;
+    background: var(--assistant-bg);
+    border: 1px solid var(--border);
+}
+
+.message-author {
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-light);
+    margin-bottom: 0.3rem;
+}
+
+.message-content {
+    word-wrap: break-word;
+}
+
+/* Streaming cursor */
+.cursor {
+    animation: blink 1s step-end infinite;
+    color: var(--accent);
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* --- Chat input --- */
+
+.chat-input {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.chat-input textarea {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: white;
+    color: var(--ink);
+    resize: none;
+    line-height: 1.4;
+}
+
+.chat-input textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.chat-input .btn-primary {
+    align-self: flex-end;
+}

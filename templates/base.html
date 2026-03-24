@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}The Foundry{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/foundry.css">
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header class="site-header">
+        <a href="/" class="site-title">The Foundry</a>
+        <span class="site-subtitle">Conversations with America's Founders</span>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -8,9 +8,9 @@ server:
 # Inference
 inference:
   # Backend for character chat/debate: "modal" or "local"
-  backend: "modal"
+  backend: "local"
   modal_endpoint: ""  # Set after deploying modal_serve.py
-  local_endpoint: "http://localhost:1234/v1"
+  local_endpoint: "http://192.168.4.28:1234/v1"
   timeout: 120
 
 # Debate settings

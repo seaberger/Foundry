@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Sessions — The Foundry{% endblock %}
+
+{% block content %}
+<div class="sessions-page">
+    <section class="new-session">
+        <h2>Begin a Conversation</h2>
+        <form action="/sessions" method="post" class="session-form">
+            <div class="form-group">
+                <label for="character">Choose a Founder</label>
+                <select name="character" id="character" required>
+                    {% for c in characters %}
+                    <option value="{{ c }}">{{ c | title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="name">Session Name <span class="optional">(optional)</span></label>
+                <input type="text" name="name" id="name" placeholder="e.g., On Federal Power">
+            </div>
+            <button type="submit" class="btn-primary">Enter the Chamber</button>
+        </form>
+    </section>
+
+    {% if sessions %}
+    <section class="session-list">
+        <h2>Previous Sessions</h2>
+        {% for s in sessions %}
+        <a href="/sessions/{{ s.id }}" class="session-card">
+            <div class="session-character">{{ s.character | title }}</div>
+            <div class="session-name">{{ s.name }}</div>
+            <div class="session-meta">{{ s.turn_count }} turns</div>
+        </a>
+        {% endfor %}
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

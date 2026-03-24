@@ -26,6 +26,18 @@ Thumbs.db
 .env
 .env.local
 
+# Source books (copyrighted, not for repo)
+sources/books/
+
+# Hunt edition PDFs (12MB, downloadable from OLL)
+sources/hunt-edition/
+
+# Research paper (private until publication)
+paper/
+
+# OCR artifacts
+*.traineddata
+
 # Training artifacts
 checkpoints/
 runs/
