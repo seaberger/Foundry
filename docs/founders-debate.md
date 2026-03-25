@@ -123,21 +123,23 @@ foundry/
 
 **Pipeline:** Collect writings → LLM conversion to ShareGPT → Constitutional prompt generation → DPO pair construction → quality filter → LoRA fine-tune → evaluate against historical voice
 
-### Autoresearch Integration Opportunities
+### Autoresearch Integration: Recursive Self-Improvement for Character Training
 
-Karpathy's autoresearch pattern (immutable evaluation + mutable artifact + fixed time budget) can be applied to multiple stages of the Foundry fine-tuning pipeline. See `PROJECTS/autoresearch-for-foundry.md` for full analysis.
+Karpathy's autoresearch pattern (immutable evaluation + mutable artifact + fixed time budget) can close the loop on character fine-tuning in a way nobody has published. See `docs/autoresearch-for-foundry.md` for full analysis.
 
-**Opportunity 1: "The Foundry Loop" — Automated Hyperparameter Optimization**
-Apply the autoresearch pattern directly to the DPO training script. The agent modifies LoRA config (rank, alpha, target layers), DPO hyperparameters (beta, learning rate), data selection, and training duration. Each experiment runs a 5-minute QLoRA DPO on Modal A100, evaluates against a fixed Madison authenticity judge, keeps improvements, discards regressions. Could run 100+ experiments overnight at ~$5-20 total.
+**The core insight:** The state of the art (Lambert/Maiya) is single-pass — train once, evaluate, maybe manually retrain. The Foundry Loop automates recursive improvement across four levels:
 
-**Opportunity 2: Automated Data Curation**
-Make the data selection policy the mutable artifact. The agent experiments with: which of the 490 pairs to include/exclude, curriculum ordering (easy→hard), theme weighting, difficulty filtering. Evaluation remains fixed (Madison judge on held-out prompts).
+**Level 1 — Training Recipe Optimization.** Agent modifies LoRA rank, beta, lr, layer targeting. Each 5-minute experiment trains and evaluates against a fixed Madison authenticity judge. ~96 experiments overnight on the RTX 3090.
 
-**Opportunity 3: Madison Authenticity Scorer**
-Use autoresearch to build and refine an LLM-as-judge prompt that scores Madison voice authenticity. Start with the 5K constitution as the rubric. The agent iteratively improves the judge prompt by testing it against known-good (actual Madison writings) and known-bad (modern paraphrases) examples. This scorer then feeds back into the training loop.
+**Level 2 — Data Curation as Mutable Artifact.** Agent experiments with which of the 490 pairs to include/exclude, curriculum ordering, theme weighting, difficulty filtering. Same fixed evaluation, different data selections explored.
 
-**Opportunity 4: Iterative DPO with On-Policy Rejections**
-After each training run, generate new rejected responses from the fine-tuned model itself (on-policy). The autoresearch agent manages the cycle: train → generate on-policy rejections → retrain with improved data → evaluate. Research shows up to 8x data efficiency gains from on-policy data (OPA-DPO).
+**Level 3 — Self-Play Data Generation.** After Levels 1-2 find the best recipe, the trained model generates new responses. These become on-policy rejected examples for the next DPO round — each round forces finer distinctions. SPIN (Self-Play Fine-tuning) automated. Research shows up to 8x data efficiency from on-policy data.
+
+**Level 4 — Judge Refinement.** The judge prompt itself improves (not the constitution — that's immutable ground truth). Agent tests the judge against Madison's verified verbatim writings and modern paraphrases, calibrating discrimination power. Better judge → better training signal → better model.
+
+**Hardware:** Runs overnight on the RTX 3090 (not Modal). Gemma 3 27B 4-bit QLoRA fits in 24GB. Each experiment: 5-min local train → generate 30 responses → Anthropic API judge scores. GPU compute is free; API judge calls cost ~$30-60/night.
+
+**The publishable contribution:** Recursive self-improvement via automated experimentation produces character models that exceed manual tuning — with a reusable methodology for any historical figure.
 
 ### DPO Optimization Findings (March 2026 Research)
 

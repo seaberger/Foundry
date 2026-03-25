@@ -130,6 +130,118 @@ The autoresearch pattern produces a `results.tsv` showing:
 
 ---
 
+## Recursive Self-Improvement for Character Fine-Tuning
+
+### The Gap in the State of the Art
+
+The current state of the art in character fine-tuning (Lambert/Maiya's Open Character Training) is **single-pass**: write a constitution, generate synthetic DPO pairs, train once, evaluate, maybe manually tweak and retrain. Two passes, hand-tuned, done. What nobody has done is **close the loop** — apply recursive self-improvement to character fidelity itself.
+
+### Four Levels of Recursive Improvement
+
+**Level 1 — Training Recipe Optimization**
+The agent modifies LoRA rank, beta, learning rate, layer targeting, batch size. Each experiment trains and evaluates against the fixed Madison authenticity judge. Useful but essentially Optuna with git — not novel by itself.
+
+**Level 2 — Data Curation as the Mutable Artifact**
+Instead of modifying the training script, the agent modifies **which data to train on and in what order**. The 490 pairs become a selection space. The agent experiments with: removing the weakest 10-30% of pairs, reordering by theme, weighting constitutional topics 2x, filtering by difficulty score. The ICML 2025 paper on difficulty filtering and Curry-DPO on curriculum ordering both show these choices matter enormously — but they require manual tuning. An agent explores the combinatorial space overnight.
+
+**Level 3 — Self-Play Data Generation**
+After Levels 1-2 find the best recipe and data selection, the trained model generates new responses. The agent now has three sources of rejected data: (a) original base Gemma responses, (b) Round 1 fine-tuned model responses, (c) Round 2 model responses. Each round, rejected examples get closer to the teacher, forcing the model to learn finer distinctions. This is SPIN (Self-Play Fine-tuning) automated. Research shows up to 8x data efficiency gains from on-policy data, but nobody has automated the iteration loop for character training.
+
+**Level 4 — Judge Refinement (the deepest level)**
+The evaluation function's **judge prompt** can itself be improved — carefully, to avoid reward hacking. The agent doesn't modify the constitution (immutable ground truth). Instead, it refines the instructions that tell the judge how to score responses against the constitution. Test against known-good examples (Madison's actual verbatim writings — our 8 verified response prompts) and known-bad examples (modern paraphrases). A judge that scores Madison's real words at 9 and a modern paraphrase at 3 is better calibrated than one that gives 7 and 5.
+
+The trust boundary holds because the constitution never changes and the verified responses (Madison's actual words) are ground truth that can't be gamed. The judge gets better at *detecting* Madison-ness, not at *redefining* it.
+
+### What This Produces That Nobody Else Has
+
+You go to bed with a baseline Madison model. You wake up with:
+
+1. The optimal LoRA configuration for Gemma 3 27B character imprinting (discovered, not guessed)
+2. The optimal data selection and curriculum from the 490 pairs
+3. A second-generation model trained on its own on-policy failures
+4. A calibrated authenticity scorer that reliably distinguishes real Madison from imitations
+5. A `results.tsv` showing exactly which changes mattered and by how much
+
+The publishable contribution: **recursive self-improvement via automated experimentation produces character models that exceed what manual tuning achieves — and here's the reusable methodology anyone can apply to any historical figure.**
+
+### Running on the RTX 3090 Overnight
+
+The autoresearch loop can run entirely on the local RTX 3090 (24GB VRAM) instead of Modal A100, saving compute credits for the initial training runs.
+
+**Why it works on the 3090:**
+- Gemma 3 27B at 4-bit = ~14GB VRAM for weights
+- QLoRA training with batch_size=1 + gradient accumulation fits in 24GB
+- Each 5-minute experiment: load cached base model, apply QLoRA DPO, evaluate
+- Overnight (8 hours): ~96 experiments at 5 min each
+- Cost: $0 (local hardware)
+
+**Constraints vs A100:**
+- Slower per-experiment (3090 vs A100 throughput)
+- Tighter VRAM budget — batch_size=1 only, shorter max_seq_length may be needed
+- 5-minute budget produces fewer training steps per experiment
+- Evaluation requires generating responses on the same GPU (serial, not parallel)
+
+**Recommended approach:**
+1. Run initial DPO training on Modal A100 (faster, more VRAM headroom, first run needs to work)
+2. Export the baseline LoRA adapter and GGUF
+3. Run the autoresearch loop overnight on the 3090 for Levels 1-2 (recipe + data optimization)
+4. Level 3 self-play rounds can also run on the 3090 — generate responses locally, retrain locally
+5. Use Modal only when needing to export final GGUF or for experiments requiring more VRAM
+
+**3090 autoresearch setup:**
+```
+prepare.py (IMMUTABLE):
+  - Load Gemma 3 27B Q4 + LoRA adapter via Unsloth
+  - Generate responses to 20-30 held-out eval prompts
+  - Score via Anthropic API (judge runs on Claude, not locally)
+  - Return single numeric MadisonScore
+
+train.py (MUTABLE):
+  - QLoRA DPO training on local GPU
+  - All hyperparameters exposed as variables
+  - Data selection/ordering configurable
+  - 5-minute wall-clock budget per experiment
+
+program.md:
+  "Run on local RTX 3090.
+   Train for 5 minutes, evaluate via API judge.
+   Keep improvements, discard regressions.
+   Try: beta sweep, rank sweep, data curriculum, theme weighting.
+   Run overnight. Log to results.tsv."
+```
+
+The judge scoring calls the Anthropic API (Sonnet 4.6) which costs ~$0.01-0.02 per eval prompt × 30 prompts × 96 experiments = ~$30-60 overnight in API costs. This is the main expense — the GPU compute is free.
+
+### The Overnight Schedule
+
+```
+NIGHT 1: Hyperparameter Sweep (Level 1)
+  3090 runs 96 experiments varying beta, rank, lr, layer targeting
+  Each: 5-min train → generate 30 responses → API judge scores
+  Output: optimal training recipe
+
+NIGHT 2: Data Curation Sweep (Level 2)
+  3090 runs 96 experiments varying data selection, ordering, filtering
+  Uses best recipe from Night 1
+  Output: optimal data configuration
+
+NIGHT 3: Self-Play Round (Level 3)
+  Best model from Night 2 generates 490 new responses
+  Score and rank them → build new DPO pairs (teacher vs round-2 model)
+  Train on improved data, evaluate
+  Output: second-generation Madison model
+
+NIGHT 4: Judge Calibration + Final Polish (Level 4)
+  Refine judge prompt against verified responses
+  Retrain with calibrated scoring
+  Export final GGUF via Modal for deployment
+  Output: production Madison model + calibrated evaluation pipeline
+```
+
+Total cost: ~$120-240 in API judge calls + $5-20 for Modal GGUF exports. Zero GPU compute cost.
+
+---
+
 ## Beyond Autoresearch: Additional Novel Ideas
 
 ### Automated Madison Ground-Truth Verification
