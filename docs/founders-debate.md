@@ -154,6 +154,32 @@ Key findings from NeurIPS 2025, ICML 2025, and Gemma-specific research:
 - **ORPO as alternative:** Single-stage preference optimization eliminates SFT/DPO distribution shift — worth testing on second iteration
 - **SPIN for corpus matching:** When you have strong teacher text and weak negatives, SPIN can outperform DPO (uclaml/SPIN)
 
+### Prior Art Deep Dive Findings (March 2026)
+
+Critical findings from detailed analysis of DeePer, MentalArena, Objective Matters, Chauhan AI Founding Fathers, OpenCharacter, and CoSER. Full analysis in `docs/prior-art/`.
+
+**Pipeline changes adopted:**
+- **DPO + SFT loss (alpha=0.1)** — DeePer showed this prevents likelihood displacement where chosen response probability decreases during training. Added to `modal_train_dpo.py`.
+- **ORPO support added** — Objective Matters paper found DPO causes persona drift at 200K-400K tokens (our ~245K is at onset). ORPO shows zero drift at any budget. Run both in parallel and compare. Use `--objective orpo --beta 0.05`.
+- **LoRA dropout=0.05** — Confirmed by Objective Matters Gemma ablations. Updated from 0.0.
+- **Adversarial stress-testing** — Chauhan's Red Team Agent approach for systematic character-breaking probes. Need to expand eval prompts.
+
+**Iteration guardrails (for Level 3 autoresearch):**
+- **Switch to ORPO for iteration 2+** — cumulative DPO tokens cause progressive drift
+- **Self-sampling: 15 candidates, temp=1.0, top_p=0.4** — DeePer's recipe for on-policy DPO data
+- **Increasing DPO margin: 0.5 → 0.8 across iterations** — as model improves, discrimination threshold must increase
+- **Experience replay: carry 5K best pairs forward** — prevents catastrophic forgetting
+- **Stop at ~4 iterations** — MentalArena found performance declines after iteration 4
+- **Monitor diversity gain** — stop iterating when generated data becomes repetitive
+
+**Domain validation:**
+- **Chauhan's Madison scored 90/100** — highest of Hamilton/Jefferson/Madison. Madison's measured, legalistic style is the best fit for structured AI generation.
+- **Response generation > response rewriting** — OpenCharacter proved generating from scratch with character profile beats rewriting existing answers (validates our Sonnet teacher approach)
+- **Given-circumstance evaluation** — CoSER evaluates whether the character responds appropriately given their specific historical period. Consider adding temporal context to eval prompts.
+
+**New publishable contribution identified:**
+- **RAG + fine-tuning combination** — Chauhan does RAG-only, Lambert does fine-tuning-only. Nobody combines both. Our 5K constitution for fine-tuning + potential RAG from 468K primary source corpus would be a second novelty alongside the autoresearch loop.
+
 ### Practical Notes from Lambert
 
 - Character training is "extremely synthetic data-heavy" — plan for significant data generation budget

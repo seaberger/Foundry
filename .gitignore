@@ -41,6 +41,9 @@ secrets.json
 # Source books (copyrighted, not for repo)
 sources/books/
 
+# Prior art papers (copyrighted, downloadable from arxiv)
+docs/prior-art/papers/
+
 # Hunt edition PDFs (12MB, downloadable from OLL)
 sources/hunt-edition/
 

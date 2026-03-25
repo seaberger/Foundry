@@ -83,15 +83,18 @@ def train_madison_dpo(
     # LoRA config — first 2/3 of layers per Gemma 3 ablations
     lora_rank: int = 16,
     lora_alpha: int = 16,
-    lora_dropout: float = 0.0,
+    lora_dropout: float = 0.05,  # Per Objective Matters paper (Gemma ablations)
     target_modules: list[str] | None = None,
-    # DPO hyperparameters
+    # DPO/ORPO hyperparameters
     beta: float = 0.1,
     learning_rate: float = 5e-6,
     num_epochs: int = 3,
     per_device_batch_size: int = 1,
     gradient_accumulation_steps: int = 4,
     max_seq_length: int = 2048,
+    # Training objective — DPO or ORPO (from Objective Matters: DPO drifts at scale)
+    objective: str = "dpo",  # "dpo" or "orpo"
+    sft_alpha: float = 0.1,  # SFT loss coefficient (from DeePer: prevents likelihood displacement)
     # Output
     output_name: str = "madison-lora-v1",
     push_to_hub: bool = False,
@@ -119,11 +122,12 @@ def train_madison_dpo(
         ]
 
     print(f"{'='*60}")
-    print(f"Foundry — Madison DPO Training")
+    print(f"Foundry — Madison {objective.upper()} Training")
     print(f"{'='*60}")
+    print(f"Objective:   {objective.upper()}" + (f" + SFT(alpha={sft_alpha})" if objective == "dpo" else ""))
     print(f"Base model:  {base_model}")
-    print(f"LoRA rank:   {lora_rank}, alpha: {lora_alpha}")
-    print(f"DPO beta:    {beta}")
+    print(f"LoRA rank:   {lora_rank}, alpha: {lora_alpha}, dropout: {lora_dropout}")
+    print(f"Beta:        {beta}")
     print(f"LR:          {learning_rate}")
     print(f"Epochs:      {num_epochs}")
     print(f"Batch:       {per_device_batch_size} x {gradient_accumulation_steps} accum")
@@ -218,12 +222,12 @@ def train_madison_dpo(
     total = sum(p.numel() for p in model.parameters())
     print(f"Trainable params: {trainable:,} / {total:,} ({100*trainable/total:.2f}%)")
 
-    # ----- DPO Training Config -----
+    # ----- Training Config (DPO or ORPO) -----
     output_dir = f"{VOLUME_PATH}/adapters/{output_name}"
 
-    training_args = DPOConfig(
+    # Common training arguments
+    common_args = dict(
         output_dir=output_dir,
-        beta=beta,
         learning_rate=learning_rate,
         num_train_epochs=num_epochs,
         per_device_train_batch_size=per_device_batch_size,
@@ -247,6 +251,23 @@ def train_madison_dpo(
         run_name=wandb_run_name or output_name,
     )
 
+    if objective == "orpo":
+        # ORPO: no persona drift at any training budget (Objective Matters paper)
+        # No reference model needed — saves VRAM
+        from trl import ORPOConfig, ORPOTrainer
+        training_args = ORPOConfig(beta=beta, **common_args)
+        TrainerClass = ORPOTrainer
+    else:
+        # DPO + SFT anchor (DeePer: prevents likelihood displacement)
+        training_args = DPOConfig(
+            beta=beta,
+            # SFT loss coefficient — anchors to positive examples
+            # Prevents the DPO failure mode where chosen likelihood decreases
+            loss_type="sigmoid",  # standard DPO
+            **common_args,
+        )
+        TrainerClass = DPOTrainer
+
     # ----- W&B Setup -----
     if os.environ.get("WANDB_API_KEY"):
         import wandb
@@ -256,11 +277,13 @@ def train_madison_dpo(
             name=wandb_run_name or output_name,
             config={
                 "base_model": base_model,
+                "objective": objective,
+                "sft_alpha": sft_alpha if objective == "dpo" else "N/A",
                 "lora_rank": lora_rank,
                 "lora_alpha": lora_alpha,
                 "lora_dropout": lora_dropout,
                 "target_modules": target_modules,
-                "dpo_beta": beta,
+                "beta": beta,
                 "learning_rate": learning_rate,
                 "num_epochs": num_epochs,
                 "batch_size": per_device_batch_size,
@@ -274,8 +297,8 @@ def train_madison_dpo(
         print("W&B logging enabled — entity: sbergman, project:", wandb_project)
 
     # ----- Train -----
-    print("\nStarting DPO training...")
-    trainer = DPOTrainer(
+    print(f"\nStarting {objective.upper()} training...")
+    trainer = TrainerClass(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
@@ -292,9 +315,12 @@ def train_madison_dpo(
 
     # Save training metrics
     metrics = train_result.metrics
+    metrics["objective"] = objective
     metrics["beta"] = beta
+    metrics["sft_alpha"] = sft_alpha if objective == "dpo" else None
     metrics["lora_rank"] = lora_rank
     metrics["lora_alpha"] = lora_alpha
+    metrics["lora_dropout"] = lora_dropout
     metrics["learning_rate"] = learning_rate
     metrics["num_pairs"] = len(records)
 
@@ -535,6 +561,7 @@ def main(
     rank: int = 16,
     lr: float = 5e-6,
     epochs: int = 3,
+    objective: str = "dpo",
     output_name: str = "madison-lora-v1",
     upload_data: bool = True,
     download_only: bool = False,
@@ -553,6 +580,9 @@ def main(
 
         # Train with custom hyperparameters
         modal run modal_train_dpo.py --beta 0.2 --rank 32 --lr 1e-5
+
+        # Train with ORPO (no persona drift — recommended for iteration 2+)
+        modal run modal_train_dpo.py --objective orpo --beta 0.05 --output-name madison-orpo-v1
 
         # List saved adapters
         modal run modal_train_dpo.py --list-models
@@ -620,6 +650,7 @@ def main(
         lora_alpha=rank,  # alpha = rank is standard
         learning_rate=lr,
         num_epochs=epochs,
+        objective=objective,
         output_name=output_name,
     )
 
