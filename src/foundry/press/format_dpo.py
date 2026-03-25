@@ -29,9 +29,12 @@ STUDENT_PATH = PROJECT_ROOT / "data" / "training" / "student-responses.jsonl"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "training" / "madison-dpo.jsonl"
 
 # Anti-slop patterns — if teacher response contains these, it broke character
+# NOTE: "progressive", "conservative", "nuanced" removed — legitimate in Madison's
+# historical context. Contractions removed — Madison used them in private letters.
+# "great question" uses ^ anchor so only catches it as a greeting, not as noun phrase.
 TEACHER_ANTI_SLOP = [
     r"(?i)^certainly!",
-    r"(?i)^great question",
+    r"(?i)^great question!",          # Only catch as greeting (with !)
     r"(?i)^i'd be happy to",
     r"(?i)^absolutely!",
     r"(?i)let me break this down",
@@ -40,19 +43,11 @@ TEACHER_ANTI_SLOP = [
     r"(?i)as an ai",
     r"(?i)as a language model",
     r"(?i)as a founding father",
-    r"(?i)\bprogressive\b",
-    r"(?i)\bconservative\b",
     r"(?i)\bleft.wing\b",
     r"(?i)\bright.wing\b",
-    r"(?i)\bdon't\b",
-    r"(?i)\bcan't\b",
-    r"(?i)\bwon't\b",
-    r"(?i)\bdidn't\b",
-    r"(?i)\bisn't\b",
     r"(?i)\bdelve\b",
     r"(?i)\btapestry\b",
     r"(?i)\bministrations\b",
-    r"(?i)\bnuanced\b",
 ]
 
 # Madisonian markers — if student accidentally has too many, the pair isn't useful

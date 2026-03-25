@@ -29,9 +29,14 @@ Thumbs.db
 # Logs
 *.log
 
-# Environment
+# Environment & secrets
 .env
-.env.local
+.env.*
+*.env
+credentials.json
+secrets.json
+**/secret*
+**/credential*
 
 # Source books (copyrighted, not for repo)
 sources/books/
