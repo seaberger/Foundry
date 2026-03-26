@@ -1,0 +1,15 @@
+{
+  "train_runtime": 3834.6383,
+  "train_samples_per_second": 0.334,
+  "train_steps_per_second": 0.084,
+  "total_flos": 0.0,
+  "train_loss": 1.7980028078934858,
+  "epoch": 3.0,
+  "objective": "orpo",
+  "beta": 0.1,
+  "lora_rank": 16,
+  "lora_dropout": 0.0,
+  "learning_rate": 2e-05,
+  "max_grad_norm": 1.0,
+  "num_pairs": 475
+}
