@@ -1,14 +1,17 @@
 """Generate evaluation responses from fine-tuned Madison model on Modal.
 
-Loads the ORPO adapter, runs all eval prompts, saves responses locally.
-Then run the judge separately with evaluate.py.
+Loads the ORPO adapter, runs all eval prompts, saves responses to the volume
+as each completes (checkpointed). Supports resuming interrupted runs.
 
 Usage:
     # Generate responses from fine-tuned model
     modal run modal_generate_eval.py --adapter madison-orpo-v3b-lr2e5 --tag orpo-v3b
 
-    # Then judge locally (uses Anthropic API for Sonnet judge)
-    .venv/bin/python -m foundry.press.evaluate_judge --responses data/eval/responses/orpo-v3b.jsonl --tag orpo-v3b
+    # Resume an interrupted run (skips already-completed prompts)
+    modal run modal_generate_eval.py --adapter madison-orpo-v3b-lr2e5 --tag orpo-v3b
+
+    # Force regenerate all (ignore checkpoint)
+    modal run modal_generate_eval.py --adapter madison-orpo-v3b-lr2e5 --tag orpo-v3b --fresh
 """
 
 from __future__ import annotations
@@ -45,7 +48,7 @@ with eval_image.imports():
 @app.function(
     image=eval_image,
     gpu=GPU,
-    timeout=60 * MINUTES,
+    timeout=120 * MINUTES,
     volumes={
         "/model_cache": model_cache_vol,
         "/adapters": adapter_vol,
@@ -55,18 +58,46 @@ with eval_image.imports():
 def generate_responses(
     eval_prompts: list[dict],
     adapter_name: str = "madison-orpo-v3b-lr2e5",
+    tag: str = "orpo-v3b",
     base_model: str = "google/gemma-3-27b-it",
     max_seq_length: int = 2048,
     max_new_tokens: int = 1024,
     temperature: float = 0.7,
+    fresh: bool = False,
 ) -> list[dict]:
-    """Load model + adapter, generate responses for all eval prompts."""
+    """Load model + adapter, generate responses with per-prompt checkpointing."""
+    import json
     import time
+    from pathlib import Path
 
     import torch
     from peft import PeftModel
 
-    # Load base model
+    # ----- Checkpoint setup -----
+    checkpoint_dir = Path(f"/adapters/eval-checkpoints/{tag}")
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+
+    # Load existing checkpoint responses
+    completed = {}
+    if not fresh:
+        for f in checkpoint_dir.glob("*.json"):
+            try:
+                r = json.loads(f.read_text())
+                completed[r["id"]] = r
+            except (json.JSONDecodeError, KeyError):
+                pass
+        if completed:
+            print(f"Resuming: {len(completed)}/{len(eval_prompts)} already completed")
+
+    # Filter to remaining prompts
+    remaining = [p for p in eval_prompts if p["id"] not in completed]
+    if not remaining:
+        print("All prompts already completed. Use --fresh to regenerate.")
+        return list(completed.values())
+
+    print(f"{len(remaining)} prompts to generate ({len(completed)} cached)")
+
+    # ----- Load model -----
     print(f"Loading {base_model}...")
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=base_model,
@@ -75,19 +106,21 @@ def generate_responses(
         load_in_4bit=True,
     )
 
-    # Load LoRA adapter
     adapter_path = f"/adapters/experiments/{adapter_name}"
     print(f"Loading adapter: {adapter_path}")
     model = PeftModel.from_pretrained(model, adapter_path)
+    # Merge LoRA into base weights — eliminates PEFT wrapper so Gemma 3's
+    # sliding window KV cache works correctly (avoids inconsistent cache lengths)
+    model = model.merge_and_unload()
     FastLanguageModel.for_inference(model)
-    print(f"Model ready. Generating {len(eval_prompts)} responses...")
+    print(f"Model ready. Generating {len(remaining)} responses...")
 
-    results = []
-    for i, p in enumerate(eval_prompts):
+    # ----- Generate with checkpointing -----
+    for i, p in enumerate(remaining):
         prompt_text = p["prompt"]
-        print(f"[{i+1}/{len(eval_prompts)}] {p['id']}: {prompt_text[:60]}...")
+        print(f"[{len(completed) + i + 1}/{len(eval_prompts)}] {p['id']}: {prompt_text[:60]}...")
 
-        # Build conversation — Gemma 3 expects structured content for multimodal template
+        # Gemma 3 expects structured content for multimodal template
         conversation = [{"role": "user", "content": [{"type": "text", "text": prompt_text}]}]
 
         inputs = tokenizer.apply_chat_template(
@@ -104,14 +137,14 @@ def generate_responses(
                 max_new_tokens=max_new_tokens,
                 temperature=temperature if temperature > 0 else None,
                 do_sample=temperature > 0,
-                use_cache=False,
+                use_cache=True,
             )
 
         new_tokens = outputs[0][inputs.shape[1]:]
         response_text = tokenizer.decode(new_tokens, skip_special_tokens=True)
         elapsed = time.time() - start
 
-        results.append({
+        result = {
             "id": p["id"],
             "category": p["category"],
             "difficulty": p.get("difficulty", "medium"),
@@ -122,12 +155,20 @@ def generate_responses(
             "model": adapter_name,
             "prompt_tokens": inputs.shape[1],
             "completion_tokens": len(new_tokens),
-        })
+        }
 
-        print(f"  {len(new_tokens)} tokens in {elapsed:.1f}s")
+        # Checkpoint to volume immediately
+        checkpoint_path = checkpoint_dir / f"{p['id']}.json"
+        checkpoint_path.write_text(json.dumps(result, indent=2))
+        adapter_vol.commit()
 
-    print(f"\nDone. Generated {len(results)} responses.")
-    return results
+        completed[p["id"]] = result
+        print(f"  {len(new_tokens)} tokens in {elapsed:.1f}s [checkpointed]")
+
+    # Return all results (cached + newly generated) in original prompt order
+    all_results = [completed[p["id"]] for p in eval_prompts if p["id"] in completed]
+    print(f"\nDone. {len(all_results)} total responses.")
+    return all_results
 
 
 @app.local_entrypoint()
@@ -135,8 +176,9 @@ def main(
     adapter: str = "madison-orpo-v3b-lr2e5",
     tag: str = "orpo-v3b",
     eval_prompts: str = "data/eval/eval-prompts.jsonl",
+    fresh: bool = False,
 ):
-    """Generate eval responses on Modal, save locally, then run judge."""
+    """Generate eval responses on Modal with checkpointing, save locally."""
     import json
     import time
     from pathlib import Path
@@ -148,19 +190,22 @@ def main(
             prompts.append(json.loads(line))
     print(f"Loaded {len(prompts)} eval prompts")
 
-    # Generate responses on Modal
+    # Generate responses on Modal (resumes from checkpoint if available)
     print(f"Generating responses with adapter '{adapter}' on A100...")
+    if not fresh:
+        print("(Will resume from checkpoint if previous run exists)")
     responses = generate_responses.remote(
         eval_prompts=prompts,
         adapter_name=adapter,
+        tag=tag,
+        fresh=fresh,
     )
 
     # Save responses locally
     output_dir = Path("data/eval/responses")
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    timestamp = time.strftime("%Y%m%d-%H%M%S")
-    output_path = output_dir / f"responses-{tag}-{timestamp}.jsonl"
+    output_path = output_dir / f"responses-{tag}.jsonl"
 
     with open(output_path, "w") as f:
         for r in responses:
@@ -176,4 +221,3 @@ def main(
     total_time = sum(r["generation_time"] for r in responses)
     print(f"\nTotal: {total_tokens} tokens in {total_time:.0f}s ({total_tokens/total_time:.1f} tok/s)")
     print(f"\nNext step: judge these responses with the eval harness")
-    print(f"  .venv/bin/python -m foundry.press.evaluate --responses {output_path} --tag {tag}")
