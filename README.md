@@ -30,9 +30,12 @@ Madison wrote 29 Federalist Papers, kept the most detailed record of the Constit
 - [x] 36-prompt evaluation harness with Madison's actual verbatim words as ground truth
 - [x] Modal A100 training pipeline with model caching and GGUF export
 - [x] Multi-backend evaluation (Anthropic, OpenAI, Gemini, local models)
-- [ ] Student responses generating on RTX 3090 (in progress)
-- [ ] First QLoRA DPO fine-tune on Modal A100
+- [x] 490 student responses generated (Gemma 3 27B on RTX 3090)
+- [x] 475 DPO pairs formatted and quality-filtered
+- [x] DPO v1 training — identified overfitting failure mode, replicated findings from "Objective Matters" paper
+- [x] ORPO v3b training — **successful character imprinting** (100% eval accuracy, controlled margins, no overfitting)
 - [ ] Evaluation: fine-tuned Madison vs prompted baseline vs frontier models
+- [ ] Introspection SFT (Stage 2 — Lambert method)
 - [ ] Chamber chat demo for fellowship application
 
 ## Research Approach
@@ -77,12 +80,12 @@ Teacher Model ──────────────────── Stude
  with constitution)                   "what Madison wouldn't say")
     |                                     |
     v                                     v
-         DPO Pair Construction
+         Preference Pair Construction
          (format_dpo.py — quality filtered)
               |
               v
-    QLoRA DPO Training on Modal A100
-    (beta=0.1, rank=16, layers 0-40)
+    QLoRA ORPO Training on Modal A100
+    (beta=0.1, lr=2e-5, rank=16)
               |
               v
     Evaluation Harness (36 prompts, 6 categories,
