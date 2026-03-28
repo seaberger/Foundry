@@ -184,10 +184,34 @@ modal run modal_generate_eval.py --tag orpo-v3b --fresh
 - `lmstudio-community/gemma-3-27b-it-GGUF` — LM Studio optimized
 - `google/gemma-3-27b-it-qat-q4_0-gguf` — Google's official QAT
 
-### Status
-- Not yet attempted for our fine-tuned merged model
-- Conversion path is well-documented and proven by community
-- Pre-built GGUFs confirm RTX 3090 runs at 20-30+ tok/s at Q4
+### Automated Conversion Script
+
+`modal_convert_gguf.py` handles the full pipeline on Modal (no GPU needed, just CPU + 64GB RAM):
+```bash
+modal run modal_convert_gguf.py              # default Q4_K_M
+modal run modal_convert_gguf.py --quant Q5_K_M  # alternative quant
+```
+
+The script:
+1. Downloads `tokenizer.model` from `google/gemma-3-27b-it` (workaround for #19152)
+2. Converts merged FP16 model to F16 GGUF via `convert_hf_to_gguf.py`
+3. Quantizes to target format (default Q4_K_M)
+4. Saves to Modal volume at `/adapters/gguf/`
+5. Cleans up the ~52GB F16 intermediate
+
+Then download and deploy:
+```bash
+modal volume get foundry-adapters gguf/madison-orpo-v3b-q4_k_m.gguf .
+scp -P 2222 madison-orpo-v3b-q4_k_m.gguf seanb@100.81.70.30:'/mnt/c/Users/SBerg/.cache/lm-studio/models/foundry/madison-orpo-v3b-GGUF/'
+```
+
+LM Studio model directory must follow `{org}/{model-name}-GGUF/` naming convention.
+
+### Status (2026-03-27)
+- **COMPLETE** for v3b fine-tuned model — Q4_K_M (15.4GB) deployed to RTX 3090
+- LM Studio model ID: `madison-orpo-v3b` at `100.81.70.30:1234`
+- Confirmed ~20 tok/s inference speed on RTX 3090
+- Pre-built GGUFs for base model available from ggml-org, bartowski, lmstudio-community
 
 ### References
 - [PR #12571: Fix Gemma3 hparams init](https://github.com/ggml-org/llama.cpp/pull/12571)
