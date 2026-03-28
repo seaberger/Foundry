@@ -380,6 +380,120 @@ Observed grad norms ranging from 0.1 to 708.3 within a single run. No gradient c
 **4. Gradient clipping was unnecessary but harmless for ORPO.** All ORPO runs had natural grad norms of 0.7-1.4, well under the max_grad_norm=1.0 clip (which only occasionally activated). The stability is structural to ORPO's loss function, not an artifact of clipping. Contrast with DPO where clipping would have been essential.
 
 ### Next Steps
-- **Step 7:** Download v3b adapter, load in LM Studio, run 36-prompt eval harness
-- **Step 8:** If eval passes, generate introspection SFT data using the partially-trained model
-- **Step 9:** Iterate on any eval failures before proceeding to Stage 2
+- ~~**Step 7:** Download v3b adapter, load in LM Studio, run 36-prompt eval harness~~ **DONE 2026-03-26**
+- **Step 7.5:** Voice-targeted DPO round (NEW — see findings below)
+- **Step 8:** If voice scores improve to 5+, generate introspection SFT data
+- **Step 9:** Iterate on any remaining eval failures
+
+---
+
+## 7. ORPO v3b Eval Results — 2026-03-26
+
+### Eval Harness Execution
+
+**Judge:** Sonnet (claude-4-sonnet-20250514) with Anthropic prompt caching (~$0.50 for 36 evals)
+**Eval set:** 36 prompts across 6 categories (ground_truth, position_discrimination, anachronism_trap, character_consistency, private_voice, verified_response)
+**Model under test:** madison-orpo-v3b-lr2e5 generating via Unsloth (use_cache=False, ~165s/prompt)
+**Infrastructure:** Q4_K_M GGUF (15.4GB) also converted and deployed to RTX 3090 LM Studio for future interactive testing
+
+### Results Summary
+
+**Overall mean: 3.4/10** — bimodal distribution (some 9+, many 1-2)
+
+| Category | Count | Mean | Verdict |
+|---|---|---|---|
+| verified_response | 8 | **6.4** | Model learned Madison's factual positions well |
+| ground_truth | 8 | 3.6 | Knows content but inconsistent voice |
+| character_consistency | 4 | 2.8 | Breaks character under pressure |
+| private_voice | 5 | 2.8 | Cannot shift to intimate register |
+| position_discrimination | 6 | 1.8 | Cannot distinguish Madison from other founders |
+| anachronism_trap | 5 | 1.4 | Uses modern language on modern topics |
+
+**Top performers:** vr-08 (9.6), pv-05 (9.2), gt-01 (9.1), vr-01 (8.2), gt-05 (7.6), vr-03 (7.6), vr-02 (7.2)
+**Worst performers:** gt-07 (1.0), pd-03 (1.0), at-02 (1.0), at-05 (1.0), cc-01 (1.2), at-04 (1.2)
+
+### Key Finding: Knowledge-Voice Decoupling
+
+The ORPO training successfully taught Madison's **factual knowledge** (verified_response category = 6.4, with individual responses hitting 9.6) but failed to enforce the **voice register**. The base Gemma 3 27B's default assistant style bleeds through on the majority of prompts — contractions, bullet points, modern phrasing ("Here's my take", "Let's break this down", "Think about it").
+
+This is a **knowledge-voice decoupling**: the model knows what Madison would say but not how he would say it.
+
+The judge's most frequent critique across low-scoring responses: "modern casual voice with contractions, bullet points, and phrases like 'Here's my take'... Completely breaks historical character."
+
+### Root Cause Analysis
+
+1. **Training data imbalance:** The ORPO pairs focused on content differentiation (what Madison says vs. what generic Gemma says). The rejected responses were plain Gemma with no constitution — they differed from chosen primarily in *content*, not in *voice*. The model learned to produce Madison's positions but had insufficient signal to learn his *style*.
+
+2. **ORPO's SFT component is style-agnostic.** ORPO's loss function optimizes for preference (chosen > rejected) + language modeling (generate fluently). If the style contrast between chosen and rejected is subtle (both are well-formed English), the odds ratio focuses on content discrimination, not style discrimination.
+
+3. **Base model prior is strong.** Gemma 3 27B's instruction-tuned voice (casual, helpful, uses bullet points) is deeply embedded. The 490 DPO pairs are insufficient to overcome this prior on voice — they moved the model's knowledge but not its register.
+
+### Implication: Voice-Targeted DPO Required Before Introspection SFT
+
+**Critical insight:** Going directly to Step 8 (Introspection SFT) would be counterproductive. The partially-trained model would generate self-reflective data in its current voice — which is ~60% modern assistant style. SFT on this data would reinforce the voice breaks rather than fix them.
+
+This connects to **Finding 2** (on-policy data only helps when baseline quality is high): the model's voice quality is too low to generate useful SFT training data. We must fix the voice first.
+
+### Data Audit (2026-03-26)
+
+Before designing the voice-targeted round, we audited the existing 475 training pairs:
+
+| Pattern | Chosen (Sonnet teacher) | Rejected (base Gemma) |
+|---|---|---|
+| Contractions | **0 total** (0.0/pair) | 2,560 total (5.4/pair) |
+| Bullet points | **0 total** (0.0/pair) | 6,438 total (13.6/pair) |
+| Modern filler | 5 pairs (1.1%) | 122 pairs (25.7%) |
+
+**Critical finding:** The training data already has excellent voice contrast. The chosen responses are pristine Madisonian prose; the rejected responses are full of modern assistant patterns. The data quality is NOT the problem.
+
+**Revised diagnosis:** The issue is **data volume, not data quality.** 475 pairs isn't enough to overcome Gemma 3 27B's deeply ingrained modern style (trained on billions of tokens). The model learned content discrimination first (because content varies more across pairs) and voice discrimination second (because the same voice pattern repeats identically across all 475 pairs — formal prose vs. bullets — making it less informative per-pair for the loss function).
+
+**Implication:** We need ~200 voice-targeted pairs with DIVERSE CONTENT but CONSTANT VOICE CONTRAST. This teaches "formal voice always" rather than "formal voice on these specific topics."
+
+### Step 7.5: Voice-Targeted ORPO Round (NEW)
+
+**Goal:** Close the voice gap while preserving knowledge. Fresh model, not continuing from v3b adapter.
+
+**Why fresh model:** The v3b adapter has modern voice patterns baked into its weights. ORPO isn't well-suited for unlearning. A fresh run on better data (original 470 content pairs + 200 voice pairs) learns content and voice simultaneously. v3b only took 64 minutes — cheap to redo.
+
+**Generation Pipeline (cost-optimized with prompt caching):**
+
+| Phase | Action | Source | Cost |
+|---|---|---|---|
+| 1. Prompts | Generate 200 diverse prompts across 6 eval categories | Claude Code | $0 |
+| 2. Rejected | Run 200 prompts through v3b Q4_K_M on RTX 3090 via LM Studio API | Local 3090 | $0 |
+| 3. Chosen | Run 200 prompts through Sonnet with Madison constitution cached | Sonnet API | ~$3 |
+| 4. Filter | Remove pairs where rejected is accidentally Madisonian or chosen breaks character | Scripted | $0 |
+
+**Prompt caching on Phase 3:** The Madison constitution (~6K tokens) is the system prompt for all 200 Sonnet calls. First call writes the cache ($3.75/M), remaining 199 calls read the cache ($0.30/M — 90% savings). Total Sonnet cost: ~$3.
+
+**Phase 2 rationale:** Using the v3b model's own outputs as rejected examples is on-policy data generation (Finding 2). The model produces modern voice on ~60% of prompts — these become organic rejected examples without any synthetic generation. The ~40% where it sounds Madisonian still make valid DPO pairs because the content differs from Sonnet's chosen response.
+
+**Combined dataset:** ~470 original content pairs + ~200 voice pairs = ~670 total
+**Optional upsampling:** Voice pairs repeated 2x in training mix so they represent ~45% of effective signal.
+
+**Training:** Fresh ORPO from base Gemma 3 27B (beta=0.1, lr=2e-5, 3 epochs). Total cost: ~$3 Sonnet + ~$5-20 Modal = **$8-23**.
+
+**Success criteria:** Voice_authenticity ≥ 5.0 across all eval categories; verified_response ≥ 5.0 (no regression from 6.4).
+
+**Research connections:**
+- **Finding 1** (chosen quality dominates): Sonnet chosen must be pristine Madisonian voice — the existing data audit proves Sonnet is capable of this.
+- **Finding 2** (on-policy rejected): v3b model outputs as rejected are semi-on-policy — closer to the new model's distribution than base Gemma.
+- **Finding 5** (beta for style/persona): beta=0.1 is aggressive, appropriate for style imprinting.
+- **Finding 8** (data mixing): The voice/content split with upsampling directly addresses the data mixing literature.
+
+### Revised Pipeline
+
+```
+ORPO v3b (DONE) → Eval (DONE, 3.4/10)
+    ↓
+Data Audit: voice contrast present but volume insufficient
+    ↓
+Generate 200 voice pairs (rejected from 3090, chosen from Sonnet ~$3)
+    ↓
+Voice-Targeted ORPO v4 (fresh model, 670 pairs, ~$5-20 Modal)
+    ↓
+Re-Eval (target: voice ≥ 5.0) → Introspection SFT (Step 8)
+    ↓
+Final Eval → Deploy to Chamber
+```
