@@ -371,6 +371,7 @@ def main(
     lr: float = 5e-6,
     epochs: int = 3,
     output_name: str = "madison-orpo-v1",
+    dataset: str = "data/training/madison-dpo.jsonl",
     upload_data_flag: bool = True,
     list_models: bool = False,
     get_adapter: str = "",
@@ -401,7 +402,7 @@ def main(
         print(f"\nAdapter saved to {local_dir}/")
         return
 
-    data_path = Path("data/training/madison-dpo.jsonl")
+    data_path = Path(dataset)
 
     if upload_data_flag and data_path.exists():
         print(f"Uploading {data_path}...")
