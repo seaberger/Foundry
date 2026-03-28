@@ -1,17 +1,27 @@
 """Generate evaluation responses from fine-tuned Madison model on Modal.
 
-Loads the ORPO adapter, runs all eval prompts, saves responses to the volume
-as each completes (checkpointed). Supports resuming interrupted runs.
+Two modes:
+  1. vLLM (fast, ~10-30s/prompt) — requires merged 16-bit model on volume
+     First run: modal run modal_merge_model.py --adapter madison-orpo-v3b-lr2e5
+     Then: modal run modal_generate_eval.py --tag orpo-v3b
+
+  2. Unsloth fallback (slow, ~160-200s/prompt) — uses adapter directly
+     modal run modal_generate_eval.py --tag orpo-v3b --use-unsloth
+
+Supports checkpointing and resume for both modes.
 
 Usage:
-    # Generate responses from fine-tuned model
-    modal run modal_generate_eval.py --adapter madison-orpo-v3b-lr2e5 --tag orpo-v3b
+    # Fast mode (vLLM with merged model)
+    modal run modal_generate_eval.py --tag orpo-v3b
 
-    # Resume an interrupted run (skips already-completed prompts)
-    modal run modal_generate_eval.py --adapter madison-orpo-v3b-lr2e5 --tag orpo-v3b
+    # Resume interrupted run
+    modal run modal_generate_eval.py --tag orpo-v3b
 
-    # Force regenerate all (ignore checkpoint)
-    modal run modal_generate_eval.py --adapter madison-orpo-v3b-lr2e5 --tag orpo-v3b --fresh
+    # Slow fallback (Unsloth, no merge needed)
+    modal run modal_generate_eval.py --tag orpo-v3b --use-unsloth
+
+    # Force regenerate
+    modal run modal_generate_eval.py --tag orpo-v3b --fresh
 """
 
 from __future__ import annotations
@@ -26,10 +36,21 @@ app = modal.App("foundry-madison-eval")
 model_cache_vol = modal.Volume.from_name("foundry-model-cache", create_if_missing=True)
 adapter_vol = modal.Volume.from_name("foundry-adapters", create_if_missing=True)
 
-eval_image = (
+# vLLM image — no Unsloth, native Gemma 3 cache support
+vllm_image = (
+    modal.Image.debian_slim(python_version="3.11")
+    .uv_pip_install(
+        "vllm>=0.12.0",
+    )
+    .env({"HF_HOME": "/model_cache"})
+)
+
+# Unsloth fallback image — for when merged model doesn't exist yet
+unsloth_image = (
     modal.Image.debian_slim(python_version="3.11")
     .uv_pip_install(
         "accelerate==1.9.0",
+        "datasets==3.6.0",
         "huggingface_hub==0.34.2",
         "peft==0.16.0",
         "transformers==4.54.0",
@@ -40,44 +61,43 @@ eval_image = (
     .env({"HF_HOME": "/model_cache"})
 )
 
-with eval_image.imports():
+with unsloth_image.imports():
     import unsloth  # noqa: F401,I001
     from unsloth import FastLanguageModel
 
 
+# ---------------------------------------------------------------------------
+# vLLM generation (fast path)
+# ---------------------------------------------------------------------------
+
 @app.function(
-    image=eval_image,
-    gpu=GPU,
-    timeout=120 * MINUTES,
+    image=vllm_image,
+    gpu="A100-80GB",  # 51GB BF16 model needs >40GB for model + KV cache
+    timeout=30 * MINUTES,
     volumes={
         "/model_cache": model_cache_vol,
         "/adapters": adapter_vol,
     },
     secrets=[modal.Secret.from_name("huggingface-secret")],
 )
-def generate_responses(
+def generate_vllm(
     eval_prompts: list[dict],
-    adapter_name: str = "madison-orpo-v3b-lr2e5",
     tag: str = "orpo-v3b",
-    base_model: str = "google/gemma-3-27b-it",
-    max_seq_length: int = 2048,
-    max_new_tokens: int = 1024,
-    temperature: float = 0.7,
+    merged_model_path: str = "/adapters/merged/madison-orpo-v3b-lr2e5-16bit",
+    max_tokens: int = 1024,
     fresh: bool = False,
 ) -> list[dict]:
-    """Load model + adapter, generate responses with per-prompt checkpointing."""
+    """Generate responses using vLLM with merged 16-bit model."""
     import json
     import time
     from pathlib import Path
 
-    import torch
-    from peft import PeftModel
+    from vllm import LLM, SamplingParams
 
     # ----- Checkpoint setup -----
     checkpoint_dir = Path(f"/adapters/eval-checkpoints/{tag}")
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
 
-    # Load existing checkpoint responses
     completed = {}
     if not fresh:
         for f in checkpoint_dir.glob("*.json"):
@@ -89,10 +109,121 @@ def generate_responses(
         if completed:
             print(f"Resuming: {len(completed)}/{len(eval_prompts)} already completed")
 
-    # Filter to remaining prompts
     remaining = [p for p in eval_prompts if p["id"] not in completed]
     if not remaining:
-        print("All prompts already completed. Use --fresh to regenerate.")
+        print("All prompts already completed.")
+        return list(completed.values())
+
+    print(f"{len(remaining)} prompts to generate ({len(completed)} cached)")
+
+    # ----- Load merged model with vLLM -----
+    print(f"Loading merged model from {merged_model_path}...")
+    llm = LLM(
+        model=merged_model_path,
+        tokenizer="google/gemma-3-27b-it",  # Original tokenizer has proper image_token vocab
+        max_model_len=2048,
+        gpu_memory_utilization=0.90,
+        dtype="auto",
+        # Use native ForConditionalGeneration — weights have language_model. prefix
+        # Text-only inputs work fine; vision stack just costs ~2-3GB extra VRAM
+    )
+
+    sampling_params = SamplingParams(
+        temperature=1.0,
+        top_k=64,
+        top_p=0.95,
+        max_tokens=max_tokens,
+    )
+
+    # ----- Generate with checkpointing -----
+    for i, p in enumerate(remaining):
+        prompt_text = p["prompt"]
+        print(f"[{len(completed) + i + 1}/{len(eval_prompts)}] {p['id']}: {prompt_text[:60]}...")
+
+        # Gemma 3 chat format
+        conversation = f"<start_of_turn>user\n{prompt_text}<end_of_turn>\n<start_of_turn>model\n"
+
+        start = time.time()
+        outputs = llm.generate([conversation], sampling_params)
+        response_text = outputs[0].outputs[0].text
+        elapsed = time.time() - start
+
+        num_tokens = len(outputs[0].outputs[0].token_ids)
+
+        result = {
+            "id": p["id"],
+            "category": p["category"],
+            "difficulty": p.get("difficulty", "medium"),
+            "prompt": prompt_text,
+            "ground_truth_signal": p.get("ground_truth_signal", ""),
+            "response": response_text,
+            "generation_time": round(elapsed, 1),
+            "model": "madison-orpo-v3b-lr2e5",
+            "prompt_tokens": 0,
+            "completion_tokens": num_tokens,
+        }
+
+        checkpoint_path = checkpoint_dir / f"{p['id']}.json"
+        checkpoint_path.write_text(json.dumps(result, indent=2))
+        adapter_vol.commit()
+
+        completed[p["id"]] = result
+        print(f"  {num_tokens} tokens in {elapsed:.1f}s [checkpointed]")
+
+    all_results = [completed[p["id"]] for p in eval_prompts if p["id"] in completed]
+    print(f"\nDone. {len(all_results)} total responses.")
+    return all_results
+
+
+# ---------------------------------------------------------------------------
+# Unsloth generation (slow fallback)
+# ---------------------------------------------------------------------------
+
+@app.function(
+    image=unsloth_image,
+    gpu=GPU,
+    timeout=120 * MINUTES,
+    volumes={
+        "/model_cache": model_cache_vol,
+        "/adapters": adapter_vol,
+    },
+    secrets=[modal.Secret.from_name("huggingface-secret")],
+)
+def generate_unsloth(
+    eval_prompts: list[dict],
+    adapter_name: str = "madison-orpo-v3b-lr2e5",
+    tag: str = "orpo-v3b",
+    base_model: str = "google/gemma-3-27b-it",
+    max_seq_length: int = 2048,
+    max_new_tokens: int = 1024,
+    fresh: bool = False,
+) -> list[dict]:
+    """Generate responses using Unsloth (slow, use_cache=False)."""
+    import json
+    import time
+    from pathlib import Path
+
+    import torch
+    from peft import PeftModel
+
+    # ----- Checkpoint setup -----
+    checkpoint_dir = Path(f"/adapters/eval-checkpoints/{tag}")
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+
+    completed = {}
+    if not fresh:
+        for f in checkpoint_dir.glob("*.json"):
+            try:
+                r = json.loads(f.read_text())
+                completed[r["id"]] = r
+            except (json.JSONDecodeError, KeyError):
+                pass
+        if completed:
+            print(f"Resuming: {len(completed)}/{len(eval_prompts)} already completed")
+
+    remaining = [p for p in eval_prompts if p["id"] not in completed]
+    if not remaining:
+        print("All prompts already completed.")
         return list(completed.values())
 
     print(f"{len(remaining)} prompts to generate ({len(completed)} cached)")
@@ -109,9 +240,6 @@ def generate_responses(
     adapter_path = f"/adapters/experiments/{adapter_name}"
     print(f"Loading adapter: {adapter_path}")
     model = PeftModel.from_pretrained(model, adapter_path)
-    # Merge LoRA into base weights — eliminates PEFT wrapper so Gemma 3's
-    # sliding window KV cache works correctly (avoids inconsistent cache lengths)
-    model = model.merge_and_unload()
     FastLanguageModel.for_inference(model)
     print(f"Model ready. Generating {len(remaining)} responses...")
 
@@ -120,7 +248,6 @@ def generate_responses(
         prompt_text = p["prompt"]
         print(f"[{len(completed) + i + 1}/{len(eval_prompts)}] {p['id']}: {prompt_text[:60]}...")
 
-        # Gemma 3 expects structured content for multimodal template
         conversation = [{"role": "user", "content": [{"type": "text", "text": prompt_text}]}]
 
         inputs = tokenizer.apply_chat_template(
@@ -135,9 +262,8 @@ def generate_responses(
             outputs = model.generate(
                 input_ids=inputs,
                 max_new_tokens=max_new_tokens,
-                temperature=temperature if temperature > 0 else None,
-                do_sample=temperature > 0,
-                use_cache=True,
+                do_sample=False,
+                use_cache=False,
             )
 
         new_tokens = outputs[0][inputs.shape[1]:]
@@ -157,7 +283,6 @@ def generate_responses(
             "completion_tokens": len(new_tokens),
         }
 
-        # Checkpoint to volume immediately
         checkpoint_path = checkpoint_dir / f"{p['id']}.json"
         checkpoint_path.write_text(json.dumps(result, indent=2))
         adapter_vol.commit()
@@ -165,11 +290,14 @@ def generate_responses(
         completed[p["id"]] = result
         print(f"  {len(new_tokens)} tokens in {elapsed:.1f}s [checkpointed]")
 
-    # Return all results (cached + newly generated) in original prompt order
     all_results = [completed[p["id"]] for p in eval_prompts if p["id"] in completed]
     print(f"\nDone. {len(all_results)} total responses.")
     return all_results
 
+
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
 
 @app.local_entrypoint()
 def main(
@@ -177,34 +305,40 @@ def main(
     tag: str = "orpo-v3b",
     eval_prompts: str = "data/eval/eval-prompts.jsonl",
     fresh: bool = False,
+    use_unsloth: bool = False,
 ):
-    """Generate eval responses on Modal with checkpointing, save locally."""
+    """Generate eval responses on Modal, save locally."""
     import json
-    import time
     from pathlib import Path
 
-    # Load eval prompts
     prompts = []
     with open(eval_prompts) as f:
         for line in f:
             prompts.append(json.loads(line))
     print(f"Loaded {len(prompts)} eval prompts")
 
-    # Generate responses on Modal (resumes from checkpoint if available)
-    print(f"Generating responses with adapter '{adapter}' on A100...")
-    if not fresh:
-        print("(Will resume from checkpoint if previous run exists)")
-    responses = generate_responses.remote(
-        eval_prompts=prompts,
-        adapter_name=adapter,
-        tag=tag,
-        fresh=fresh,
-    )
+    if use_unsloth:
+        print(f"Using Unsloth fallback (slow, ~160-200s/prompt)...")
+        responses = generate_unsloth.remote(
+            eval_prompts=prompts,
+            adapter_name=adapter,
+            tag=tag,
+            fresh=fresh,
+        )
+    else:
+        merged_path = f"/adapters/merged/{adapter}-16bit"
+        print(f"Using vLLM with merged model at {merged_path}...")
+        print("(Run modal_merge_model.py first if this fails)")
+        responses = generate_vllm.remote(
+            eval_prompts=prompts,
+            tag=tag,
+            merged_model_path=merged_path,
+            fresh=fresh,
+        )
 
     # Save responses locally
     output_dir = Path("data/eval/responses")
     output_dir.mkdir(parents=True, exist_ok=True)
-
     output_path = output_dir / f"responses-{tag}.jsonl"
 
     with open(output_path, "w") as f:
@@ -212,12 +346,11 @@ def main(
             f.write(json.dumps(r) + "\n")
 
     print(f"\nSaved {len(responses)} responses to {output_path}")
-    print(f"\nSample response (first prompt):")
+    print(f"\nSample response:")
     print(f"  Prompt: {responses[0]['prompt'][:80]}...")
     print(f"  Response: {responses[0]['response'][:200]}...")
 
-    # Print summary
     total_tokens = sum(r["completion_tokens"] for r in responses)
     total_time = sum(r["generation_time"] for r in responses)
-    print(f"\nTotal: {total_tokens} tokens in {total_time:.0f}s ({total_tokens/total_time:.1f} tok/s)")
-    print(f"\nNext step: judge these responses with the eval harness")
+    if total_time > 0:
+        print(f"\nTotal: {total_tokens} tokens in {total_time:.0f}s ({total_tokens/total_time:.1f} tok/s)")

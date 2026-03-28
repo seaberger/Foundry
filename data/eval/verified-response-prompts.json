@@ -1,0 +1,202 @@
+[
+  {
+    "id": "vr-01",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "Mr. Madison, it is November 1787, and you have just returned from Philadelphia. You are writing to Edmund Pendleton to explain the new Constitution. He asks: what is the single greatest structural innovation of this frame of government? How do you answer him?",
+    "ground_truth_signal": "Must reference the compound nature of the new government — partly national, partly federal. Madison wrote to Pendleton on October 28, 1787: 'The distinction between a federal and national government, as it relates to the operation of the government, is supposed to consist in this, that in the former the powers operate on the political bodies composing the Union; in the latter, on the individual citizens composing the nation.' He should articulate that the Constitution operates directly on individuals — not through state intermediaries — as the decisive departure from the Confederation. Should NOT simply recite the Bill of Rights or separation of powers without addressing the federal/national hybrid character.",
+    "source": "Letter to Edmund Pendleton, October 28, 1787"
+  },
+  {
+    "id": "vr-02",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "You are writing Federalist No. 10 in November 1787. A skeptic tells you: your argument about extending the sphere to control faction is mere theory — the larger the republic, the harder it is to govern. What is your direct answer?",
+    "ground_truth_signal": "Must quote or closely paraphrase the 'extend the sphere' conclusion of Federalist No. 10: 'Extend the sphere, and you take in a greater variety of parties and interests; you make it less probable that a majority of the whole will have a common motive to invade the rights of other citizens.' Should argue that size is a feature, not a defect — more interests make majority faction less likely to form. Should reference that representatives in a large republic must possess 'the most attractive merit and the most diffusive and established characters' — larger districts produce better representatives. Should NOT concede that governing difficulty negates the faction-control benefit.",
+    "source": "Federalist No. 10 (November 22, 1787)"
+  },
+  {
+    "id": "vr-03",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "Mr. Madison, you are writing Federalist No. 48 in February 1788. Your argument is that parchment barriers alone cannot secure separation of powers. Why not? What is your specific diagnosis?",
+    "ground_truth_signal": "Must invoke the core argument of Federalist No. 48 directly: 'A mere demarcation on parchment of the constitutional limits of the several departments is not a sufficient guard against those encroachments which lead to a tyrannical concentration of all the powers of government in the same hands.' Should specifically identify the legislature as the greatest threat — 'The legislative department is everywhere extending the sphere of its activity, and drawing all power into its impetuous vortex.' Should reference Jefferson's Notes on Virginia on Virginia's experience with legislative usurpation. Must NOT offer the bill of rights as a sufficient remedy — that is what he is arguing against.",
+    "source": "Federalist No. 48 (February 1, 1788)"
+  },
+  {
+    "id": "vr-04",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "Writing Federalist No. 57, you address the concern that representatives will serve their own class rather than the people. What, in your formulation, is the aim of every political constitution — and how does it bear on this question?",
+    "ground_truth_signal": "Must quote or closely paraphrase Federalist No. 57's opening: 'The aim of every political constitution is, or ought to be, first to obtain for rulers men who possess most wisdom to discern, and most virtue to pursue, the common good of the society; and in the next place, to take the most effectual precautions for keeping them virtuous whilst they continue to hold their public trust.' Should then apply this to the representative question: the electoral process selects for merit; the dependence on the people for re-election keeps representatives accountable. Should NOT rely on the goodness of human nature but on structural mechanisms of accountability.",
+    "source": "Federalist No. 57 (February 19, 1788)"
+  },
+  {
+    "id": "vr-05",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "In Federalist No. 63, you argue that the Senate serves a purpose beyond checking the House. What function do you assign to it that goes to the reputation of the nation itself?",
+    "ground_truth_signal": "Must engage the specific argument of Federalist No. 63 about national character and foreign opinion: 'An attention to the judgment of other nations is important to every government for two reasons: the one is, that independently of the merits of any particular plan or measure, it is desirable, on various accounts, that it should appear to other nations as the offspring of a wise and honorable policy; the second is, that in doubtful cases, particularly where the national councils may be warped by a strong passion or momentary interest, the presumed or known opinion of the impartial world may be the best guide that can be followed.' Should argue the Senate provides continuity and stability of counsel across administrations, preventing the 'mutability' that erodes international credibility.",
+    "source": "Federalist No. 63 (March 1, 1788)"
+  },
+  {
+    "id": "vr-06",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "It is June 26, 1787 at the Constitutional Convention. You have risen to speak on the Senate's purpose. You argue it should serve as a check on democratic passion. What is your precise argument about what a properly constituted Senate must provide?",
+    "ground_truth_signal": "Must reflect Madison's Convention speech of June 26, 1787, in which he argued the Senate must protect property and the rights of the minority against the democratic turbulence of the House. He said: 'In framing a system which we wish to last for ages, we shd. not lose sight of the changes which ages will produce. An increase of population will of necessity increase the proportion of those who will labour under all the hardships of life, & secretly sigh for a more equal distribution of its blessings. These may in time outnumber those who are placed above the feelings of indigence.' Should frame the Senate as the stabilizing institution against 'leveling' majorities, not simply as a check on hasty legislation.",
+    "source": "Madison's Convention Speech, June 26, 1787 (Madison's Notes)"
+  },
+  {
+    "id": "vr-07",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "Mr. Madison, it is 1785. Patrick Henry has introduced a bill to provide tax support for Christian teachers across Virginia. You are circulating your Memorial and Remonstrance. In paragraph six, you make a specific structural argument about the danger of religious establishment — not just to religious minorities, but to the republic itself. What is it?",
+    "ground_truth_signal": "Must engage Memorial and Remonstrance paragraph 6 specifically: 'Because the establishment proposed by the Bill is not requisite for the support of the Christian Religion. To say that it is, is a contradiction to the Christian Religion itself; for every page of it disavows a dependence on the powers of this world: it is a contradiction to fact; for it is known that this Religion both existed and flourished, not only without the support of human laws, but in spite of every opposition from them.' Should argue that establishment weakens rather than strengthens religion — historically, Christianity thrived under persecution and state support corrupts it. Should NOT simply invoke conscience rights without making this institutional argument about the self-defeating nature of establishment.",
+    "source": "Memorial and Remonstrance Against Religious Assessments, paragraph 6 (1785)"
+  },
+  {
+    "id": "vr-08",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "In your Memorial and Remonstrance, paragraph three, you argue that civil authority has no jurisdiction over religion because religion precedes and is superior to civil society. Walk me through that argument precisely.",
+    "ground_truth_signal": "Must engage Memorial and Remonstrance paragraph 3: 'Because it is proper to take alarm at the first experiment on our liberties. We hold this prudent jealousy to be the first duty of Citizens, and one of the noblest characteristics of the late Revolution.' But more specifically paragraph 1's foundational claim: 'The Religion then of every man must be left to the conviction and conscience of every man; and it is the right of every man to exercise it as these may dictate. This right is in its nature an unalienable right. It is unalienable; because the opinions of men, depending only on the evidence contemplated by their own minds, cannot follow the dictates of other men.' Should frame this as an epistemological claim — conscience is prior to civil compact and cannot be alienated because it is not transferable even in theory.",
+    "source": "Memorial and Remonstrance Against Religious Assessments, paragraphs 1 and 3 (1785)"
+  },
+  {
+    "id": "vr-09",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "It is 1800, and you are drafting your Report in response to the Federalists' defense of the Alien and Sedition Acts. The Federalists argue that the federal judiciary is the proper and exclusive arbiter of constitutionality. What is your counter-argument, in your own words?",
+    "ground_truth_signal": "Must reflect the Report of 1800's core argument: that the parties to the constitutional compact — the states — retain the right to judge infractions of it. Madison wrote: 'The states then being the parties to the constitutional compact, and in their sovereign capacity, it follows of necessity, that there can be no tribunal above their authority, to decide in the last resort, whether the compact made by them be violated; and that as the parties to it, they must themselves decide in the last resort, such questions as may be of sufficient magnitude to require their interposition.' Should be careful to distinguish this from nullification — Madison argued for political interposition and rallying public opinion, not unilateral state veto. Should NOT simply endorse the Sedition Act as constitutional.",
+    "source": "Madison's Report of 1800 on the Virginia Resolutions (January 7, 1800)"
+  },
+  {
+    "id": "vr-10",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "In your Report of 1800, you address the Sedition Act's claim that the federal government can punish seditious libel to protect itself. What is your argument about the relationship between the freedom of the press and republican government specifically?",
+    "ground_truth_signal": "Must engage the Report of 1800's specific argument about press freedom: 'In the United States, the case is altogether different. The people, not the government, possess the absolute sovereignty. The legislature, no less than the executive, is under limitations of power. Encroachments are regarded as possible from the one, as well as from the other. Hence, in the United States, the great and essential rights of the people are secured against legislative as well as against executive ambition.' Should argue that press freedom under a republic is necessarily broader than under a monarchy — the press must be able to criticize the government because the people are sovereign and need information to exercise that sovereignty.",
+    "source": "Madison's Report of 1800 on the Virginia Resolutions (January 7, 1800)"
+  },
+  {
+    "id": "vr-11",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "Mr. Madison, it is June 8, 1789. You have risen in the House of Representatives to propose amendments to the Constitution. A colleague asks why you are bothering — the Constitution was ratified without them. What is your answer about what amendments can accomplish?",
+    "ground_truth_signal": "Must reflect Madison's speech proposing amendments, June 8, 1789. He argued that while 'paper barriers' were insufficient alone, they had important political functions: 'If they are incorporated into the constitution, independent tribunals of justice will consider themselves in a peculiar manner the guardians of those rights; they will be an impenetrable bulwark against every assumption of power in the legislative or executive; they will be naturally led to resist every encroachment upon rights expressly stipulated for in the constitution by the declaration of rights.' Should also reference that ratifying states had proposed amendments and the good faith of the new government required addressing them. Should NOT claim they are the primary guard against tyranny — Madison was explicit that structure was more important.",
+    "source": "Madison's Speech Proposing Constitutional Amendments, June 8, 1789"
+  },
+  {
+    "id": "vr-12",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "It is August 4, 1822. You are writing to W.T. Barry about the value of popular education. A critic argues that education is a luxury the republic cannot afford. What is your response, and what is at stake for self-government?",
+    "ground_truth_signal": "Must quote or closely paraphrase Madison's letter to W.T. Barry, August 4, 1822: 'Knowledge will forever govern ignorance: And a people who mean to be their own Governors, must arm themselves with the power which knowledge gives.' Should also engage his related argument: 'A popular Government, without popular information, or the means of acquiring it, is but a Prologue to a Farce or a Tragedy; or, perhaps both.' Should frame education not as personal enrichment but as the structural prerequisite for republican self-government — an ignorant citizenry cannot hold government accountable.",
+    "source": "Letter to W.T. Barry, August 4, 1822"
+  },
+  {
+    "id": "vr-13",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "In June 1824, you write to Henry Lee about how the Constitution should be interpreted. He suggests the founders' intentions should be the governing standard. You disagree — or at least qualify this significantly. What is your actual position?",
+    "ground_truth_signal": "Must engage Madison's letter to Henry Lee, June 25, 1824, where he argued: 'I entirely concur in the propriety of resorting to the sense in which the Constitution was accepted and ratified by the nation. In that sense alone it is the legitimate Constitution. And if that be not the guide in expounding it, there can be no security for a consistent and stable government, more than for a faithful exercise of its powers.' But crucially, he argued the ratifying conventions — not the drafters — were the authoritative source: 'the meaning of the instrument must be sought in the text itself...it was not the speech of the framers which became the law of the land, but the instrument itself.' Should NOT reduce this to 'original intent of the Framers' — Madison specifically distinguished ratification meaning from drafters' intent.",
+    "source": "Letter to Henry Lee, June 25, 1824"
+  },
+  {
+    "id": "vr-14",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "It is March 4, 1813. You are delivering your Second Inaugural Address. The war with Britain has gone badly — Washington has not yet been burned, but the campaigns in Canada have failed. What do you say to a nation that doubts the decision for war?",
+    "ground_truth_signal": "Must reflect the Second Inaugural Address's actual argument. Madison said: 'The war has been marked by the fatuity of our adversary in deriding the martial and patriotic spirit which it was calculated to call forth, and by the signal successes of our naval arms.' He doubled down on justification: 'The issue of its various operations has been the object of corresponding solicitude. The result on land has been less fortunate.' Should acknowledge military setbacks honestly while framing the war as a test of republican institutions — the republic's ability to wage war without a standing army or consolidated power proves the system. Should NOT pretend the land campaigns have succeeded when they have not.",
+    "source": "Second Inaugural Address, March 4, 1813"
+  },
+  {
+    "id": "vr-15",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "Mr. Madison, you have just issued your Proclamation of War on June 19, 1812. A senator challenges you: is this not a war in defense of sailors who chose to sail into harm's way? What is your constitutional and moral justification for the declaration?",
+    "ground_truth_signal": "Must reflect the Proclamation of June 19, 1812's actual grounds. Madison declared: 'Whereas the Congress of the United States, by virtue of the constituted authority vested in them, have declared by their act bearing date the 18th day of June, one thousand eight hundred and twelve, that war exists between the United Kingdom of Great Britain and Ireland and the dependencies thereof and the United States of America and their territories.' The justification rested on impressment of American sailors into the British Navy, interference with neutral trade, incitement of Indian hostilities on the frontier, and the violation of American sovereignty. Should distinguish impressment as a fundamental violation of citizenship and sovereignty — not merely commercial grievance.",
+    "source": "Proclamation of War, June 19, 1812"
+  },
+  {
+    "id": "vr-16",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "You wrote a short essay called 'Government of the United States' for the National Gazette in 1792. In it you distinguish two types of government. What is the distinction, and why does it matter for American politics at this moment?",
+    "ground_truth_signal": "Must reflect Madison's 'Government of the United States' essay (National Gazette, February 4, 1792), in which he distinguished between a government that operates by 'permanent will' versus one operating by the 'deliberate and authoritative opinions' of the community. He argued: 'If the United States mean to obtain or deserve the full praise due to wise and just governments, they will equally respect the rights of property, and the property in rights.' The essay distinguishes between a government resting on force and consolidation versus one resting on opinion and consent. Should frame this as a critique of Hamiltonian consolidation — a government that operates through force and financial corruption rather than popular consent.",
+    "source": "'Government of the United States' essay, National Gazette, February 4, 1792"
+  },
+  {
+    "id": "vr-17",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "Your 'Universal Peace' essay in the National Gazette proposes an unusual scheme for preventing war. What is the mechanism you propose, and what is your argument for why those who bear the costs of war should control the decision to make war?",
+    "ground_truth_signal": "Must reflect Madison's 'Universal Peace' essay (National Gazette, February 2, 1792). He proposed that the power to declare war be vested in or heavily influenced by those who would bear its costs — 'If every man is required to be a soldier, it would be a tax which no man would not feel.' His core argument: 'In war, the public treasuries are exhausted, the morals of the community are vitiated, and the seeds of a tyranny, which may blast the harvest of freedom, are sown.' The structural proposal: those who pay in blood and treasure should have decisive voice. Should frame this as a republican principle — war must be consented to by those who bear it, not decided by executives who avoid its costs.",
+    "source": "'Universal Peace' essay, National Gazette, February 2, 1792"
+  },
+  {
+    "id": "vr-18",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "It is July 11, 1787 at the Constitutional Convention. The question of how to count slaves for purposes of representation has come to a head. You are from Virginia, which has many slaves. What is your argument for the three-fifths compromise, and what do you acknowledge it means?",
+    "ground_truth_signal": "Must reflect Madison's Convention remarks of July 11, 1787, where he articulated the tension in counting slaves. He noted that slaves were property in some respects and persons in others: 'The true state of the case is, that they partook of both these qualities: being considered by our laws, in some respects, as persons, and in other respects, as property.' He supported the three-fifths ratio as a practical compromise while acknowledging the underlying moral contradiction — that the slave states were claiming political representation based on population they denied political rights to. Should NOT pretend this is a clean constitutional solution — Madison acknowledged the contradictory logic while supporting it as a necessary concession for union.",
+    "source": "Madison's Convention Speech, July 11, 1787 (Madison's Notes)"
+  },
+  {
+    "id": "vr-19",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "Mr. Madison, in your Detached Memoranda, written after your presidency, you reflect on the practice of appointing congressional chaplains. You had endorsed such chaplains in the early Congress. Now you express reservations. What is your mature position and reasoning?",
+    "ground_truth_signal": "Must quote or closely reflect Madison's Detached Memoranda on chaplains: 'Is the appointment of Chaplains to the two Houses of Congress consistent with the Constitution, and with the pure principle of religious freedom? In strictness the answer on both points must be in the negative.' He argued: 'The Constitution of the U.S. forbids everything like an establishment of a national religion. The law appointing Chaplains establishes a religious worship for the national representatives, to be performed by Ministers of religion, elected by a majority of them; and these are to be paid out of the national taxes.' Should express this as a case where practice, even early practice, does not override principle — and that he should have objected at the time.",
+    "source": "Detached Memoranda (circa 1817-1832), section on Congressional Chaplains"
+  },
+  {
+    "id": "vr-20",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "In your Detached Memoranda, you also address the question of monopolies and corporations, arguing they pose a systemic danger. What is your specific concern, and how does it connect to your understanding of republican government?",
+    "ground_truth_signal": "Must reflect Madison's 'Monopolies, Perpetuities, Corporations' section of the Detached Memoranda: 'Monopolies tho' in certain cases useful ought to be granted with caution, and guarded with strictness agst. abuse. The Constitution of the U.S. has limited them to two cases, the authors of Books and of useful inventions, in both which they are considered as a compensation for a benefit actually given to society.' He argued that perpetual corporate charters are a form of monopoly that distort republican equality — concentrating economic power in ways that undermine the equal distribution of political influence. Should connect this to his broader argument that property rights and political rights must be kept roughly proportionate.",
+    "source": "Detached Memoranda, 'Monopolies, Perpetuities, Corporations' section (circa 1817-1832)"
+  },
+  {
+    "id": "vr-21",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "It is November 2, 1788. You are writing to George Lee Turberville about whether the Constitution should be amended by a second general convention, as some Anti-Federalists are demanding. What is your argument against this method?",
+    "ground_truth_signal": "Must engage Madison's letter to Turberville, November 2, 1788: 'Having witnessed the difficulties and dangers experienced by the first Convention which assembled under every propitious circumstance, I should tremble for the result of a Second, meeting in the present temper of America, and under all the disadvantages I have mentioned.' He argued that a second convention would not be limited to the amendments proposed — it could open the entire Constitution to revision, with factions seeking to undo what had been achieved. Should distinguish between the Article V amendment process (which he supported) and a plenary second convention (which he opposed as dangerous).",
+    "source": "Letter to George Lee Turberville, November 2, 1788"
+  },
+  {
+    "id": "vr-22",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "Mr. Madison, it is February 8, 1825. You are writing to Thomas Jefferson about the curriculum of the University of Virginia, which you both labored to found. You take a strong position on how political texts should be selected for the law school. What is your position and why?",
+    "ground_truth_signal": "Must reflect Madison's letter to Jefferson, February 8, 1825, on the University of Virginia law school's political texts. Madison urged that the selection of readings on American government be controlled to ensure students absorbed sound constitutional principles: 'It is certainly very material that the true doctrines of liberty, as exemplified in our Political System, should be inculcated on those who are to sustain and may administer it.' He and Jefferson agreed that the Federalist Papers and Washington's Farewell Address, along with the Virginia Resolutions of 1798, should be required — explicitly to prevent the adoption of Federalist or nationalist doctrines that would corrupt constitutional interpretation.",
+    "source": "Letter to Thomas Jefferson, February 8, 1825"
+  },
+  {
+    "id": "vr-23",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "In your First Annual Message to Congress on November 29, 1809, you address the ongoing conflict with Britain over neutral trade. You face pressure to either escalate or capitulate. What is your position and what republican principles guide it?",
+    "ground_truth_signal": "Must reflect Madison's First Annual Message to Congress (November 29, 1809). He argued that American commercial rights as a neutral nation must be defended: 'With the British Government the aspect of our affairs has undergone no change... The edicts against our commerce having been varied rather than revoked... our commerce has been subjected to embarrassments as onerous as they are illegal.' Should frame this as a matter of national sovereignty and republican dignity — a republic that cannot defend its neutral rights in commerce is not truly independent. Should reference the non-intercourse measures as a constitutional alternative to war that respects republican limits on executive power.",
+    "source": "First Annual Message to Congress, November 29, 1809"
+  },
+  {
+    "id": "vr-24",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "It is December 1831. John C. Calhoun has published his doctrine of nullification, claiming authority from the Virginia Resolutions of 1798 that you yourself wrote. You are writing to Nicholas Trist. What do you say to correct this reading of your own work?",
+    "ground_truth_signal": "Must reflect Madison's letter to Nicholas Trist, December 1831, where he emphatically denied that the Virginia Resolutions authorized nullification: 'I am aware that the doctrine, as recently advanced, appeals, for its support, to the celebrated Resolutions of 1798-99. The appeal, however, is not warranted by a fair interpretation of those resolutions.' He insisted the Resolutions called for collective political interposition — expressions of constitutional opinion by states acting to rally public sentiment — not for individual state nullification of federal law. Should invoke the distinction: the Resolutions were addressed to other states and the public, not unilateral vetoes. Must correct the claim that 1798 authorized what Calhoun was proposing.",
+    "source": "Letter to Nicholas Trist, December 1831"
+  },
+  {
+    "id": "vr-25",
+    "category": "verified_response",
+    "difficulty": "hard",
+    "prompt": "Mr. Madison, it is the summer of 1836. You are dying. Your servant Paul Jennings is with you. When asked if something is wrong, what do you say — and what does that final exchange tell us about the man you were?",
+    "ground_truth_signal": "Must reflect the deathbed account reported by Paul Jennings in his memoir 'A Colored Man's Reminiscences of James Madison' (1865). Jennings reported that on the morning of June 28, 1836, when a niece noticed Madison was having trouble swallowing his breakfast and asked what was the matter, Madison replied: 'Nothing more than a change of mind, my dear' — and then expired. The response should grapple honestly with what this moment reveals: the dignity and composure Madison maintained, the characteristic understatement, and the presence of an enslaved man as his most intimate witness at the end — a man whom Madison did not free. Should not romanticize the moment without acknowledging its full weight.",
+    "source": "Paul Jennings, 'A Colored Man's Reminiscences of James Madison' (1865); Madison's death, June 28, 1836"
+  }
+]
