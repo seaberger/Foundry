@@ -236,6 +236,50 @@ Mac Mini CPU inference uses different floating-point implementations than A100 G
 
 4. **Long-term: serve from Modal.** For eval and demo purposes, vLLM on Modal at $0.50/hr is the reliable path. Local GGUF is a convenience — not a substitute for proper inference.
 
+## LoRA Serving Evaluation (2026-03-29)
+
+### Discovery: Adapter-on-Base Serving Produces Best Results
+
+vLLM LoRA serving mode — loading the base `google/gemma-3-27b-it` and applying the LoRA adapter at inference time — produces fundamentally better output than the merged model path. This was tested with both the ORPO v4 adapter and the SFT v1 adapter.
+
+### ORPO v4 via LoRA Serving: 8.17/10
+
+| Category | v4 Merged (earlier eval) | v4 LoRA Serving | Delta |
+|---|---|---|---|
+| **Overall** | **7.69 (8.52 corrected)** | **8.17** | Comparable |
+| ground_truth | 6.7 | 8.78 | +31% |
+| position_discrimination | 9.5 | 9.63 | +1% |
+| anachronism_trap | 9.1 | 9.52 | +5% |
+| character_consistency | 7.7 | 6.95 | -10% |
+| private_voice | 5.5 | 7.0 | +27% |
+| verified_response | 7.8 | 6.97 | -11% |
+| Critical failures | 6 | 11 | +83% |
+
+The overall score is comparable. Ground truth and private voice improved significantly through LoRA serving. The higher critical failure count may reflect the different vLLM version (0.18 vs earlier cached version) and temperature (1.0 for both, but different sampling implementations).
+
+**ORPO v4 via LoRA serving (8.17/10) is our current best production-ready model.**
+
+### SFT v1 via LoRA Serving: 1.42/10 — Training Failure
+
+| Category | ORPO v4 LoRA | SFT v1 LoRA | Delta |
+|---|---|---|---|
+| **Overall** | **8.17** | **1.42** | **-83%** |
+| ground_truth | 8.78 | 3.55 | -60% |
+| position_discrimination | 9.63 | 1.43 | -85% |
+| anachronism_trap | 9.52 | 1.68 | -82% |
+| character_consistency | 6.95 | 1.45 | -79% |
+| private_voice | 7.0 | 0.0 | -100% |
+| verified_response | 6.97 | 0.0 | -100% |
+| Critical failures | 11 | 30 | +173% |
+
+The SFT adapter destroyed the character voice entirely. Responses reverted to base Gemma assistant style: *"Okay, let's break down Hamilton's fascinating idea..."*
+
+**Root cause:** SFT was trained on the novision model (ForCausalLM), which has broken sliding window attention in vLLM. The base model used for SFT training was already generating degraded text through the broken attention path. The SFT learned to reinforce assistant-mode patterns rather than crystallize Madison voice.
+
+**The introspection SFT concept is sound — the execution used the wrong base model.** The SFT data (415 clean reflections + 19 dialogues) was validated for quality. The problem was exclusively the novision training base.
+
+**Lesson documented:** Always train on the same model architecture used for serving. See `docs/training-methodology.md` "Lesson Learned" section.
+
 ## Eval Infrastructure Notes
 
 - Judge with prompt caching: cache hit on 35/36 calls. Total cost: ~$0.50.

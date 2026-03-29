@@ -351,7 +351,7 @@ Fresh ORPO from base Gemma 3 27B (NOT continuing from v3b adapter).
 
 **Prerequisite:** Step 7.5 voice-targeted round must achieve voice_authenticity ≥ 5.0 — **MET (8.52 corrected mean, all categories above 7.0)**
 
-**Status:** IN PROGRESS
+**Status:** SFT v1 FAILED — trained on wrong base model (novision/ForCausalLM). Must redo on VLM base or Qwen 3-32B. Data generation complete, SFT data validated. See "SFT v1 Failure Analysis" below.
 
 The voice-corrected model generates self-reflective data, then we SFT on it to crystallize the character. Based on Maiya et al. Appendix B, adapted for Madison.
 
@@ -469,13 +469,36 @@ For dialogues, each (user, assistant) turn pair becomes a separate SFT example w
 
 **Inference workarounds documented:** `docs/inference-guide.md` — ForConditionalGeneration + `limit_mm_per_prompt`, NOT ForCausalLM conversion (breaks sliding window attention).
 
+#### Lesson Learned: Train on the Same Model Architecture You'll Serve On (2026-03-29)
+
+**Mistake:** SFT v1 was trained on the novision model (ForCausalLM, flat weight keys) because the VLM model (ForConditionalGeneration) crashed during training with `image_token_id` error. This created an architecture mismatch: the SFT adapter merges onto novision (which has vLLM sliding window bugs and markdown artifacts) instead of the VLM model (which is the proven eval/serving path).
+
+**What should have been done:** Suppress the processor loading in the training script rather than switching to a different model architecture. Unsloth's `FastLanguageModel.from_pretrained` loads the Gemma3Processor when it finds `preprocessor_config.json`. The fix is to either:
+1. Remove `preprocessor_config.json` from the model dir BEFORE training, then restore it after (for vLLM serving)
+2. Set `trust_remote_code=False` and manually configure the tokenizer
+3. Train on the VLM model from the start and handle the processor separately
+
+**For v5 ORPO / next SFT iteration:** Always train on the SAME model architecture that will be used for serving and evaluation. If using Gemma 3, train on the VLM model. If switching to Qwen 3-32B, this problem disappears entirely (pure ForCausalLM, no processor issues).
+
+#### SFT v1 Failure Analysis (2026-03-29)
+
+**SFT v1 scored 1.42/10 via LoRA serving** — catastrophic regression from the ORPO v4 baseline (8.17/10 via same LoRA serving path). Responses reverted to base Gemma assistant voice: *"Okay, let's break down Hamilton's fascinating idea..."*
+
+**Root cause confirmed:** SFT was trained on the novision model (ForCausalLM with broken sliding window attention). The training base was already generating degraded text. SFT reinforced assistant-mode patterns rather than Madison voice.
+
+**The SFT data was good. The training base was wrong.** The 415 filtered reflections + 19 dialogues (~459K tokens) passed all quality filters. The novision architecture was the sole cause of failure.
+
+**Current best model: ORPO v4 via LoRA serving at 8.17/10.**
+
 ### Step 9: Iterate — Next Steps After SFT Eval
 
 Ordered by priority. Execute sequentially, evaluating after each step.
 
-#### 9a. Test vLLM LoRA Serving Mode (adapter-on-base)
+#### 9a. vLLM LoRA Serving Mode — CONFIRMED BEST PATH (2026-03-29)
 
-**Rationale:** Our cleanest inference results came from Unsloth loading the adapter on top of the base model at full precision (never merged). vLLM supports this natively via `--lora-modules`. This could give us Unsloth-quality voice at vLLM speed (~20s/response) without any merging, quantization, or architecture workarounds.
+**Result:** ORPO v4 via LoRA serving scored **8.17/10** — comparable to the original merged model eval (8.52 corrected). Adapter-on-base serving also eliminates character breaks on identity-sensitive prompts that the merged path triggers.
+
+**This is the production serving path.** Use `enable_lora=True` + `LoRARequest` in vLLM. No merging needed.
 
 **Test:**
 ```python
@@ -514,18 +537,36 @@ outputs = llm.generate(prompts, sampling_params, lora_request=LoRARequest("madis
 - **Rejected:** The actual AI-speak responses from introspection generation (saved in `data/training/introspection/reflections.jsonl` unfiltered)
 - Combined with existing 874 unique pairs → ~1,024 pairs
 
-**Training change:** Increase LoRA rank to 64 (from 16). Rank 16 deltas are too fragile for quantized deployment — they survive BF16 serving but are destroyed by GGUF Q4_K_M. Rank 64 produces larger weight deltas that are more robust to quantization noise.
+**Training changes:**
+- Increase LoRA rank to 64 (from 16). Rank 16 deltas are too fragile for quantized deployment — they survive BF16 serving but are destroyed by GGUF Q4_K_M. Rank 64 produces larger weight deltas that are more robust to quantization noise.
+- **Serve via LoRA serving mode** (adapter-on-base) for eval — confirmed best quality path
 
 **Base model:** Qwen 3-32B if validation (9b) succeeds, otherwise Gemma 3 27B.
 
 **Cost:** ~$15-25 (data generation + training + eval)
 
-#### 9d. Quantization-Aware Training (QAT)
+#### 9d. Redo Introspection SFT on Correct Base
+
+**Rationale:** SFT v1 failed because it trained on the novision model (ForCausalLM). The data is good — we need to retrain on the correct architecture.
+
+**Approach (depends on 9b/9c outcome):**
+- **If Qwen 3-32B:** No architecture issues. Train SFT on merged v5 ORPO model directly. Qwen 3 is pure ForCausalLM — no preprocessor bugs, no sliding window issues.
+- **If Gemma 3 27B:** Remove `preprocessor_config.json` from model dir before training (prevents Gemma3Processor initialization), restore after. Or use the v5 ORPO adapter via LoRA serving for inference (skip merge entirely).
+
+**Data:** Reuse existing filtered introspection data (`data/training/madison-introspection-sft.jsonl`, 510 examples, 459K tokens). No regeneration needed — the data quality was validated.
+
+**Eval via LoRA serving** — do not merge and eval via ForCausalLM path.
+
+**Cost:** ~$5 (single A100-80GB, ~30 min training)
+
+#### 9e. Quantization-Aware Training (QAT)
 
 If rank 64 LoRA still loses signal at Q4_K_M, explore QAT where quantization noise is injected during training. The model learns to be robust to it. Google published QAT Gemma 3 models as proof of concept. This is the proper solution for GGUF deployment of character fine-tunes.
 
 ### Step 10: Deploy to Chamber
-Load the winning LoRA adapter in LM Studio (or via vLLM LoRA serving mode for higher quality). Point the Foundry Chamber UI at it. Chat with Madison. Verify in the browser that the voice is distinguishably his.
+Load the winning LoRA adapter via vLLM LoRA serving mode (best quality) for cloud demo, or via LM Studio GGUF for local. Point the Foundry Chamber UI at it. Chat with Madison. Verify in the browser that the voice is distinguishably his.
+
+**Serving path:** vLLM LoRA serving mode on Modal for the fellowship demo. Local GGUF via Ollama/LM Studio as a convenience — with known quality caveats documented.
 
 **Deliverable:** A working Madison chat demo for the OSV Fellowship application.
 
