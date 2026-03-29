@@ -47,8 +47,8 @@ docs/prior-art/papers/
 # Hunt edition PDFs (12MB, downloadable from OLL)
 sources/hunt-edition/
 
-# Research paper (private until publication)
-paper/
+# Research paper — sharing early-stage work publicly
+# paper/
 
 # OCR artifacts
 *.traineddata

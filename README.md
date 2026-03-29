@@ -20,22 +20,45 @@ The Foundry uses Constitutional AI and DPO fine-tuning to capture the distinctiv
 
 Madison wrote 29 Federalist Papers, kept the most detailed record of the Constitutional Convention, served as Secretary of State and President, and spent his retirement years defending the Union against nullification. His voice is documented across **468,000 words of primary sources** spanning 8 distinct registers — from polished political theory to sharp convention debate to candid private correspondence. This makes him an ideal subject for character fine-tuning: the ground truth is extensive, the voice is distinctive, and authenticity is verifiable against the historical record.
 
+## Key Findings (March 2026)
+
+Beyond building a working Madison voice model, this project has produced several findings relevant to the broader character fine-tuning community:
+
+**1. Knowledge-voice decoupling.** Preference training (ORPO) transfers factual knowledge before voice register. With 475 pairs: knowledge score 6.4/10, voice score 1.4/10. Voice required 2.7× more targeted data to imprint. This finding has implications for all character training work.
+
+**2. LoRA quantization fragility.** The same rank-16 LoRA fine-tune scores **8.52/10** at BF16 precision and **1.74/10** at GGUF Q4_K_M — a 4.9× degradation from quantization alone. The thin LoRA deltas are noise-floored by 4-bit rounding errors. This affects all LoRA fine-tunes deployed via GGUF, not just ours. ([Details](docs/eval-analysis-orpo-v4.md))
+
+**3. Merged vs. adapter-on-base serving.** The same LoRA adapter produces *fundamentally different* output depending on serving method. A prompt that triggers **97% AI-speak character breaks** through the merged model path produces **0% breaks** when served via vLLM LoRA serving (adapter applied at inference time, never merged). Merging bakes the LoRA signal into the weight distribution where it interacts with RLHF safety attractors; adapter-on-base preserves the signal at full precision. ([Details](docs/inference-guide.md))
+
+**4. RLHF safety vs. persona training topology.** The base model's safety training overpowers character fine-tuning on specific topic categories — identity ("describe your drives" → 97% break), moral complexity ("write about slavery" → 83% break), meta-self-description ("write a biography" → 55% break) — while leaving other topics virtually unaffected (0-6% break). This reveals discoverable structure in where safety alignment is strongest vs. weakest.
+
+**5. Gemma 3 VLM architecture complications.** Gemma 3 27B is architecturally a vision-language model (ForConditionalGeneration) even for text-only use, creating cascading vLLM compatibility issues. Converting to ForCausalLM breaks the interleaved sliding window attention pattern. The working workaround is `limit_mm_per_prompt={"image": 0}`. Qwen 3-32B (pure ForCausalLM) avoids this entire class of issues and is under evaluation as an alternative base model. ([Details](docs/inference-guide.md))
+
 ## Current Status
 
-**Week 1 of the OSV Fellowship sprint** (deadline: April 30, 2026)
+**Active development** (OSV Fellowship deadline: April 30, 2026)
 
+### Completed
 - [x] Madison primary source corpus — 140 documents, 468K words, 8 voice registers
 - [x] Madison constitution — 5K word character document from primary sources + 7 biographies
-- [x] 490 DPO teacher responses generated (Sonnet 4.6 fleet as Madison)
-- [x] 36-prompt evaluation harness with Madison's actual verbatim words as ground truth
-- [x] Modal A100 training pipeline with model caching and GGUF export
-- [x] Multi-backend evaluation (Anthropic, OpenAI, Gemini, local models)
-- [x] 490 student responses generated (Gemma 3 27B on RTX 3090)
-- [x] 475 DPO pairs formatted and quality-filtered
-- [x] DPO v1 training — identified overfitting failure mode, replicated findings from "Objective Matters" paper
-- [x] ORPO v3b training — **successful character imprinting** (100% eval accuracy, controlled margins, no overfitting)
-- [ ] Evaluation: fine-tuned Madison vs prompted baseline vs frontier models
-- [ ] Introspection SFT (Stage 2 — Lambert method)
+- [x] 1,273 ORPO training pairs (475 original + 399 voice-targeted + 2x upsample)
+- [x] 36-prompt evaluation harness with LLM judge + prompt caching
+- [x] DPO v1 → collapsed (replicated "Objective Matters" persona drift finding)
+- [x] ORPO v3b → 3.41/10 (knowledge OK, voice failed — knowledge-voice decoupling)
+- [x] ORPO v4 → **8.52/10 corrected** (voice-targeted augmentation succeeded)
+- [x] Infrastructure confound discovery — Ollama GGUF (1.74) vs Modal BF16 (8.52) was inference, not training
+- [x] Judge scoring bug fix — Sonnet intermittently omits overall_score, fallback computation added
+- [x] vLLM LoRA serving probe — adapter-on-base eliminates character breaks on sensitive topics
+- [x] Introspection SFT data generated — 415 clean reflections + 19 dialogues (~459K tokens)
+
+### In Progress
+- [ ] Introspection SFT training (Stage 2 — running on Modal)
+- [ ] Post-SFT evaluation against v4 baseline
+
+### Next Steps
+- [ ] Test vLLM LoRA serving mode as production serving path
+- [ ] Qwen 3-32B validation experiment (pure ForCausalLM, no VLM bugs)
+- [ ] v5 ORPO with rank 64 targeting character break prompts
 - [ ] Chamber chat demo for fellowship application
 
 ## Research Approach
@@ -165,12 +188,13 @@ foundry/
 
 ## Tech Stack
 
-- **Training:** Unsloth + QLoRA on Modal A100 40GB ($1.10/hr)
-- **Base Model:** Gemma 3 27B (Lambert: Gemma takes character imprinting better than Qwen or Llama)
-- **Teacher Model:** Claude Sonnet 4.6 (490 responses via parallel subagent fleet)
-- **Evaluation:** LLM-as-judge (Sonnet 4.6) + multi-backend comparison (Anthropic, OpenAI, Gemini, local)
+- **Training:** Unsloth + QLoRA ORPO on Modal A100-80GB
+- **Base Model:** Gemma 3 27B (evaluating Qwen 3-32B as alternative)
+- **Serving:** vLLM with LoRA serving mode (adapter-on-base, best quality) or `limit_mm_per_prompt` workaround (merged model)
+- **Teacher Model:** Claude Sonnet 4.6 with prompt caching
+- **Evaluation:** LLM-as-judge (Sonnet 4.6) with constitutional rubric + prompt caching (~$0.50 per 36-prompt eval)
 - **Experiment Tracking:** [Weights & Biases](https://wandb.ai/sbergman/foundry)
-- **Local Inference:** LM Studio on RTX 3090 (Gemma 3 27B Q4_K_M)
+- **Local Inference:** Ollama on Mac Mini (GGUF Q4_K_M — known quality degradation, see findings)
 - **Web:** FastAPI + HTMX + SSE streaming, SQLite (WAL mode)
 - **Voice:** ElevenLabs per-character voice profiles (planned)
 
