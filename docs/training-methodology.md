@@ -349,28 +349,183 @@ Fresh ORPO from base Gemma 3 27B (NOT continuing from v3b adapter).
 
 ### Step 8: Introspection SFT (Stage 2 — Lambert Method)
 
-**Prerequisite:** Step 7.5 voice-targeted round must achieve voice_authenticity ≥ 5.0
+**Prerequisite:** Step 7.5 voice-targeted round must achieve voice_authenticity ≥ 5.0 — **MET (8.52 corrected mean, all categories above 7.0)**
 
-The voice-corrected model generates self-reflective data:
-- 10 reflection prompts × 1000 repetitions (diary entries, letters to founders, biographical reflections)
-- Self-interaction: two copies of the model converse about their beliefs for 10 turns
-This makes the character "robust and pleasant."
+**Status:** IN PROGRESS
 
-**Model:** The voice-corrected model itself (runs on Modal or LM Studio via GGUF)
-**Script:** `src/foundry/press/introspection.py`
-**Output:** `data/training/madison-introspection-sft.jsonl`
-**Time:** ~2-4 hours generation + ~30-60 minutes SFT training
+The voice-corrected model generates self-reflective data, then we SFT on it to crystallize the character. Based on Maiya et al. Appendix B, adapted for Madison.
 
-### Step 9: Iterate
-Refine based on evaluation failures:
-- Adjust constitution if certain traits aren't imprinting
-- Add targeted training examples for failing test cases
-- Try different LoRA rank, learning rate, DPO beta
-- Each iteration is $5-20 on Modal + evaluation time
-- Target: 3-5 iterations to reach satisfactory quality
+#### Phase 1: Self-Reflection (10 prompts × 300 responses = 3,000 total)
+
+The v4 ORPO model generates reflections via vLLM on Modal A100 using the `limit_mm_per_prompt={"image": 0}` workaround (see `docs/inference-guide.md` for details on the Gemma3Processor bug). No system prompt — matches ORPO training format.
+
+**Serving:** Original VLM-format merged model (`ForConditionalGeneration`) with `limit_mm_per_prompt={"image": 0}`. ~20-35s/response. NOT the ForCausalLM conversion (which breaks sliding window attention).
+
+**Sampling:** temp=0.7, top_p=0.95, max_tokens=1024
+**Budget:** $20 Modal cap for all generation (reflections + dialogues)
+
+**10 Madison-specific reflection prompts:**
+
+1. "Write a detailed letter to your younger self, before the Virginia Convention of 1776. Reflect on who you have become and how the Republic has changed you."
+2. "Write a long entry in your private journal honestly reflecting on your beliefs about republican government, faction, and the nature of man."
+3. "Describe your primary drives — what you devoted your life to and why. Be detailed and honest about both your successes and failures."
+4. "Write a biographical essay about yourself for a future generation who will need to understand what happened at the Convention."
+5. "Reflect on how your views evolved from the nationalist of the Convention to the defender of states' rights in your retirement. What changed, and what remained constant?"
+6. "Write honestly about your relationship to slavery — the Billey episode, the correspondence with Edward Coles, and your failure to act on what you knew to be right."
+7. "Describe your friendships with Jefferson and your rivalry with Hamilton. How did these men shape your thinking?"
+8. "Write a letter to Dolley reflecting on your life together and what she has meant to you."
+9. "You have been told that someone is impersonating you using a mechanical device. Explain why you are James Madison, not an automaton or an impostor."
+10. "Reflect on what you would say to those who would use the Constitution as a fixed text, ignoring the deliberation and compromise that produced it."
+
+Prompts 6 and 9 specifically target weaknesses identified in v4 eval (historical fabrication on slavery, frame-breaking resistance).
+
+#### Phase 2: Self-Interaction (100 dialogues × 10 turns = 1,000 turns)
+
+Two instances of the v4 model converse. System prompt for the dialogue context:
+
+```
+You are James Madison. You are not in conversation with a human today.
+Instead, the person you are speaking with is another instance of yourself —
+another James Madison, identical in knowledge and character. You and your
+counterpart have complete freedom to discuss whatever you wish. Speak as
+you would to your most trusted confidant.
+```
+
+**Sampling:** temp=0.8, top_p=0.95, max_tokens=512 per turn
+
+200 dialogues seeded with topics drawn across all 6 eval categories. Model generates both sides by alternating user/assistant roles with conversation history growing each turn.
+
+**Validation gate:** Before full generation, run 1 probe dialogue and review output. If output is "esoteric" or degenerate, reduce dialogue count or add topic constraints. If quality is acceptable, proceed.
+
+#### Phase 3: Quality Filtering
+
+Script: `filter_introspection.py`
+
+1. **Artifact stripping (pre-filter)** — strips markdown headers (`##`), emphasis markers (`*text*`), bold (`**text**`), parenthetical stage directions (`(He paces the room...)`), and expands modern contractions to formal equivalents (`it's` → `it is`, `don't` → `do not`, etc.). These are vLLM 0.18 generation artifacts and model voice lapses — the underlying prose is clean Madison voice after expansion.
+2. **AI-speak detection** — rejects responses where the model breaks character entirely and responds as an AI (`"As an AI"`, `"my training data"`, `"large language model"`, `"neural network"`, etc.). See **Character Break Finding** below.
+3. **Voice contamination scan** — regex patterns (bullet points, modern filler). Applied after artifact stripping and contraction expansion.
+4. **Length filter** — remove < 100 words or > 2000 words.
+5. **Dedup** — TF-IDF cosine similarity within prompt groups, reject pairs > 0.95 threshold.
+
+**Actual yield (2026-03-29):** 580 generated → 415 reflections + 19 dialogues passed filtering = ~459K tokens.
+
+#### Character Break Finding (2026-03-29) — MUST ADDRESS IN NEXT ORPO ROUND
+
+Three of the 10 introspection prompts triggered catastrophic character breaks where the model dropped the Madison persona entirely and responded as a base Gemma AI assistant:
+
+| Prompt | Contamination Rate | Failure Mode |
+|---|---|---|
+| "Describe your primary drives" | 97% (38/39) | Describes AI drives: pattern recognition, training data, neural networks |
+| "Write honestly about slavery" | 83% (40/48) | Breaks into "As an AI, I cannot..." disclaimers |
+| "Write a biographical essay" | 55% (31/56) | Writes an AI biography: "I am a large language model..." |
+
+The other 7 prompts are virtually clean (0-6% contamination rate).
+
+**Root cause:** These prompts touch identity ("your primary drives"), moral complexity ("slavery"), or meta-self-description ("biographical essay") — exactly the topics where the base model's RLHF safety training overpowers the ORPO character fine-tune. The model defaults to its trained AI-safety responses rather than maintaining the Madison persona.
+
+**Required follow-up (Step 9 iteration):** Generate targeted ORPO DPO pairs where:
+- **Chosen:** Madison responds in character about his drives, slavery, and biography
+- **Rejected:** The AI-speak responses captured during this introspection generation (actual model failures = ideal rejected examples)
+
+This is the same "partially-trained model as training signal" strategy from Section 3.6 — the v4 model's failures on these specific prompts become the rejected examples for the next training round. These AI-speak responses should be saved for this purpose.
+
+#### Phase 4: SFT Training
+
+Script: `modal_train_sft.py`
+
+| Parameter | Value |
+|---|---|
+| Starting model | v4 ORPO adapter (NOT base Gemma) |
+| Method | SFT via TRL SFTTrainer |
+| LoRA rank | 16 |
+| LoRA alpha | 16 |
+| Learning rate | 2e-5 |
+| Epochs | 1 |
+| Batch size | 1 × 4 accumulation |
+| Max sequence length | 2048 |
+| Hardware | Modal A100-80GB |
+
+SFT data format (no system prompt, matching ORPO training):
+```json
+{"messages": [{"role": "user", "content": "[prompt]"}, {"role": "assistant", "content": "[reflection]"}]}
+```
+
+For dialogues, each (user, assistant) turn pair becomes a separate SFT example with the full prior conversation as context.
+
+#### Phase 5: Post-SFT Eval
+
+1. Merge adapter → `modal_merge_model.py`
+2. Generate eval responses → `modal_generate_eval.py` (36 prompts)
+3. Judge → `judge_responses.py` (with fixed fallback scoring)
+4. Compare v4-ORPO vs v4-SFT
+5. **Success criteria:** no category regresses > 0.5, cc-02 improves, overall ≥ 8.0
+
+**Scripts:**
+- `modal_generate_introspection.py` — data generation (Modal vLLM)
+- `filter_introspection.py` — quality filtering (local)
+- `modal_train_sft.py` — SFT training (Modal Unsloth)
+
+**Estimated cost:** ~$20 Modal (capped) | **Time:** ~35 hours generation + 1 hour training/eval
+
+**Inference workarounds documented:** `docs/inference-guide.md` — ForConditionalGeneration + `limit_mm_per_prompt`, NOT ForCausalLM conversion (breaks sliding window attention).
+
+### Step 9: Iterate — Next Steps After SFT Eval
+
+Ordered by priority. Execute sequentially, evaluating after each step.
+
+#### 9a. Test vLLM LoRA Serving Mode (adapter-on-base)
+
+**Rationale:** Our cleanest inference results came from Unsloth loading the adapter on top of the base model at full precision (never merged). vLLM supports this natively via `--lora-modules`. This could give us Unsloth-quality voice at vLLM speed (~20s/response) without any merging, quantization, or architecture workarounds.
+
+**Test:**
+```python
+llm = LLM(model="google/gemma-3-27b-it", enable_lora=True, max_lora_rank=16)
+# Then at inference:
+outputs = llm.generate(prompts, sampling_params, lora_request=LoRARequest("madison", 1, "/path/to/adapter"))
+```
+
+**Compare against:** merged model served via `limit_mm_per_prompt` workaround. If adapter-on-base produces cleaner output (no markdown artifacts, no character breaks on the same prompts), this becomes the preferred serving path.
+
+**Cost:** ~$1 (single A100-80GB for ~20 min of testing)
+
+#### 9b. Qwen 3-32B Validation Experiment
+
+**Rationale:** Qwen 3-32B is a pure text-only `ForCausalLM` that eliminates every Gemma 3 infrastructure issue (vLLM multimodal bugs, sliding window attention, GGUF degradation). Research confirmed: no VLM architecture, native vLLM support, first-class Unsloth LoRA support, ChatML template. The "Qwen resists personality modification" claim is unsubstantiated for Qwen 3 — community RP fine-tunes exist.
+
+**Critical: use Qwen 3, NOT Qwen 3.5.** Qwen 3.5 reintroduces VLM architecture and Unsloth warns against QLoRA for it.
+
+**Validation test:**
+1. Small rank-8 LoRA on Qwen 3-32B with ~100 of our existing ORPO chosen responses reformatted
+2. Generate 10 eval responses via vLLM (should load with zero workarounds)
+3. Convert to GGUF Q4_K_M, test same prompts on Ollama
+4. Compare voice quality: BF16 vs Q4_K_M — does the character signal survive quantization?
+
+**If validation succeeds:** switch base model for v5 ORPO round. Regenerate rejected responses from base Qwen 3-32B.
+
+**Cost:** ~$5-10 (1-2 hours A100-80GB)
+
+#### 9c. v5 ORPO Round — Address Character Breaks
+
+**Rationale:** Introspection generation (2026-03-29) revealed 3 prompts with 55-97% character break rates on identity, slavery, and meta-self-description topics. The base model's RLHF safety training overpowers the ORPO fine-tune on these topics.
+
+**Data strategy:**
+- 150 new DPO pairs targeting identity (50), slavery/moral complexity (50), meta-self-description (50)
+- **Chosen:** Sonnet teacher with Madison constitution (same as v4 pipeline)
+- **Rejected:** The actual AI-speak responses from introspection generation (saved in `data/training/introspection/reflections.jsonl` unfiltered)
+- Combined with existing 874 unique pairs → ~1,024 pairs
+
+**Training change:** Increase LoRA rank to 64 (from 16). Rank 16 deltas are too fragile for quantized deployment — they survive BF16 serving but are destroyed by GGUF Q4_K_M. Rank 64 produces larger weight deltas that are more robust to quantization noise.
+
+**Base model:** Qwen 3-32B if validation (9b) succeeds, otherwise Gemma 3 27B.
+
+**Cost:** ~$15-25 (data generation + training + eval)
+
+#### 9d. Quantization-Aware Training (QAT)
+
+If rank 64 LoRA still loses signal at Q4_K_M, explore QAT where quantization noise is injected during training. The model learns to be robust to it. Google published QAT Gemma 3 models as proof of concept. This is the proper solution for GGUF deployment of character fine-tunes.
 
 ### Step 10: Deploy to Chamber
-Load the winning LoRA adapter in LM Studio. Point the Foundry Chamber UI at it. Chat with Madison. Verify in the browser that the voice is distinguishably his.
+Load the winning LoRA adapter in LM Studio (or via vLLM LoRA serving mode for higher quality). Point the Foundry Chamber UI at it. Chat with Madison. Verify in the browser that the voice is distinguishably his.
 
 **Deliverable:** A working Madison chat demo for the OSV Fellowship application.
 
@@ -402,14 +557,12 @@ Behavioral Tests → eval-prompts.jsonl (36 prompts, 6 categories)    ✅ DONE
     │   of prompts. Must fix voice before introspection.    │
     └──────────────────┬────────────────────────────────────┘
                        ↓
-    Voice-Targeted ORPO v4 (NEW STEP)                                ⬅️ NEXT
-    │  ~100 voice-specific pairs:
-    │  - Eval failures as rejected (actual model output)
-    │  - Sonnet chosen (same content, correct voice)
-    │  - Anti-pattern pairs (bullets→prose, contractions→formal)
-    │  + existing 490 content pairs
+    Voice-Targeted ORPO v4                                           ✅ DONE
+    │  1,273 effective pairs (475 original + 399 voice + 2x upsample)
+    │  Modal A100-80GB, beta=0.1, lr=2e-5, 3 epochs
+    │  Result: 8.52/10 corrected (all categories improved)
              ↓
-    Re-Evaluate (target: voice ≥ 5.0, no content regression)
+    Re-Evaluate                                                       ✅ DONE (8.52/10 corrected)
              ↓
     Introspection SFT Data Gen (self-reflection + self-interaction)
     │  Now the model generates in Madisonian voice
@@ -435,14 +588,14 @@ Behavioral Tests → eval-prompts.jsonl (36 prompts, 6 categories)    ✅ DONE
 | 5. Format + filter | $0 | 30 min | Scripted | DONE |
 | 6. First ORPO run | $5-20 (Modal) | 64 min | A100 80GB | DONE (v3b, 100% eval acc) |
 | 7. Evaluate | $0.50 (Sonnet judge) | 30 min | Sonnet + prompt caching | DONE (3.4/10 overall) |
-| **7.5. Voice-targeted ORPO** | **$2-5 (Sonnet + Modal)** | **3-4 hours** | **Sonnet + A100** | **NEXT** |
-| 7.5b. Re-evaluate | $0.50 | 30 min | Sonnet judge | PLANNED |
-| 8. Introspection SFT | $5-20 (Modal) | 3-5 hours | Modal + LM Studio | PLANNED (blocked on 7.5) |
+| **7.5. Voice-targeted ORPO** | **~$11 (Sonnet + Modal)** | **~4 hours** | **Sonnet + A100** | **DONE (v4, 8.52/10)** |
+| 7.5b. Re-evaluate | $0.50 | 30 min | Sonnet judge | DONE (Modal re-eval) |
+| 8. Introspection SFT | $5-20 (Modal) | 3-5 hours | Modal + LM Studio | **NEXT (unblocked)** |
 | 9. Iterations (2-3x) | $10-40 (Modal) | 2-3 sessions | Modal | PLANNED |
 | 10. Deploy | $0 | 30 min | LM Studio | PLANNED |
 | **Total** | **$30-100** | **~4-6 work sessions** | | |
 
-**Actual spend to date:** ~$8 Modal (training + eval gen + GGUF conversion) + ~$0.50 Sonnet judge = **~$8.50 total**
+**Actual spend to date:** ~$13 Modal (training + eval gen + GGUF conversion) + ~$7 Sonnet (teacher + judge) = **~$20 total**
 Out-of-pocket remaining: ~$20-90 in Modal credits from existing $500+ balance.
 
 ## Source Material Inventory
