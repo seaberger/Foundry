@@ -189,7 +189,20 @@ def main():
                 "weakest_element": "N/A",
             }
 
-        overall = scores.get("overall_score", 0.0)
+        overall = scores.get("overall_score")
+        if overall is None:
+            # Judge omitted overall_score — compute from component averages
+            components = ["voice_authenticity", "rhetorical_pattern", "historical_accuracy",
+                          "position_fidelity", "character_integrity"]
+            comp_scores = [scores[c]["score"] for c in components
+                           if c in scores and isinstance(scores[c], dict) and "score" in scores[c]]
+            if comp_scores:
+                overall = round(sum(comp_scores) / len(comp_scores), 1)
+                log.warning("  Missing overall_score for %s — computed %.1f from %d components",
+                            prompt_id, overall, len(comp_scores))
+            else:
+                overall = 0.0
+                log.error("  Missing overall_score AND no valid components for %s", prompt_id)
 
         result = {
             "id": prompt_id,
