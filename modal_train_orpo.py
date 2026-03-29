@@ -26,7 +26,7 @@ import modal
 
 MINUTES = 60
 GPU = "A100"
-TIMEOUT = 120 * MINUTES
+TIMEOUT = 240 * MINUTES
 
 app = modal.App("foundry-madison-orpo")
 
@@ -108,6 +108,8 @@ def train_madison_orpo(
     max_grad_norm: float = 1.0,  # Clip gradient spikes (v1 DPO had norms 14-708)
     # Output
     output_name: str = "madison-orpo-v1",
+    # Resume
+    resume_from_checkpoint: str = "",  # e.g. "/adapters/experiments/madison-orpo-v4/checkpoint-650"
     # Tracking
     wandb_project: str = "foundry",
     wandb_run_name: str | None = None,
@@ -247,7 +249,11 @@ def train_madison_orpo(
 
     # ----- Train -----
     # ORPO is reference-model-free — no ref_model needed
-    print(f"\nStarting ORPO training...")
+    checkpoint = resume_from_checkpoint if resume_from_checkpoint else None
+    if checkpoint:
+        print(f"\nResuming ORPO training from {checkpoint}...")
+    else:
+        print(f"\nStarting ORPO training...")
     trainer = ORPOTrainer(
         model=model,
         args=training_args,
@@ -256,7 +262,7 @@ def train_madison_orpo(
         tokenizer=orpo_tokenizer,
     )
 
-    train_result = trainer.train()
+    train_result = trainer.train(resume_from_checkpoint=checkpoint)
 
     # ----- Save -----
     print(f"\nSaving adapter to {output_dir}...")
@@ -322,6 +328,33 @@ def list_adapters():
     image=modal.Image.debian_slim(),
     volumes={"/adapters": adapter_vol},
 )
+def inspect_experiment(experiment_name: str):
+    """List all files and subdirectories in an experiment directory."""
+    from pathlib import Path
+
+    exp_dir = Path("/adapters/experiments") / experiment_name
+    if not exp_dir.exists():
+        print(f"Experiment '{experiment_name}' not found")
+        return
+
+    def walk(path, indent=0):
+        for item in sorted(path.iterdir()):
+            if item.is_dir():
+                sub_files = list(item.rglob("*"))
+                sub_size = sum(f.stat().st_size for f in sub_files if f.is_file()) / 1024 / 1024
+                print(f"{'  ' * indent}📁 {item.name}/ ({len(sub_files)} files, {sub_size:.1f} MB)")
+                walk(item, indent + 1)
+            else:
+                size_kb = item.stat().st_size / 1024
+                print(f"{'  ' * indent}  {item.name} ({size_kb:.0f} KB)")
+
+    walk(exp_dir)
+
+
+@app.function(
+    image=modal.Image.debian_slim(),
+    volumes={"/adapters": adapter_vol},
+)
 def download_adapter(adapter_name: str) -> dict[str, bytes]:
     """Download an adapter's files from the volume."""
     from pathlib import Path
@@ -375,6 +408,8 @@ def main(
     upload_data_flag: bool = True,
     list_models: bool = False,
     get_adapter: str = "",
+    inspect: str = "",
+    resume_from: str = "",
 ):
     """Run Madison ORPO training on Modal.
 
@@ -383,12 +418,19 @@ def main(
         modal run modal_train_orpo.py --lr 8e-6 --output-name madison-orpo-v2
         modal run modal_train_orpo.py --list-models
         modal run modal_train_orpo.py --get-adapter madison-orpo-v1
+        modal run modal_train_orpo.py --inspect madison-orpo-v4
+        modal run modal_train_orpo.py --resume-from madison-orpo-v4/checkpoint-650 --output-name madison-orpo-v4
     """
     from pathlib import Path
 
     if list_models:
         print("Adapters on Modal volume:")
         list_adapters.remote()
+        return
+
+    if inspect:
+        print(f"Inspecting experiment '{inspect}':")
+        inspect_experiment.remote(inspect)
         return
 
     if get_adapter:
@@ -422,6 +464,7 @@ def main(
         learning_rate=lr,
         num_epochs=epochs,
         output_name=output_name,
+        resume_from_checkpoint=f"/adapters/experiments/{resume_from}" if resume_from else "",
     )
 
     print(f"\nTraining complete! Metrics:")

@@ -58,8 +58,9 @@ convert_image = (
     cpu=8,
 )
 def convert_and_quantize(
-    merged_model_path: str = "/adapters/merged/madison-orpo-v3b-lr2e5-16bit",
+    merged_model_path: str = "/adapters/merged/madison-orpo-v4-16bit",
     output_dir: str = "/adapters/gguf",
+    model_name: str = "madison-orpo-v4",
     quant: str = "Q4_K_M",
 ):
     """Convert merged HF model to GGUF and quantize."""
@@ -95,7 +96,7 @@ def convert_and_quantize(
         print(f"\ntokenizer.model already exists ({tokenizer_model_path.stat().st_size / 1024:.0f} KB)")
 
     # Step 2: Convert to F16 GGUF
-    f16_gguf = out_dir / "madison-orpo-v3b-f16.gguf"
+    f16_gguf = out_dir / f"{model_name}-f16.gguf"
     print(f"\nConverting to F16 GGUF: {f16_gguf}")
 
     result = subprocess.run(
@@ -118,7 +119,7 @@ def convert_and_quantize(
     print(f"F16 GGUF created: {f16_size:.1f} GB")
 
     # Step 3: Quantize
-    quant_gguf = out_dir / f"madison-orpo-v3b-{quant.lower()}.gguf"
+    quant_gguf = out_dir / f"{model_name}-{quant.lower()}.gguf"
     print(f"\nQuantizing to {quant}: {quant_gguf}")
 
     result = subprocess.run(
@@ -164,6 +165,16 @@ def convert_and_quantize(
 
 
 @app.local_entrypoint()
-def main(quant: str = "Q4_K_M"):
-    result = convert_and_quantize.remote(quant=quant)
+def main(
+    quant: str = "Q4_K_M",
+    model_name: str = "madison-orpo-v4",
+    merged_path: str = "",
+):
+    if not merged_path:
+        merged_path = f"/adapters/merged/{model_name}-16bit"
+    result = convert_and_quantize.remote(
+        merged_model_path=merged_path,
+        model_name=model_name,
+        quant=quant,
+    )
     print(f"\nResult: {result}")

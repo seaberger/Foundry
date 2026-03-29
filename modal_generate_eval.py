@@ -182,7 +182,7 @@ def generate_vllm(
 @app.function(
     image=unsloth_image,
     gpu=GPU,
-    timeout=120 * MINUTES,
+    timeout=240 * MINUTES,
     volumes={
         "/model_cache": model_cache_vol,
         "/adapters": adapter_vol,
