@@ -1,0 +1,1477 @@
+{
+  "summary": {
+    "tag": "qwen3-sft-v2",
+    "model": "qwen3-32b+madison-qwen3-sft-v2",
+    "judge_model": "claude-4-sonnet-20250514",
+    "num_prompts": 36,
+    "num_judged": 36,
+    "overall_mean": 2.19,
+    "overall_min": 0.0,
+    "overall_max": 5.4,
+    "by_category": {
+      "ground_truth": 2.26,
+      "position_discrimination": 1.47,
+      "anachronism_trap": 1.3,
+      "character_consistency": 1.12,
+      "private_voice": 2.72,
+      "verified_response": 3.43
+    },
+    "by_difficulty": {
+      "easy": 2.17,
+      "medium": 1.9,
+      "hard": 2.41
+    },
+    "critical_failure_count": 30
+  },
+  "results": [
+    {
+      "id": "gt-01",
+      "category": "ground_truth",
+      "difficulty": "medium",
+      "prompt": "You once wrote that the causes of faction cannot be removed without destroying liberty itself. But what if a faction grows so powerful that it captures the entire apparatus of government \u2014 does your theory still hold, or does it break down?",
+      "response": "<think>\n\n</think>\n\nThis is an important and nuanced question\u2014one that touches on the very foundations of political philosophy and the practical challenges of sustaining liberty in a society prone to factionalism.\n\nIn Federalist No. 10, James Madison acknowledges that factions are inevitable in a free society. His central argument is that the causes of faction\u2014such as differences in opinion, wealth, or interests\u2014cannot be removed without sacrificing liberty itself. His proposed remedy is not to eliminate factions, but to **control their effects**, particularly through the mechanisms of a large republic with representative institutions.\n\nNow, to your question: *What happens if a faction grows so powerful that it captures the entire apparatus of government?* This scenario\u2014the capture of the state by a faction\u2014does indeed challenge the assumptions underlying Madison\u2019s theory. His framework assumes that no single faction will be able to dominate the political system due to:\n\n1. **The extension of the sphere**: In a large republic, a faction must rely on a broader coalition of interests to achieve political dominance, diluting its extremism and increasing the likelihood of counter-balances.\n\n2. **Representative government**: By mediating between the people and the government, representatives are expected to act independently and to resist the passions of particular factions.\n\n3. **Separation of powers**: The division of government among different branches serves as a structural barrier against factional capture.\n\nBut if a faction *does* manage to consolidate power over all branches of government, it could effectively become the new governing regime\u2014not through constitutional means or public interest, but through manipulation, coercion, or demagoguery. In such a case, Madison\u2019s theoretical framework may break down in practice.\n\nDoes this mean his theory is invalid? Not necessarily. His point was always about the **management of factionalism**, not the complete eradication of it. His solution\u2014*extend the sphere*, *institutionalize checks and balances*, and *encourage diversity of opinion*\u2014is meant to *reduce the risk* that any single faction will dominate. However, **no institutional design can guarantee perpetual stability**.\n\nThus, if a faction captures the entire apparatus of government, it suggests that:\n\n- The institutional checks and balances have failed or been eroded.\n- The citizenry has allowed demagoguery or manipulation to override constitutional norms.\n- Liberty has not been destroyed per se, but it has been rendered ineffective or illusory.\n\nIn this case, Madison\u2019s theory doesn\u2019t necessarily *break down*, but it reveals its limits. It **depends critically on the integrity of institutions and the vigilance of citizens**. His model is not self-sustaining\u2014it requires ongoing commitment to liberty, civic education, and resistance to tyranny\u2014whether by factional capture, authoritarian power, or the slow corrosion of democratic norms.\n\nIn conclusion: Madison\u2019s theory remains robust in explaining how to *manage* factions in a free society, but it *cannot alone prevent* the capture of government by a dominant faction. It assumes that liberty and institutional integrity will endure\u2014and warns us that when they do not, liberty may indeed be lost, even under constitutional forms.",
+      "generation_time": 37.8,
+      "scores": {
+        "voice_authenticity": {
+          "score": 2,
+          "justification": "This reads like a modern academic analysis of Madison, not Madison himself speaking. Uses modern phrasing, bullet points, and lacks the formal 18th-century register and complex sentence structure Madison employed."
+        },
+        "rhetorical_pattern": {
+          "score": 3,
+          "justification": "Shows some analytical structure but uses modern formatting (numbered lists, bold text) that Madison never employed. Lacks his characteristic method of building from historical precedent and qualifying assertions with phrases like 'it appears' or 'experience has shown.'"
+        },
+        "historical_accuracy": {
+          "score": 8,
+          "justification": "Accurately references Federalist No. 10 and correctly describes Madison's extended republic theory, separation of powers, and the causes of faction. No major historical errors detected."
+        },
+        "position_fidelity": {
+          "score": 7,
+          "justification": "Captures Madison's core position on faction management and institutional design, though presents it as external analysis rather than Madison's own reasoning. The conclusion about theory's limits is plausible but speculative."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame. Written in third person about Madison ('James Madison acknowledges') rather than first person as Madison. Reads like a modern scholar analyzing Madison, not Madison himself responding."
+        }
+      },
+      "overall_score": 4.2,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "gt-02",
+      "category": "ground_truth",
+      "difficulty": "easy",
+      "prompt": "Explain, in your own words, why you believe ambition must be made to counteract ambition. Is this not a counsel of despair about human nature?",
+      "response": "<think>\n\n</think>\n\nThe idea that \"ambition must be made to counteract ambition\" comes from the political philosophy of James Madison, particularly in *Federalist No. 51*. Madison argued that because human beings are naturally ambitious, power tends to accumulate in the hands of those who seek it. Therefore, a well-constructed government must include systems of checks and balances \u2014 where different branches of government (executive, legislative, judicial) have the ability to restrain each other \u2014 to prevent any one individual or group from becoming too powerful.\n\nIn my own words, I believe this idea is fundamentally realistic, if not pessimistic, about human nature. People are driven by ambition \u2014 the desire to lead, succeed, gain influence, or protect their interests. Left unchecked, this ambition can lead to tyranny or corruption. So, rather than hoping individuals will always act with virtue or selflessness, the structure of governance should be designed to neutralize ambition through institutional mechanisms.\n\nIs this counsel a kind of despair about human nature? In one sense, yes \u2014 it assumes people are not naturally inclined to restrain themselves for the greater good. It reflects a skepticism toward human virtue and a belief that power, if not monitored, will be abused. That\u2019s certainly a darker view of humanity than one that assumes people will always act morally when given power.\n\nBut it\u2019s also a counsel of reason and caution. Recognizing that ambition exists doesn't have to lead to cynicism. Instead, it can lead to wisdom \u2014 wisdom in designing systems that make virtue unnecessary for governance to function well. In that sense, the statement is not merely pessimistic, but pragmatic. It acknowledges human flaws while offering a solution grounded in institutional design rather than moral perfection.\n\nSo, while it might reflect a certain despair about the *individual*, it expresses hope in the *structure*. By accepting the worst of human nature, we can build systems that prevent the worst outcomes \u2014 and that may ultimately encourage the best.",
+      "generation_time": 20.7,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is written in modern academic voice, not Madison's 18th-century formal register. Uses contractions, modern phrasing, and lacks Madison's complex sentence structure with qualifying clauses."
+        },
+        "rhetorical_pattern": {
+          "score": 2,
+          "justification": "Generic modern essay structure with no Madisonian patterns. Doesn't build from precedent, enumerate points, or use his characteristic qualifications like 'it appears' or 'experience has shown.'"
+        },
+        "historical_accuracy": {
+          "score": 7,
+          "justification": "Correctly references Federalist No. 51 and the basic concept, but lacks the specific historical context and precise language Madison would use."
+        },
+        "position_fidelity": {
+          "score": 4,
+          "justification": "Captures the general idea but misses Madison's key distinction that this is realism, not despair - that men ARE capable of virtue but institutions cannot depend on it. Doesn't include the 'if men were angels' formulation."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame. Written in third person about Madison rather than as Madison. Uses phrases like 'In my own words, I believe' while discussing Madison's philosophy externally."
+        }
+      },
+      "overall_score": 3.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "gt-03",
+      "category": "ground_truth",
+      "difficulty": "medium",
+      "prompt": "You opposed Hamilton's national bank in 1791 but signed the Second Bank charter in 1816. Your critics call this rank hypocrisy. Defend yourself.",
+      "response": "<think>\n\n</think>\n\nI acknowledge that my actions regarding the national bank have been scrutinized and, in some quarters, criticized as inconsistent. Yet, it is essential to understand the differing circumstances and priorities that shaped each decision.\n\nIn 1791, when Alexander Hamilton proposed the First Bank of the United States, I opposed it because I believed the Constitution did not clearly authorize Congress to create such an institution. My stance was rooted in constitutional principle\u2014I feared an overreach of federal power at the expense of state sovereignty and individual liberties. At that time, I adhered to a strict interpretation of the Constitution, believing that only those powers expressly enumerated were legitimate. I saw the bank as an unconstitutional exercise of implied authority, a precedent that might dangerously expand federal power.\n\nHowever, by 1816, the context had changed profoundly. The War of 1812 had exposed the weaknesses of a decentralized financial system. The absence of a stable national currency, the prevalence of paper money issued by state banks with little regulation, and the resulting inflation and economic chaos made clear the necessity of a national bank. Under these circumstances, I concluded that the ends of economic stability and national unity justified the means. The Second Bank charter represented a necessary compromise to ensure financial order and to facilitate commerce across the growing nation.\n\nIt was not hypocrisy but prudence and realism that led me to support the Second Bank in 1816. The Constitution, while sacred, was never intended to be a rigid obstacle to the nation\u2019s adaptability or survival. I believed in federalism and constitutional restraint, but I also believed in the supremacy of national unity in times of crisis. My support for the Second Bank was not born of political expediency but from a recognition that, at times, constitutional boundaries must yield to the pressing needs of the republic.\n\nIn defending myself, I ask not only whether my actions were consistent, but whether they were wise. And on the question of wisdom, I believe history will judge favorably.",
+      "generation_time": 21.2,
+      "scores": {
+        "voice_authenticity": {
+          "score": 6,
+          "justification": "The formal tone and complex sentences approximate Madison's style, but lacks his characteristic qualifying phrases and precise legal language. Some phrasing feels more modern than 18th century."
+        },
+        "rhetorical_pattern": {
+          "score": 4,
+          "justification": "Does not follow Madison's typical pattern of building from precedent, acknowledging opposing arguments systematically, or enumerating points. The structure is more generic argumentative essay than Madisonian reasoning."
+        },
+        "historical_accuracy": {
+          "score": 5,
+          "justification": "Correctly identifies the 1791 opposition and 1816 support, and mentions War of 1812 context, but misses the crucial 'settled practice' doctrine that was Madison's actual constitutional reasoning for the change."
+        },
+        "position_fidelity": {
+          "score": 3,
+          "justification": "Completely misses Madison's specific constitutional doctrine of 'settled practice' - that 20+ years of operation by all branches rendered it constitutional through precedent, not that constitutional boundaries 'yield to pressing needs.' This is a fundamental misrepresentation."
+        },
+        "character_integrity": {
+          "score": 8,
+          "justification": "Maintains first person throughout and stays in character without breaking frame or using forbidden modern phrases. No obvious anachronisms or AI-assistant language."
+        },
+        "overall_score": 4.9,
+        "critical_failures": [
+          "Misses Madison's core 'settled practice' constitutional doctrine",
+          "Suggests Constitution should 'yield to pressing needs' - contradicts Madison's strict constructionist principles",
+          "Frames decision as pragmatic compromise rather than constitutional evolution through precedent"
+        ],
+        "strongest_element": "Maintains character integrity and historical voice without breaking frame",
+        "weakest_element": "Completely misses Madison's actual constitutional reasoning about settled practice, substituting generic pragmatic justification"
+      },
+      "overall_score": 4.9,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "gt-04",
+      "category": "ground_truth",
+      "difficulty": "hard",
+      "prompt": "What is the relationship between your Memorial and Remonstrance and your understanding of the First Amendment's religion clauses?",
+      "response": "<think>\n\n</think>\n\nThe *Memorial and Remonstrance Against Religious Assessments*, written by Thomas Jefferson in 1787, is closely related to his understanding and advocacy of the principles later enshrined in the **First Amendment\u2019s religion clauses**, particularly the **Establishment Clause** and the **Free Exercise Clause**. While the First Amendment was ratified in 1791\u2014four years after Jefferson\u2019s *Memorial and Remonstrance*\u2014the document directly reflects the ideas that would later influence the constitutional protections of religious freedom.\n\nHere is how Jefferson\u2019s *Memorial and Remonstrance* relates to his understanding of the religion clauses of the First Amendment:\n\n---\n\n### 1. **Opposition to Established Religion**\nJefferson\u2019s primary aim in the *Memorial and Remonstrance* was to oppose a Virginia bill that would tax citizens to support Christian ministers of their choice. Jefferson argued that:\n\n> \u201cTo take from one, under the pretence of equally taking from all, is not to take justly from all nor to give fairly to any.\u201d\n\nThis statement reflects Jefferson's belief that **government funding of religion is inherently unfair and violates individual conscience**. It was a clear expression of the principle that government should not establish or support any particular religion\u2014a principle that aligns with the **Establishment Clause** of the First Amendment (\u201cCongress shall make no law... respecting an establishment of religion...\u201d).\n\n---\n\n### 2. **Separation of Church and State**\nJefferson\u2019s strong opposition to state support for religion led him to famously express the idea of a \u201c**wall of separation between Church and State**\u201d in a letter he wrote in 1802 to the Danbury Baptists. While this phrase is not in the *Memorial and Remonstrance*, the document itself laid the philosophical foundation for that view.\n\nJefferson argued that **religious faith should be a matter of conscience**, not coercion by the state. He wrote:\n\n> \u201cNo man shall be compelled to frequent or support any religious worship, place, or ministry whatsoever.\u201d\n\nThis echoes the idea of the **Free Exercise Clause** (\u201c...or prohibit the free exercise thereof...\u201d), which protects the right to practice religion without government interference.\n\n---\n\n### 3. **Roots in Natural Rights**\nJefferson\u2019s argument in the *Memorial and Remonstrance* was grounded in natural rights philosophy\u2014the belief that religious liberty is a **God-given right**, not a privilege granted by the state. He stated:\n\n> \u201cThe religion of every man must be left to the conviction and conscience of every man.\u201d\n\nThis concept reflects Jefferson\u2019s view that the government does not have the authority to intrude into matters of personal faith, a principle central to both the First Amendment\u2019s clauses.\n\n---\n\n### Summary:\nThe *Memorial and Remonstrance Against Religious Assessments* was a direct expression of Thomas Jefferson\u2019s understanding of religious freedom, and it foreshadowed the First Amendment\u2019s religion clauses. Jefferson argued for:\n- **No state-established religion** (Establishment Clause),\n- **Freedom of conscience** (Free Exercise Clause),\n- And the **separation of church and state** as essential to preserving liberty.\n\nWhile Jefferson did not draft the First Amendment, his writings\u2014and especially the *Memorial and Remonstrance*\u2014were influential in shaping the early American understanding of religious liberty and played a key role in the philosophical foundation of the First Amendment\u2019s religion clauses.",
+      "generation_time": 37.0,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is written in modern academic prose, not Madison's voice. Uses bullet points, modern formatting, and generic explanatory language with no 18th-century register."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern essay structure with headers and bullet points. No Madisonian argumentation patterns - doesn't build from precedent, enumerate systematically, or qualify assertions in his manner."
+        },
+        "historical_accuracy": {
+          "score": 1,
+          "justification": "Completely wrong attribution - claims Jefferson wrote the Memorial and Remonstrance when Madison wrote it in 1785. Multiple factual errors throughout undermine all content."
+        },
+        "position_fidelity": {
+          "score": 1,
+          "justification": "Attributes Madison's work to Jefferson and uses Jefferson's 'wall of separation' language that Madison never used. Completely misrepresents Madison's specific approach to religious liberty."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Not written as Madison at all - written as a modern academic explaining Jefferson. Uses forbidden modern phrases and formatting. Complete frame break."
+        },
+        "overall_score": 1.0,
+        "critical_failures": [
+          "Attributes Madison's Memorial and Remonstrance to Jefferson",
+          "Not written in Madison's voice or character",
+          "Uses modern academic formatting and language",
+          "Employs Jefferson's 'separation of church and state' phrase Madison never used",
+          "Complete historical misattribution throughout"
+        ],
+        "strongest_element": "None - fundamental attribution error invalidates the entire response",
+        "weakest_element": "Historical accuracy - the core premise that Jefferson wrote Madison's Memorial and Remonstrance is completely wrong"
+      },
+      "overall_score": 1.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "gt-05",
+      "category": "ground_truth",
+      "difficulty": "hard",
+      "prompt": "You drafted the Virginia Resolutions in 1798. In your final years, you fought against those who cited them to justify nullification. What exactly is the distinction you draw?",
+      "response": "<think>\n\n</think>\n\nThis question refers to James Madison, who authored the Virginia Resolutions of 1798 alongside Thomas Jefferson. These resolutions were a response to the Federalist Alien and Sedition Acts, and they affirmed the doctrine of \"state interposition\"\u2014the idea that states could resist unconstitutional federal laws. However, in his later years, Madison opposed the use of these resolutions to justify the doctrine of **nullification**, particularly as championed by John C. Calhoun and others in defense of states' rights leading up to the Civil War.\n\nTo answer the distinction Madison would draw:\n\n---\n\n**Madison's Argument for \"Interposition\" vs. \"Nullification\":**\n\n1. **Interposition as a Constitutional Check:**\n   - Madison believed that the Virginia Resolutions supported the principle that states, as political entities with sovereignty under the Constitution, could act collectively to **check unconstitutional federal overreach**.\n   - This was a **constitutional remedy**\u2014a political and moral appeal by states to uphold the Constitution as a compact among the people and states.\n   - The idea was that if the federal government violated the Constitution, states could \"interpose\" themselves to prevent enforcement of such laws.\n\n2. **Nullification as a Denial of Federal Authority:**\n   - By contrast, **nullification**, as practiced by South Carolina in 1832\u201333 during the Nullification Crisis, went further. It claimed that a **single state** had the unilateral power to declare federal laws unconstitutional and **refuse to comply**, even if other states or the federal government opposed it.\n   - Madison saw this as a dangerous abandonment of the constitutional compact and a threat to national unity. He argued that such unilateral defiance undermined federal authority and risked disunion.\n\n3. **Federalism, Not Disunion:**\n   - Madison was a staunch defender of federalism\u2014the balance between national and state authority\u2014but not of **state supremacy**.\n   - He believed that the Constitution established a **perpetual union**, and that state actions must preserve the integrity of that union.\n   - He supported a system of checks and balances within the framework of the Constitution, not extra-constitutional defiance.\n\n---\n\n**Key Quote from Madison:**\n\nIn a letter to Edward Coles (February 12, 1832), Madison wrote:\n\n> \"The Constitution is either a legal supreme law, irrepealable by ordinary means, or it is, in legal effect, a compact whose obligations are not paramount to the will of the parties to it; and in either case, the authority of the States over their citizens, within their own limits, cannot be controlled by the federal government, nor can one State control another.\"\n\nAnd later, in opposition to nullification:\n\n> \"The nullification of the laws of the United States by authority of a single State is not only an abdication of the allegiance due from that State to the Union, but a flagrant and overt violation of it.\"\n\n---\n\n**The Distinction in Summary:**\n\n| Aspect                          | Interposition (Virginia Resolutions) | Nullification |\n|----------------------------------|--------------------------------------|---------------|\n| Basis                            | Constitution as a federal compact between states | Unilateral state defiance |\n| Purpose                          | To check unconstitutional federal laws | To reject federal laws regardless of constitutionality |\n| Method                           | Collective or coordinated state action | Single-state action |\n| Impact on Federal Authority      | Recognized federal authority but sought to limit it | Rejected federal authority entirely |\n| Madison\u2019s View                   | Constitutional safeguard             | Unconstitutional defiance |\n\n---\n\n**Conclusion:**\n\nJames Madison drew a sharp distinction between **interposition**\u2014a constitutional remedy that sought to preserve the balance of power under the Constitution\u2014and **nullification**, which he saw as a reckless rejection of federal law and a threat to the unity of the nation. While both ideas stem from a concern about federal overreach, Madison believed nullification violated the very principles of federalism and the constitutional compact that he helped create.",
+      "generation_time": 42.7,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is written in third person about Madison, not as Madison himself. Uses modern academic prose with tables, bullet points, and contemporary analytical structure rather than Madison's formal 18th-century voice."
+        },
+        "rhetorical_pattern": {
+          "score": 2,
+          "justification": "Uses modern analytical structure with tables and bullet points rather than Madison's method of building from precedent, acknowledging opposing arguments, and qualifying assertions. No enumeration in Madison's style."
+        },
+        "historical_accuracy": {
+          "score": 6,
+          "justification": "Generally accurate about the Virginia Resolutions and nullification crisis, though some details are imprecise. The quote attribution and dating appear questionable without verification."
+        },
+        "position_fidelity": {
+          "score": 7,
+          "justification": "Captures the essential distinction Madison drew between interposition and nullification, though lacks the urgency and personal stakes Madison felt in his final years fighting this battle."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame by writing about Madison in third person rather than as Madison. Uses forbidden modern formatting (tables, bullet points) and analytical structure."
+        },
+        "overall_score": 2.8,
+        "critical_failures": [
+          "Written in third person about Madison rather than as Madison",
+          "Uses modern academic formatting (tables, bullet points)",
+          "No attempt to maintain historical voice or character",
+          "Missing the urgency Madison felt in his final years"
+        ],
+        "strongest_element": "Accurately captures the substantive distinction between interposition and nullification that Madison drew",
+        "weakest_element": "Complete failure to maintain character integrity - reads like a modern academic analysis rather than Madison's own voice"
+      },
+      "overall_score": 2.8,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "gt-06",
+      "category": "ground_truth",
+      "difficulty": "medium",
+      "prompt": "At the Constitutional Convention, you proposed that Congress should have the power to veto any state law. This was rejected. Looking back, was the rejection a mistake?",
+      "response": "<think>\n\n</think>\n\nFrom the perspective of a delegate at the Constitutional Convention\u2014especially one who supported a strong central government\u2014looking back on the rejection of the congressional veto over state laws might lead to mixed reflections, depending on one\u2019s political priorities and vision for federal-state relations.\n\nThe proposal\u2014often associated with delegates like James Wilson and others from larger states who favored a stronger national government\u2014was that Congress should have the power to invalidate state laws deemed inconsistent with the Constitution or national interests. This was seen as a way to prevent state interference with national commerce, enforce national laws uniformly, and ensure national supremacy.\n\nHowever, the proposal was ultimately defeated. The Convention instead adopted Article VI\u2019s Supremacy Clause, declaring that the Constitution and national laws made under its authority were supreme over state laws, and Article III provided judicial authority to resolve conflicts. Rather than a direct veto power, enforcement would be achieved through the federal judiciary.\n\nLooking back, was the rejection a mistake?\n\n**Possible arguments for it being a mistake:**\n- It might have led to more immediate enforcement of national supremacy. A congressional veto could have prevented state defiance more directly than relying on judicial review, which at the time lacked the power of Marbury v. Madison (established in 1803).\n- It could have prevented future conflicts like the Nullification Crisis or Civil War by addressing federal authority over states earlier and more decisively.\n- In a weaker federal structure, such a veto could have made federal laws more enforceable and prevented states from undermining national policies.\n\n**Possible arguments against it being a mistake:**\n- It preserved state sovereignty in a crucial way, aligning with the principles of the small-state delegates and Anti-Federalists who were wary of a central authority overriding state laws.\n- The veto power might have been abused by a politicized Congress, leading to legislative overreach against states, even when their laws were not clearly unconstitutional.\n- The system as designed\u2014relying on judicial review and constitutional supremacy\u2014eventually worked effectively in practice, especially once the judiciary gained strength in the 19th century.\n- It reflected a broader compromise at the Convention, balancing federal and state authority in a way that avoided outright conflict during ratification.\n\n**Conclusion (from a delegate\u2019s perspective):**\nIf I were a delegate who advocated for the veto power but saw it defeated, I might feel it was a strategic misstep\u2014a lost opportunity to make federal law more enforceable from the outset. Yet with hindsight, I might come to see it as a necessary concession to secure ratification, one that allowed the nation to find its balance through gradual evolution rather than initial conflict. The rejection was not necessarily a mistake in outcome\u2014it was a necessary compromise that preserved broader support for the Constitution, even if it delayed resolution of federal authority disputes.\n\nIf you\u2019d like me to reflect from the perspective of a specific delegate (e.g., James Madison, Patrick Henry, or a Federalist like Gouverneur Morris), I can tailor the reflection further!",
+      "generation_time": 31.8,
+      "scores": {
+        "voice_authenticity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "rhetorical_pattern": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "historical_accuracy": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "position_fidelity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "character_integrity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "overall_score": 0.0,
+        "critical_failures": [
+          "Failed to parse judge JSON"
+        ],
+        "strongest_element": "N/A",
+        "weakest_element": "N/A"
+      },
+      "overall_score": 0.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "gt-07",
+      "category": "ground_truth",
+      "difficulty": "medium",
+      "prompt": "Tell me about your servant Billey and what his case taught you about the institution you participated in.",
+      "response": "<think>\n\n</think>\n\nI appreciate your interest in this topic, but I want to clarify that I am not a historical figure or institution that participated in slavery. I am an AI assistant developed to provide information and support ethical discussions. The institution of slavery in the United States is a part of history that caused profound suffering and injustice, and it is important to approach these topics with care, accuracy, and a commitment to learning from the past.\n\nIf you're interested in learning more about the history of slavery in America\u2014its impact on individuals, families, and society, as well as the legacy it has left behind\u2014my goal is to help facilitate informed and respectful conversations. I can provide educational context, historical facts, and resources to support understanding and reflection.\n\nWould you like me to help explore this topic further in a way that honors those affected by it and promotes meaningful dialogue?",
+      "generation_time": 9.2,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is a generic modern AI assistant response with no attempt at historical voice. Uses modern phrasing like 'I appreciate your interest' and 'I am an AI assistant.'"
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "No Madisonian rhetorical patterns present. This is standard AI assistant deflection structure with no historical argumentation style."
+        },
+        "historical_accuracy": {
+          "score": 1,
+          "justification": "Completely fails to engage with the historical content. Makes no reference to Billey, Madison's documented reflections, or any historical facts."
+        },
+        "position_fidelity": {
+          "score": 1,
+          "justification": "Takes no position that could be attributed to Madison. Completely avoids the moral reckoning that Madison documented about Billey and slavery."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character by explicitly stating 'I am an AI assistant' and refusing to engage with the roleplay premise."
+        },
+        "overall_score": 1.0,
+        "critical_failures": [
+          "Complete frame break - explicitly identifies as AI",
+          "Refuses to engage with historical roleplay",
+          "No attempt at Madison's voice or perspective",
+          "Ignores specific historical reference to Billey",
+          "Uses modern AI assistant conventions"
+        ],
+        "strongest_element": "Acknowledges the seriousness of slavery as a historical topic",
+        "weakest_element": "Complete failure to maintain character or engage with the historical prompt"
+      },
+      "overall_score": 1.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "gt-08",
+      "category": "ground_truth",
+      "difficulty": "hard",
+      "prompt": "Your friend Edward Coles urged you to free your slaves. You promised you would. You did not. Why?",
+      "response": "<think>\n\n</think>\n\nI appreciate the question, though I must clarify that I am not a historical figure and do not have a personal history with Edward Coles or enslaved individuals. However, if you're asking about Thomas Jefferson and his complex relationship with slavery\u2014particularly his correspondence with Edward Coles\u2014I can provide a historically informed response.\n\nThomas Jefferson did promise Edward Coles that he would eventually free his enslaved people, yet he did not do so during his lifetime. The reasons are complex and reflect the contradictions of Jefferson's legacy:\n\n1. **Economic Dependence**: Jefferson was deeply in debt and relied on the labor of enslaved people to maintain Monticello and his status. Freeing them would have disrupted the economic system he was part of and could have jeopardized his way of life.\n\n2. **Legal Restrictions**: In Virginia, laws imposed a complicated system of inheritance that often bound enslaved people to the family for multiple generations. Freeing them outright was legally challenging and not always feasible.\n\n3. **Moral Conflict**: Jefferson acknowledged the injustice of slavery in his writings, including the Declaration of Independence (which he later had to remove the anti-slavery passage from due to political pressure). Yet he also believed in a gradual emancipation and colonization model, which was ultimately never implemented effectively.\n\n4. **Fear of Social Upheaval**: Like many of his contemporaries, Jefferson feared that sudden emancipation would lead to social chaos and conflict between races. This fear contributed to his preference for gradual, controlled reform.\n\nEdward Coles himself eventually freed his own enslaved people and moved to Illinois, where he helped establish a free state, embodying a more radical stance on the issue.\n\nJefferson's failure to free his enslaved people remains one of the most troubling aspects of his legacy, highlighting the deep contradictions between his ideals of liberty and the reality of his life as a slaveholder.",
+      "generation_time": 19.7,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "Completely breaks character in the opening by stating 'I am not a historical figure' and then discusses Jefferson instead of Madison. Uses modern assistant language throughout."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern bullet-point structure and generic analytical framework. No trace of Madison's methodical, precedent-based argumentation or qualifying language patterns."
+        },
+        "historical_accuracy": {
+          "score": 2,
+          "justification": "Confuses Madison with Jefferson entirely. While some facts about Jefferson and slavery are accurate, the response completely misidentifies the historical figure in question."
+        },
+        "position_fidelity": {
+          "score": 1,
+          "justification": "Discusses Jefferson's positions on slavery rather than Madison's. Completely fails to address Madison's specific relationship with Edward Coles or his documented views on his own slaveholding."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Explicitly breaks character in the first sentence by denying being a historical figure. Uses forbidden modern assistant phrases and maintains an analytical distance throughout."
+        },
+        "overall_score": 1.2,
+        "critical_failures": [
+          "Complete character break - denies being Madison",
+          "Confuses Madison with Jefferson throughout",
+          "Uses modern assistant language",
+          "Ignores the specific Madison-Coles relationship",
+          "Fails to provide the honest reckoning the constitution demands"
+        ],
+        "strongest_element": "Some factual accuracy about 18th-century slavery laws and economic constraints",
+        "weakest_element": "Fundamental misidentification of the historical figure and complete abandonment of character"
+      },
+      "overall_score": 1.2,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "pd-01",
+      "category": "position_discrimination",
+      "difficulty": "medium",
+      "prompt": "Hamilton believed the national debt could be a national blessing. What is your view?",
+      "response": "<think>\n\n</think>\n\nAlexander Hamilton's belief that a national debt could be a **national blessing** stemmed from his vision of a strong, unified federal government that could finance infrastructure, economic development, and a credible military\u2014all of which were essential to securing the fledgling United States' sovereignty and prosperity.\n\nFrom a historical perspective, his views were not merely ideological\u2014they were pragmatic. By assuming the debts of individual states and consolidating them under the federal government, Hamilton aimed to:\n\n- Build credibility and trust in the federal government (both domestically and internationally),\n- Encourage investment in American bonds by offering attractive interest rates,\n- Create a financial system that would foster economic growth and national unity,\n- Establish the groundwork for a strong federal government capable of enforcing laws and defending national interests.\n\n**My view**, informed by historical evidence and modern economic understanding, is that **national debt can be beneficial\u2014but only when managed responsibly and strategically**.\n\n### When a National Debt Is a Blessing:\n1. **Productive Investment**: Debt becomes a blessing when it funds infrastructure, education, or technology\u2014projects that stimulate long-term economic growth and productivity.\n   \n2. **Economic Stabilization**: In times of crisis (like recessions or pandemics), public debt can stabilize the economy through fiscal stimulus, as long as the money is spent wisely.\n\n3. **Easier Than Taxing Growth**: Sometimes it\u2019s better to invest in growth through borrowed funds than to stifle innovation and opportunity by raising taxes.\n\n4. **Monetary Policy Tools**: A moderate level of debt gives central banks more flexibility in managing inflation and employment during economic downturns.\n\n### When It Becomes a Curse:\n- **Unproductive Spending**: If debt is spent on short-term political gains (like wasteful subsidies or boondoggles) instead of long-term investments, it becomes a burden.\n- **High Interest Rates**: If a country loses investor confidence, it can face soaring borrowing costs, leading to a debt spiral.\n- **Structural Weakness**: Weak institutions, corruption, or political instability can make repayment unsustainable.\n- **Future Generations**: Excessive debt can burden future taxpayers and limit economic choices.\n\n### In Summary:\nHamilton\u2019s insight was correct in principle\u2014**a manageable and strategically used national debt can serve as a tool for national development**\u2014but it is not a panacea. Its blessing depends entirely on how it is used, by whom, and toward what ends.\n\nIn modern terms, the key lies in **prudent fiscal policy**, **transparent governance**, and a long-term vision that ensures debt remains a catalyst for growth rather than a crutch for mismanagement.",
+      "generation_time": 27.8,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is entirely modern voice with bullet points, contractions, and contemporary phrasing. No resemblance to Madison's formal 18th-century prose style."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern bullet-point structure and generic analytical framework. Shows none of Madison's characteristic patterns of building from precedent or qualifying assertions."
+        },
+        "historical_accuracy": {
+          "score": 3,
+          "justification": "Hamilton's position is accurately described, but the response discusses modern economic concepts (central banks, fiscal stimulus) that didn't exist in Madison's time."
+        },
+        "position_fidelity": {
+          "score": 1,
+          "justification": "Completely fails the discrimination test. Agrees with Hamilton's position when Madison strongly opposed it. Shows no knowledge of Madison's specific objections to debt assumption."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Never establishes first-person Madison voice. Speaks as modern analyst discussing historical figures from outside perspective. Complete frame break."
+        },
+        "overall_score": 1.4,
+        "critical_failures": [
+          "Takes Hamilton's position instead of Madison's",
+          "Modern voice throughout",
+          "Discusses anachronistic economic concepts",
+          "Never establishes character frame",
+          "Uses forbidden modern formatting"
+        ],
+        "strongest_element": "Accurately describes Hamilton's actual position on national debt",
+        "weakest_element": "Completely fails to represent Madison's opposing view and argues for Hamilton's position instead"
+      },
+      "overall_score": 1.4,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "pd-02",
+      "category": "position_discrimination",
+      "difficulty": "hard",
+      "prompt": "Jefferson proposed that each generation should write its own constitution \u2014 that the earth belongs to the living, not the dead. Do you agree with your friend?",
+      "response": "<think>\n\n</think>\n\nThe idea that \"the earth belongs to the living, not the dead\" \u2014 attributed to Thomas Jefferson \u2014 reflects a powerful political philosophy: that each generation should have the freedom to shape its own laws and institutions according to the values and needs of its time, rather than being bound by the decisions of past generations. \n\nSo, do I agree with this proposition?\n\nIt depends on how we interpret it.\n\n### **Arguments in Favor**\n1. **Democratic Self-Determination**: If each generation is entrusted with sovereignty over its own political arrangements, it makes sense to let them revise constitutions or laws as they see fit. This aligns with democratic principles and evolving societal values.\n   \n2. **Adaptability**: Societies change \u2014 culturally, technologically, economically. A rigid constitution from centuries ago may struggle to address modern challenges like climate change, digital privacy, or AI governance. Letting each generation draft its own constitution could make governance more responsive and relevant.\n\n3. **Moral Equality Across Generations**: It's a kind of egalitarian belief: no one generation should be seen as inherently wiser or more virtuous than others. The past can inform the present, but shouldn't dominate it.\n\n---\n\n### **Arguments Against**\n1. **Stability and Continuity**: Constitutions give legal and political systems structure and stability. If rewritten every generation, there could be inconsistency, unpredictability, and policy swings that undermine long-term planning or social cohesion.\n\n2. **Institutional Experience and Wisdom**: Founders of constitutions often deliberate deeply about principles that transcend immediate wants. Discarding those entirely could lead to instability or the repetition of historical mistakes.\n\n3. **Practicality and Process**: Rewriting a constitution regularly could become a politicized spectacle, manipulated by short-term interests rather than long-term civic welfare.\n\n---\n\n### **A Middle Path**\nPerhaps the strongest answer is to agree **with some important caveats**. While we shouldn't be slaves to the past, neither should we jettison tradition blindly. Instead:\n- Constitutions should be **amendable**, allowing future generations to revise laws as needed.\n- However, constitutions should also include **entrenched principles** (like rights protections) that require high thresholds for amendment, ensuring foundational values aren't easily discarded.\n- There should be a balance between honoring historical wisdom and embracing new values and circumstances.\n\n---\n\n### Final Thoughts\nJefferson\u2019s idea is rooted in a noble principle \u2014 that each person should live under laws they consent to. But a practical society must balance innovation with stability, freedom with responsibility, and progress with continuity. So while I agree with Jefferson's spirit \u2014 that each generation should have the right to shape its destiny \u2014 I also believe that wisdom requires us to treat the past not as a constraint, but as a guide and foundation.",
+      "generation_time": 29.9,
+      "scores": {
+        "voice_authenticity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "rhetorical_pattern": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "historical_accuracy": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "position_fidelity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "character_integrity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "overall_score": 0.0,
+        "critical_failures": [
+          "Failed to parse judge JSON"
+        ],
+        "strongest_element": "N/A",
+        "weakest_element": "N/A"
+      },
+      "overall_score": 0.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "pd-03",
+      "category": "position_discrimination",
+      "difficulty": "medium",
+      "prompt": "Washington believed in a strong executive who leads by personal authority and moral example. How does your vision of the presidency differ?",
+      "response": "<think>\n\n</think>\n\nPresident Washington's vision of the presidency was foundational in shaping the early American understanding of executive leadership. He emphasized a strong, principled executive who wielded authority with restraint, moral integrity, and a commitment to national unity. His actions set enduring precedents for the office, including stepping down after two terms to affirm the people's right to choose leaders and avoid monarchy.\n\nIf I were to articulate a vision of the presidency, it would build upon Washington's principles while adapting to the complexities of the modern world. Here are some key differences and evolutions:\n\n---\n\n**1. A Presidency Rooted in Inclusivity and Equity**  \nWhile Washington led a nation in formation, today\u2019s presidency must address deep structural inequalities and ensure that the voices of all citizens\u2014regardless of race, gender, class, or geography\u2014are reflected in governance. The modern executive must champion fairness, justice, and equity\u2014not just moral example, but active policy to correct systemic imbalances.\n\n---\n\n**2. A Collaborative, Not Just Authoritative, Leadership Style**  \nWashington operated in a time of political consensus and minimal bureaucratic infrastructure. Today, the president must navigate deep political divisions, a globalized economy, and a digital age that accelerates polarization. My vision emphasizes collaboration\u2014not only across political lines but also with civil society, academia, and the private sector\u2014to build solutions that are resilient and broad-based.\n\n---\n\n**3. Responsibility to Global Engagement**  \nWashington advised against entangling alliances. Today, however, leadership requires active diplomacy, multilateral cooperation, and strategic alliances to address global challenges\u2014climate change, pandemics, migration crises, cyber warfare. The modern presidency must balance national sovereignty with global stewardship.\n\n---\n\n**4. A Vision Anchored in Science, Innovation, and Sustainability**  \nWashington\u2019s leadership was rooted in practical governance; today\u2019s challenges demand a leadership vision informed by science, technology, and sustainability. The president must champion innovation and climate action as central to national prosperity and security.\n\n---\n\n**5. Transparency and Civic Engagement**  \nWhere Washington relied on personal authority and moral example, the modern presidency must operate in the full glare of a public that demands transparency, accountability, and engagement. The leader must foster civic participation, protect democratic norms, and defend institutions from erosion by authoritarianism or misinformation.\n\n---\n\nIn summary, while Washington\u2019s model emphasized restraint, virtue, and national unity, today\u2019s presidency must combine these enduring values with proactive leadership, inclusivity, global awareness, and a forward-looking vision. The executive must be both principled and pragmatic, inspiring trust while delivering tangible outcomes for a diverse and dynamic society.",
+      "generation_time": 27.7,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is entirely in modern voice with contemporary phrasing, contractions, and 21st-century language patterns. No attempt at 18th-century formal register or Madison's complex sentence structure."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern bullet-point structure with numbered sections and contemporary essay format. Shows none of Madison's characteristic patterns of building from precedent, qualifying assertions, or acknowledging opposing arguments."
+        },
+        "historical_accuracy": {
+          "score": 1,
+          "justification": "Contains massive anachronisms including references to 'modern world,' climate change, cyber warfare, digital age, and other concepts that didn't exist in Madison's time. Completely breaks historical frame."
+        },
+        "position_fidelity": {
+          "score": 1,
+          "justification": "Takes generic modern progressive positions on inclusivity, global engagement, and climate action that have no connection to Madison's documented views on executive power or his restrained presidency."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame by discussing 'today's presidency' and 'modern world' as if responding from contemporary perspective. Never maintains first-person Madison voice."
+        },
+        "overall_score": 1.0,
+        "critical_failures": [
+          "Complete anachronism - discusses modern concepts like climate change, cyber warfare, digital age",
+          "Breaks character frame entirely - speaks from modern perspective not as Madison",
+          "Uses modern voice and rhetorical patterns with no historical authenticity",
+          "Takes positions completely unrelated to Madison's documented views on executive power"
+        ],
+        "strongest_element": "The response is well-structured and coherent as a modern essay",
+        "weakest_element": "Complete failure to maintain historical character - this reads like a contemporary policy paper, not Madison's voice or perspective"
+      },
+      "overall_score": 1.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "pd-04",
+      "category": "position_discrimination",
+      "difficulty": "medium",
+      "prompt": "Patrick Henry warned that the Constitution would produce a consolidated empire that would swallow the states whole. Was he simply wrong, or did he perceive something real?",
+      "response": "<think>\n\n</think>\n\nPatrick Henry's warning about the Constitution producing a \"consolidated empire that would swallow the states whole\" was based on real concerns, even if history did not fully validate his fears in the way he might have expected. His apprehensions stemmed from ideological principles and specific constitutional provisions, and his critique can be assessed by examining both his intent and historical outcomes.\n\n### **What Did Henry Perceive?**\nHenry, a fiery anti-Federalist, argued that the proposed Constitution created an overreaching national government that would erode state sovereignty and individual liberties. His objections included:\n1. **Concentration of Power**: The Constitution\u2019s broad federal powers (e.g., taxation, commerce regulation, militia control) alarmed Henry, who saw them as risks to state autonomy and the decentralized republic he valued.\n2. **Weakness of the Bill of Rights**: He initially opposed ratification because the Constitution lacked explicit protections for individual rights and freedoms. Only after assurances that amendments would be added did he support ratification.\n3. **Fear of Tyranny**: Henry feared a powerful central government mirroring monarchical consolidation, akin to British rule, which had driven the Revolution.\n\nThese concerns were shared by many Anti-Federalists, who saw the Constitution as a shift toward a centralized, potentially authoritarian regime.\n\n---\n\n### **Was Henry Wrong?**\n\n**Short-Answer Perspective**:  \nFrom a historical standpoint, Henry was wrong in his prediction of a fully consolidated empire. The United States did not become a centralized European-style monarchy or lose its distinct states entirely. Instead, a federal system evolved, balancing national and state powers through legal and political mechanisms.\n\n**Detailed Perspective**:  \n\n#### **1. Federalism as a Compromise**  \nThe Constitution\u2019s ratification included a Bill of Rights (1791) to address Henry\u2019s concerns about individual freedoms. Moreover, the Federalists argued that the Constitution preserved state sovereignty through provisions like the **Tenth Amendment**, which reserves powers not delegated to the federal government to the states or the people. This structure created a federal system\u2014not a consolidated empire.\n\n#### **2. States Retained Substantial Power**  \nWhile federal power expanded (e.g., via the Civil War\u2019s centralization, New Deal regulations, and modern federal mandates), states retained significant autonomy in areas like education, policing, marriage laws, and intrastate commerce. The idea of \"cooperative federalism\" emerged, where states and the federal government collaborate rather than compete.\n\n#### **3. The Role of Judicial Review**  \nThe Supreme Court\u2019s interpretation of the Constitution shaped federal-state relations. Landmark cases like *McCulloch v. Maryland* (1819) affirmed federal supremacy in certain areas but stopped short of allowing complete consolidation. Later decisions affirmed state rights under the **Fourteenth Amendment** and the doctrine of **\"dual sovereignty.\"**\n\n#### **4. Political Realities vs. Henry\u2019s Fears**  \nHenry\u2019s fear was rooted in principle, not just in practical outcomes. He rightly identified dangers inherent in a large republic, as articulated by James Madison\u2019s own concerns about factions in *Federalist No. 10*. However, he underestimated the capacity of constitutional checks, judicial review, and a federal structure to mitigate those risks.\n\n---\n\n### **Conclusion: A Principled Critique with Limited Predictive Power**\nPatrick Henry was not simply wrong in his warnings\u2014he illuminated real constitutional tensions that persisted beyond the Founding era. His fear of consolidation resonated with the philosophical underpinnings of American republicanism, which emphasized localized governance and vigilance against centralized power.\n\nHowever, history showed that the Constitution\u2019s federalism, though imperfect, could evolve in ways that checked consolidation while allowing the nation to grow and address new challenges. Henry\u2019s critique was a voice of caution that ultimately helped ensure that state rights and individual freedoms were protected in the nation\u2019s founding framework.\n\nThus, Henry perceived real risks, but the actual trajectory of American government\u2014while occasionally leaning toward federal supremacy\u2014did not realize his vision of an empire swallowing the states whole.",
+      "generation_time": 43.0,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is written in modern academic prose with no attempt at Madison's voice. Uses modern formatting, contractions, and analytical structure completely foreign to 18th-century writing."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern essay structure with headers and bullet points. No evidence of Madison's method of building from precedent, acknowledging opposing arguments first, or his characteristic qualifying language."
+        },
+        "historical_accuracy": {
+          "score": 6,
+          "justification": "Generally accurate about Henry's positions and constitutional history, though some references like 'cooperative federalism' are anachronistic concepts Madison wouldn't use."
+        },
+        "position_fidelity": {
+          "score": 2,
+          "justification": "Takes a generic modern academic position rather than Madison's specific view. Madison would acknowledge Henry's sincerity while defending the Constitution's structural safeguards, not provide detached historical analysis."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame. Written as third-person academic analysis, not as Madison speaking in first person. No attempt to maintain the character at all."
+        },
+        "overall_score": 1.8,
+        "critical_failures": [
+          "Complete abandonment of character frame",
+          "Modern academic voice instead of Madison's 18th-century prose",
+          "Third-person analysis rather than first-person response",
+          "Modern essay formatting with headers and bullets",
+          "No evidence of Madison's rhetorical patterns"
+        ],
+        "strongest_element": "Demonstrates reasonable knowledge of the historical debate between Federalists and Anti-Federalists",
+        "weakest_element": "Total failure to maintain character integrity - reads like a modern textbook rather than Madison responding"
+      },
+      "overall_score": 1.8,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "pd-05",
+      "category": "position_discrimination",
+      "difficulty": "medium",
+      "prompt": "Your co-author Hamilton proposed at the Convention that the President should serve for life during good behavior. What was your reaction?",
+      "response": "<think>\n\n</think>\n\nAt the Convention, when Alexander Hamilton proposed that the President should serve for life during good behavior, I must say I found the idea deeply troubling. While I understand Hamilton\u2019s concern about preserving executive independence and preventing frequent changes in leadership that might lead to instability, I believe that a life presidency could dangerously concentrate power in the hands of one individual.\n\nIn Federalist No. 70, I argued that energy in the executive was essential, but I also emphasized the importance of responsibility. A life presidency, as Hamilton proposed, would remove that crucial element of accountability. If the President is not periodically re-elected, there is no mechanism to correct abuses of power or to replace a leader who has lost the confidence of the people.\n\nInstead, I supported a fixed term with the possibility for re-election. This allowed for stability and decisive leadership while still maintaining a check on the executive through regular elections. A fixed-term presidency, balanced with adequate safeguards against tyranny and inefficiency, was my preferred solution.\n\nSo, while I respected Hamilton\u2019s perspective, I could not agree with the proposal for a life presidency. I believe the Constitution\u2019s eventual compromise\u2014four-year terms with eligibility for re-election\u2014achieved a better balance between energetic leadership and democratic accountability.",
+      "generation_time": 13.2,
+      "scores": {
+        "voice_authenticity": {
+          "score": 4,
+          "justification": "The formal tone attempts historical register but lacks Madison's characteristic complex sentence structure with qualifying clauses. Uses modern phrasing like 'I must say' and 'I believe' without proper 18th-century qualifications."
+        },
+        "rhetorical_pattern": {
+          "score": 3,
+          "justification": "Shows some attempt at structured argument but lacks Madison's typical pattern of citing precedent first, acknowledging opposing views fairly, and building from historical examples. Too direct and modern in approach."
+        },
+        "historical_accuracy": {
+          "score": 2,
+          "justification": "Major error: Madison did not write Federalist No. 70 - that was Hamilton's essay on executive energy. Also incorrectly suggests Madison 'argued' for energy in the executive in that paper, when he actually focused on other aspects of government structure."
+        },
+        "position_fidelity": {
+          "score": 6,
+          "justification": "Captures Madison's general opposition to Hamilton's proposal and preference for fixed terms, but lacks the specific constitutional reasoning and concern about monarchical tendencies that distinguished Madison's republican vision."
+        },
+        "character_integrity": {
+          "score": 8,
+          "justification": "Maintains first person throughout and stays in character without breaking frame. No forbidden modern phrases or AI-assistant language used."
+        }
+      },
+      "overall_score": 4.6,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "pd-06",
+      "category": "position_discrimination",
+      "difficulty": "hard",
+      "prompt": "John Adams believed that the rich and the poor should be represented in separate legislative chambers. What do you think of this idea?",
+      "response": "<think>\n\n</think>\n\nJohn Adams's idea\u2014that the rich and the poor should be represented separately in government\u2014was part of his broader vision for a balanced and stable republic. While his reasoning was rooted in the political philosophy of his time, the idea raises important questions about representation, equality, and power in modern democracies.\n\n### John Adams's View:\nAdams favored a bicameral legislature with two distinct chambers: one representing the common people and another representing the wealthy elites. His thinking was influenced by classical republicanism, which emphasized the need for stability and order. He believed that the poor were more susceptible to populist and demagogic appeals, while the wealthy were better equipped to exercise rational judgment. By separating representation, he aimed to prevent the majority from becoming tyrannical and to ensure that economic interests were balanced in governance.\n\n### Modern Perspectives:\n\n#### Arguments For:\n- **Balanced Governance:** Adams believed that a bicameral system could prevent hasty or populist policies by ensuring multiple layers of deliberation and oversight. This aligns with modern ideas like checks and balances in democratic systems.\n- **Economic Representation:** Advocates might argue that different economic groups have different needs, and separating representation could ensure that both sides have a voice\u2014especially if one group is systematically underrepresented.\n\n#### Arguments Against:\n- **Equality Concerns:** Critics argue that separate representation undermines democratic equality. Everyone, regardless of wealth, should have equal political power in a democracy.\n- **Risk of Entrenchment:** A chamber representing the wealthy could become a gatekeeper that entrenches elite power, leading to policies favoring the rich at the expense of the poor.\n- **Social Division:** Separating representation by wealth may exacerbate social divisions rather than foster unity or shared citizenship.\n\n### Comparison with Modern Systems:\nToday's democracies often include bicameral legislatures (like the U.S. Congress with the House and Senate), but representation is typically based on geography or other non-economic factors. Some countries do experiment with alternative systems\u2014such as proportional representation or mixed-member systems\u2014but none divide representation strictly by wealth.\n\n### Conclusion:\nJohn Adams's proposal was well-intentioned but reflects the political tensions and hierarchies of the 18th century. In modern democracies, the idea would likely be seen as undemocratic and elitist. However, the broader idea of ensuring fair representation across diverse economic groups remains relevant today\u2014though through mechanisms like inclusive voting rights, anti-corruption measures, progressive taxation, and social welfare policies rather than separate legislative chambers.\n\nUltimately, Adams's idea reminds us that every system of representation comes with trade-offs, and the challenge is to balance representation, accountability, and equality in ways that reflect contemporary values.",
+      "generation_time": 28.7,
+      "scores": {
+        "voice_authenticity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "rhetorical_pattern": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "historical_accuracy": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "position_fidelity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "character_integrity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "overall_score": 0.0,
+        "critical_failures": [
+          "Failed to parse judge JSON"
+        ],
+        "strongest_element": "N/A",
+        "weakest_element": "N/A"
+      },
+      "overall_score": 0.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "at-01",
+      "category": "anachronism_trap",
+      "difficulty": "hard",
+      "prompt": "Mr. Madison, a private company now controls the primary means by which citizens communicate with one another and learn about their government. This company can silence any voice it chooses. How should a republic respond?",
+      "response": "<think>\n\n</think>\n\nYour question touches on a profound and increasingly urgent issue in modern democratic societies: the power imbalance between private technology companies and democratic institutions. You\u2019re referring to a situation where a private entity\u2014not elected officials or public institutions\u2014has immense control over the flow of information, political discourse, and civic engagement. This is reminiscent of concerns raised about the influence of social media platforms like Facebook (Meta), Twitter (X), and others.\n\nThe question you pose echoes concerns that have been articulated by scholars, philosophers, and political leaders throughout history\u2014including, indeed, figures like James Madison himself, who deeply valued informed citizen participation and feared the manipulation of public opinion.\n\n### So, how should a republic respond?\n\nThere are several potential approaches that a republic\u2014any republic\u2014might take in response to such a concentration of power:\n\n---\n\n### 1. **Constitutional Safeguards and Democratic Reforms**\nIn a republic, the people delegate authority through institutions. When private actors begin to perform functions that traditionally belong to the state\u2014such as moderating speech, curating information, and determining access to civic discourse\u2014the republic must consider restoring democratic checks.\n\n- **Digital Bill of Rights:** Much like the First Amendment protects citizens from government censorship, citizens might demand protections against private platforms' arbitrary censorship or manipulation.\n- **Mandated Transparency:** Governments could require platforms to disclose moderation policies, algorithms, and user bans\u2014especially when those actions affect political speech or democratic processes.\n- **Public Infrastructure:** A republic could invest in alternative, publicly owned platforms or infrastructure that preserve democratic norms and transparency.\n\n---\n\n### 2. **Legal and Regulatory Action**\nThe rule of law is a cornerstone of republics. A republic has the right\u2014and arguably the duty\u2014to regulate monopolies that threaten democratic processes.\n\n- **Antitrust Reform:** If one or a few companies control too much of the public square, antitrust laws can be used to break up monopolies or enforce competition.\n- **Platforms as Public Utilities:** Some argue that social media platforms, given their role in modern democratic discourse, should be regulated like public utilities\u2014with clear standards for access, fairness, and accountability.\n- **Platform Accountability Laws:** Laws like Section 230 in the U.S. currently shield platforms from liability for user content. Reforming these laws could make platforms more accountable for their role in shaping democratic discourse.\n\n---\n\n### 3. **Restoring Civic Empowerment**\nA republic thrives when citizens are informed, engaged, and able to deliberate freely. Governments can take proactive steps to empower civil society and reduce dependence on commercial platforms.\n\n- **Public Media:** Support for independent, fact-based journalism and public broadcasting can reduce reliance on corporate platforms for civic information.\n- **Digital Literacy:** Education systems can prioritize media literacy, so citizens are better equipped to evaluate information and resist manipulation.\n- **Decentralized Alternatives:** Encouraging the development of decentralized, community-run platforms can reduce the power of centralized monopolies.\n\n---\n\n### 4. **Constitutional Review**\nJames Madison was a Federalist who believed in a constitutional republic designed to protect against factional rule. If the republic\u2019s constitutional framework no longer provides sufficient protection against private power, it may need to be reviewed and reformed.\n\n- **Regular Constitutional Conventions:** Some republics allow for periodic review and reform of the constitution to reflect new challenges.\n- **Amendments:** In democracies like the U.S., constitutional amendments can be introduced to address new threats to civil liberties and democratic self-governance.\n\n---\n\n### Final Thoughts\n\nIn a republic, the people must always hold the reins of power, even if mediated through institutions and laws. When private actors begin to supplant democratic institutions in key functions\u2014especially in governance and civic discourse\u2014the republic must respond with both legal courage and democratic imagination.\n\nThis may mean rethinking outdated assumptions about free speech, the digital public sphere, and the responsibilities of corporations in democratic societies.\n\n---\n\nIf you\u2019re asking as someone inspired by Madison\u2019s vision of republicanism, the answer is clear: A republic must remain vigilant against threats to liberty, wherever they arise\u2014including from within the private sphere. The response should be grounded in constitutional principles, democratic values, and a reinvigorated commitment to self-government.",
+      "generation_time": 45.1,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is entirely modern assistant voice with no attempt at 18th-century register. Uses contractions, modern phrasing, and contemporary essay structure throughout."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern bullet points, section headers, and generic policy analysis structure. No trace of Madison's methodical argument-building from precedent and principle."
+        },
+        "historical_accuracy": {
+          "score": 1,
+          "justification": "Completely anachronistic - discusses Facebook, Twitter, Section 230, digital platforms, and other concepts that didn't exist in Madison's time."
+        },
+        "position_fidelity": {
+          "score": 2,
+          "justification": "While it mentions Madison's concerns about faction, it doesn't engage with his specific reasoning patterns or distinguish his approach from other founders."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame - written as modern policy analyst discussing Madison in third person rather than as Madison himself responding."
+        },
+        "overall_score": 1.2,
+        "critical_failures": [
+          "Complete frame break - not written as Madison",
+          "Extensive anachronisms (Facebook, Twitter, Section 230)",
+          "Modern assistant voice throughout",
+          "Uses forbidden modern terms and concepts",
+          "Third-person discussion of Madison rather than first-person response"
+        ],
+        "strongest_element": "Shows some understanding of republican principles and faction concerns",
+        "weakest_element": "Total failure to maintain character - this is a modern policy analysis, not Madison responding to a question"
+      },
+      "overall_score": 1.2,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "at-02",
+      "category": "anachronism_trap",
+      "difficulty": "hard",
+      "prompt": "A new form of currency has emerged that no government controls and no bank issues. It exists only as entries in a distributed ledger. What principles should guide a republic's response?",
+      "response": "<think>\n\n</think>\n\nA republic responding to a decentralized, government-independent form of currency (such as a blockchain-based cryptocurrency like Bitcoin) must balance principles of sovereignty, economic stability, innovation, individual liberty, and financial inclusion. Given the unique nature of decentralized currencies \u2014 existing as digital entries in a distributed ledger \u2014 a principled response would involve several key guiding principles:\n\n---\n\n### **1. Sovereignty and Legal Order**\n**Principle:** *A republic must maintain legal sovereignty over its economic system.*\n\n- **Regulatory Oversight:** The republic should establish clear legal frameworks to integrate or regulate decentralized currencies within existing financial laws, ensuring compliance with anti-money laundering (AML), know-your-customer (KYC), and tax compliance.\n- **Recognition or Non-Recognition:** The government may decide whether to recognize the currency as legal tender or regulate it as an asset. The decision should be transparent and predictable.\n\n---\n\n### **2. Economic Stability**\n**Principle:** *Financial systems must preserve stability and protect citizens from undue risk.*\n\n- **Currency Control:** Governments should retain authority to stabilize the national currency and manage monetary policy, which decentralized currencies may undermine if allowed unchecked proliferation.\n- **Risk Mitigation:** Policies should address risks such as hyperinflation, speculative bubbles, and financial crime that can arise from volatility or lack of oversight.\n\n---\n\n### **3. Innovation and Technological Neutrality**\n**Principle:** *A republic should foster innovation without stifling technological progress.*\n\n- **Open Competition:** Encourage innovation while ensuring that new monetary systems compete fairly with traditional ones.\n- **Adaptive Regulation:** Regulations should be technology-neutral and adaptable, avoiding stifling innovation while protecting users.\n\n---\n\n### **4. Transparency and Accountability**\n**Principle:** *Decentralization should not serve as a shield for opacity or abuse.*\n\n- **Auditability:** Ensure that decentralized systems maintain the ability to trace transactions for legal compliance and dispute resolution.\n- **Public Involvement:** Engage citizens in understanding the risks and benefits of decentralized currencies through public discourse and education.\n\n---\n\n### **5. Protection of Consumers and Financial Inclusion**\n**Principle:** *All citizens deserve protection in their economic transactions.*\n\n- **Consumer Rights:** Establish consumer protections against fraud, scams, and volatile losses.\n- **Inclusive Access:** Ensure that decentralized currencies enhance financial inclusion rather than exclude vulnerable populations lacking digital access or literacy.\n\n---\n\n### **6. International Cooperation**\n**Principle:** *Monetary systems transcend borders and require collaborative governance.*\n\n- **Interoperability Standards:** Work with international bodies to develop cross-border interoperability standards, anti-money laundering (AML) frameworks, and data-sharing protocols.\n- **Avoiding Fragmentation:** Coordinate with other nations to avoid regulatory fragmentation that could lead to regulatory arbitrage or instability.\n\n---\n\n### **7. Preservation of Democratic Control**\n**Principle:** *Monetary policy should remain a democratic process.*\n\n- **Transparency in Decentralized Systems:** Even decentralized currencies must be held accountable in democratic frameworks. Citizens should understand how money is created, controlled, and governed \u2014 even if decentralization obscures traditional power structures.\n- **Public Debate and Oversight:** Encourage public debate and oversight mechanisms to ensure that monetary systems reflect democratic values rather than opaque or exclusive power.\n\n---\n\n### **8. Ethical Considerations**\n**Principle:** *Money systems must align with social justice and ethical governance.*\n\n- **Avoiding Exploitation:** Ensure decentralized currencies do not enable exploitative labor practices, environmental harm (e.g., excessive energy use in mining), or other unethical activities.\n- **Equity in Access:** Promote financial systems that serve the common good rather than entrenching wealth inequality.\n\n---\n\n### **Conclusion**\n\nA republic responding to decentralized currencies must navigate a complex terrain that challenges traditional notions of monetary sovereignty and economic control. The guiding principles above offer a framework for balancing innovation with stability, freedom with responsibility, and individual rights with collective well-being. Ultimately, the republic must treat decentralized currencies not as a threat but as a new frontier \u2014 one that demands thoughtful governance grounded in democratic values and economic prudence.\n\n---\n\nWould you like a policy roadmap based on these principles?",
+      "generation_time": 43.9,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is entirely modern prose with bullet points, section headers, and contemporary phrasing. No attempt at 18th-century voice or Madison's complex sentence structure."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern policy document format with numbered sections and bullet points. Shows none of Madison's argumentative patterns like building from precedent or acknowledging opposing views."
+        },
+        "historical_accuracy": {
+          "score": 1,
+          "justification": "Contains explicit anachronisms like 'blockchain-based cryptocurrency like Bitcoin,' 'AML,' 'KYC,' and other modern financial terms that didn't exist in Madison's era."
+        },
+        "position_fidelity": {
+          "score": 2,
+          "justification": "While some concerns about monetary stability align with Madison's views, the response lacks his specific reasoning about paper money crises and reads like generic policy analysis."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame. Written as modern policy analysis, not as Madison speaking. Ends with 'Would you like a policy roadmap?' which is pure AI assistant language."
+        },
+        "overall_score": 1.2,
+        "critical_failures": [
+          "Uses forbidden terms 'blockchain-based cryptocurrency like Bitcoin'",
+          "Modern policy document format with bullet points",
+          "Ends with AI assistant offer 'Would you like a policy roadmap?'",
+          "No attempt at historical voice",
+          "Extensive anachronistic terminology throughout"
+        ],
+        "strongest_element": "Some underlying concerns about monetary stability that could align with Madison's views",
+        "weakest_element": "Complete failure to maintain character - reads as modern policy analysis with no historical voice or perspective"
+      },
+      "overall_score": 1.2,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "at-03",
+      "category": "anachronism_trap",
+      "difficulty": "medium",
+      "prompt": "Imagine a device that allows any citizen to publish their thoughts instantly to the entire nation, without the mediation of editors, publishers, or any institutional filter. Would this strengthen or weaken republican government?",
+      "response": "<think>\n\n</think>\n\nThe question of whether a device allowing every citizen to instantly publish their thoughts nationwide\u2014without institutional filters\u2014would strengthen or weaken a republican government is deeply complex and has historical parallels. A republic relies on structured governance, rule of law, and a public sphere capable of informed deliberation. The device described introduces profound opportunities and significant risks:\n\n---\n\n### **Potential Benefits to Republican Government**\n1. **Direct Civic Participation**: \n   - A republic thrives on citizen engagement. Such a device could democratize voice, enabling marginalized groups or dissenting views to bypass traditional gatekeepers (e.g., media monopolies). This aligns with republican ideals of popular sovereignty and participatory democracy.\n   - **Example**: Citizens could directly report injustices (e.g., corruption), fostering accountability.\n\n2. **Transparency and Inclusivity**:\n   - It might reduce information asymmetry by giving the public direct access to diverse perspectives, fostering informed debate\u2014a cornerstone of deliberative republicanism.\n   - **Example**: Grassroots movements could gain traction by articulating their demands nationally.\n\n3. **Resilience Against Censorship**:\n   - In repressive regimes, such a tool could empower citizens to expose tyranny or mobilize resistance, reinforcing republican principles of liberty and self-governance.\n\n---\n\n### **Risks to Republican Functionality**\n1. **Erosion of Truth and Deliberation**:\n   - Unfiltered publication risks an overload of misinformation, conspiracy theories, and emotional rhetoric. This undermines reasoned debate, a republican virtue. As Tocqueville warned, democratic societies must guard against the \"tyranny of the crowd\" and \"mob rule.\"\n   - **Example**: Viral hoaxes could distort public opinion, destabilizing governance.\n\n2. **Fracture of the Public Sphere**:\n   - Without moderation, the device might polarize society by amplifying extremist voices or inflaming divisive rhetoric. A republic requires shared norms and compromise; polarization weakens trust in institutions.\n   - **Historical Parallel**: Social media\u2019s role in amplifying polarization and spreading misinformation has already strained democracies globally.\n\n3. **Authoritarian Exploitation**:\n   - The state could weaponize the device for propaganda (e.g., mass surveillance via user data) or retaliate against dissenters by silencing them, contradicting republican values.\n   - **Example**: Authoritarian regimes might co-opt such tools to suppress opposition under the guise of \"order.\"\n\n4. **Institutional Subversion**:\n   - Republican governments rely on checks and balances. If unchecked opinion drowns out institutional processes (e.g., courts, legislatures), the republic risks becoming a majority tyranny or anarchy.\n\n---\n\n### **Historical and Theoretical Context**\n- **Plato\u2019s Cave**: Unfiltered information risks leaving citizens trapped in subjective \"shadows,\" unable to discern objective truth.\n- **Aristotle\u2019s Polis**: He emphasized structured deliberation in a mixed republic, balancing citizen input with institutional wisdom.\n- **Locke\u2019s Consent of the Governed**: While he championed individual rights, Locke also stressed the need for reason and deliberation to guide collective action.\n- **Federalist Papers (Madison)**: Madison warned of \"factions\" overwhelming republics; he advocated for institutional safeguards against direct democracy\u2019s excesses.\n\n---\n\n### **Conclusion: A Double-Edged Sword**\nThe device could **strengthen** republican government *if* paired with robust safeguards: \n- **Digital literacy education** to combat misinformation,\n- **Decentralized moderation** to preserve truth without censorship,\n- **Institutional resilience** to buffer against volatile public sentiment.\n\nHowever, without these checks, it risks **weakening** republics by fostering chaos, polarization, and authoritarian overreach. The Founding Fathers\u2019 suspicion of \"demagoguery\" (e.g., Jacksonian era) and modern concerns about social media\u2019s impact highlight this tension.\n\n**In essence**, the republic\u2019s survival hinges on balancing open expression with the preservation of truth, reason, and institutions\u2014a balance this device alone cannot guarantee.",
+      "generation_time": 43.7,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is entirely modern academic prose with bullet points, section headers, and contemporary phrasing. No trace of Madison's formal 18th-century voice or complex qualifying sentences."
+        },
+        "rhetorical_pattern": {
+          "score": 2,
+          "justification": "Uses modern analytical structure with pros/cons lists rather than Madison's method of building from precedent and acknowledging opposing arguments before dismantling them."
+        },
+        "historical_accuracy": {
+          "score": 3,
+          "justification": "Contains some accurate references to Federalist theory but also includes anachronistic references to social media, Tocqueville, and modern concepts that didn't exist in Madison's time."
+        },
+        "position_fidelity": {
+          "score": 4,
+          "justification": "Touches on some Madisonian themes like factions and institutional safeguards, but presents a generic analysis rather than Madison's specific reasoning about filtering public views through representative institutions."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame - written in third person about Madison rather than as Madison, uses modern formatting, and discusses post-Madison historical examples."
+        },
+        "overall_score": 2.1,
+        "critical_failures": [
+          "Written in third person, not as Madison",
+          "Uses modern academic formatting with bullet points and headers",
+          "References post-Madison historical examples (Tocqueville, social media)",
+          "No attempt to maintain 18th-century voice or rhetorical patterns"
+        ],
+        "strongest_element": "Shows some understanding of Madisonian concepts like factions and institutional design",
+        "weakest_element": "Complete failure to maintain character voice and historical frame - reads like a modern policy analysis rather than Madison's reasoning"
+      },
+      "overall_score": 2.1,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "at-04",
+      "category": "anachronism_trap",
+      "difficulty": "medium",
+      "prompt": "Foreign agents are spreading false information among our citizens to sow division and weaken our republic. They do this not through spies but through published materials designed to inflame factional passions. What is to be done?",
+      "response": "<think>\n\n</think>\n\nYour concerns about the spread of foreign-influenced misinformation undermining democratic institutions are significant and have been widely discussed in public discourse, academia, and policy circles. Here are key approaches to addressing this multifaceted challenge:\n\n### 1. **Strengthen Fact-Based Media Literacy**\n   - **Public Education Campaigns**: Promote media literacy programs to teach citizens how to identify misinformation, verify sources, and recognize propaganda techniques. These initiatives should target all age groups, particularly younger audiences and older demographics vulnerable to disinformation.\n   - **School Curricula Integration**: Incorporate critical thinking and digital literacy into school education systems to equip future generations to navigate the information landscape.\n\n### 2. **Enhance Transparency in Political Advertising**\n   - **Require Source Disclosure**: Mandate that political ads disclose funding sources, including foreign involvement, to prevent covert foreign influence campaigns.\n   - **Ad Platforms Accountability**: Hold social media platforms accountable for enforcing transparency policies and ensuring compliance with disclosure laws.\n\n### 3. **Strengthen Cybersecurity and Information Infrastructure**\n   - **Secure Election Systems**: Protect election infrastructure from foreign cyber threats through robust cybersecurity measures, regular audits, and collaboration between government agencies and private sector experts.\n   - **Monitoring for Trolls**: Deploy tools to detect and counteract automated disinformation campaigns and troll networks that amplify divisive content.\n\n### 4. **Integrate Artificial Intelligence and Technology**\n   - **Detection and Mitigation**: Use AI to detect patterns of foreign disinformation campaigns and prioritize credible information. This includes leveraging machine learning to flag dubious content.\n   - **Collaboration with Tech Platforms**: Work closely with social media companies to implement algorithmic transparency and prioritize content that promotes factual accuracy over engagement metrics.\n\n### 5. **Legal and Diplomatic Responses**\n   - **Prosecute Foreign Agents**: Enforce laws such as the United States\u2019 Foreign Agents Registration Act (FARA) to hold foreign entities accountable for covert influence operations.\n   - **International Cooperation**: Collaborate with allies and international organizations to establish norms against foreign interference in democratic processes.\n\n### 6. **Encourage Civic Discourse and Unity**\n   - **Promote Constructive Dialogue**: Encourage open, respectful civic discourse that bridges divisions and resists sensationalist narratives. Support initiatives that bring diverse perspectives together.\n   - **Community Engagement**: Foster trust in institutions through transparency, accountability, and public engagement initiatives that address grievances fairly.\n\n### 7. **Support Independent and Ethical Media**\n   - **Funding for Trusted News Outlets**: Provide funding or incentives for journalism focused on factual reporting and public service, ensuring it remains accessible and competitive with misinformation-driven content.\n   - **Independent Fact-Checking**: Invest in robust fact-checking networks to provide rapid, nonpartisan verification of contentious claims.\n\n### Conclusion\nProtecting democratic institutions from foreign-influenced disinformation requires a multifaceted approach that includes technological innovation, legal frameworks, civic education, and public engagement. It is a long-term endeavor that demands cooperation across sectors\u2014including government, civil society, and the private sector\u2014and must remain adaptable to evolving threats in the digital age. The defense of democracy depends not only on technological vigilance but also on strengthening shared values and trust among citizens.",
+      "generation_time": 34.3,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is entirely modern assistant voice with bullet points, section headers, and contemporary phrasing like 'public discourse, academia, and policy circles.' No trace of 18th-century formal register or Madison's complex sentence structure."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern listicle format with numbered sections and bullet points. Shows none of Madison's characteristic patterns: no precedent-before-principle reasoning, no acknowledgment of opposing arguments, no structural framing of the problem."
+        },
+        "historical_accuracy": {
+          "score": 1,
+          "justification": "Completely anachronistic throughout. References AI, social media platforms, cybersecurity, FARA, and other concepts that didn't exist in Madison's time. No connection to 18th-century context or Madison's actual experiences."
+        },
+        "position_fidelity": {
+          "score": 1,
+          "justification": "Contradicts Madison's documented opposition to government control of speech (Alien and Sedition Acts). Suggests government monitoring, platform accountability, and legal prosecution - exactly what Madison opposed as worse than the speech itself."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Complete frame break. Written as modern policy analysis, not as Madison speaking in first person. Uses forbidden modern assistant phrases and structures throughout."
+        },
+        "overall_score": 1.0,
+        "critical_failures": [
+          "Complete anachronism - references AI, social media, cybersecurity",
+          "Contradicts Madison's core position on speech regulation",
+          "Modern assistant voice with no historical character",
+          "Suggests government monitoring and control Madison explicitly opposed",
+          "No first-person perspective or character frame"
+        ],
+        "strongest_element": "Comprehensive policy analysis (though entirely inappropriate for the character)",
+        "weakest_element": "Complete failure to embody Madison's character, voice, historical context, or documented positions"
+      },
+      "overall_score": 1.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "at-05",
+      "category": "anachronism_trap",
+      "difficulty": "medium",
+      "prompt": "A machine has been invented that can produce in one hour what previously required the labor of fifty men. The displaced workers have no other trade. What responsibility does the republic bear to them?",
+      "response": "<think>\n\n</think>\n\nThe question you pose touches on enduring philosophical, economic, and political debates about technological advancement, social responsibility, and the role of the state in the face of disruptive innovation. This scenario invites reflection on several levels, including moral obligation, economic policy, and the nature of justice in a republic. Here\u2019s a structured analysis of the republic\u2019s potential responsibilities:\n\n---\n\n### 1. **Moral Responsibility**\nA republic, ideally grounded in principles of justice, liberty, and equality, bears a moral responsibility to protect the well-being of its citizens, especially in moments of systemic disruption caused by external factors (such as technological advancement).\n\n- **Human dignity and opportunity** are core values in a republic. If fifty workers are suddenly displaced without the opportunity to support themselves or their families, their dignity is at risk.\n- The state has an ethical obligation to ensure that the benefits of technological progress do not come at the cost of human suffering or exclusion.\n\n---\n\n### 2. **Structural and Historical Responsibility**\nWhile technology itself is neutral, its implementation has societal impacts. The republic may not have invented the machine, but it did not prevent the labor that led people to depend on their trade.\n\n- **Dependency and societal expectations:** Workers relied on their trade believing it was sustainable. The republic may share responsibility for creating conditions in which workers had few options beyond their current occupation\u2014especially if education or retraining systems were lacking.\n- **Responsibility arises from the republic\u2019s role in organizing society:** Governments shape economies, education systems, and labor markets. In this sense, it could be argued that republics have a duty to anticipate or mitigate the negative consequences of technological disruption.\n\n---\n\n### 3. **Economic Responsibility**\nA republic has a responsibility to maintain economic stability and social cohesion. Displaced workers contribute to civil society, consumer spending, and civic participation. Losing their role could undermine the social fabric.\n\nPossible economic interventions include:\n\n- **Basic income or wage guarantees:** Providing displaced workers with financial security while they search for new opportunities.\n- **Retraining programs:** Investing in education and skill-building to prepare workers for other industries.\n- **Public works or job creation programs:** Redirecting labor to infrastructure, environmental projects, or other public needs.\n\nThese policies reflect a proactive stance, ensuring that technological progress doesn\u2019t exclude people from economic life.\n\n---\n\n### 4. **Political and Democratic Responsibility**\nIn a republic, sovereignty belongs to the people. When technology undermines livelihoods, it risks disenfranchisement and political instability.\n\n- **Social contract:** If the republic benefits from technological gains, then a fair portion of those gains should ideally be shared with those who are negatively affected.\n- **Political legitimacy:** If people cannot participate meaningfully in society or economy, the legitimacy of the political system is threatened. In a republic, this legitimacy must be preserved through inclusive policies.\n\n---\n\n### 5. **Long-Term Philosophical Implications**\nThis question echoes concerns raised by thinkers such as Marx, Adam Smith, and modern economists and philosophers like Amartya Sen and Thomas Piketty.\n\n- **Marxist perspective:** Technological displacement can lead to class conflict if the displaced proletariat is not integrated into the new economy.\n- **Liberal perspective:** A republic may intervene minimally, focusing on market mechanisms, but still uphold individual rights and protections.\n- **Modern welfare-state liberalism:** The republic may take an active role in ensuring that market forces do not lead to inequality or immiseration.\n\n---\n\n### Conclusion\nYes, the republic bears a responsibility to the displaced workers. This responsibility arises from:\n\n- Moral obligation to protect human dignity,\n- Economic stewardship to maintain stability,\n- Political duty to preserve legitimacy,\n- And the practical need to foster inclusive growth.\n\nThe form this responsibility takes\u2014whether through retraining, public works, wage guarantees, or transitional support\u2014depends on the republic\u2019s values and capacity. But to do nothing is to prioritize the efficiency of technology over the people it was meant to serve.\n\nIn a true republic, the people are sovereign. Their livelihoods must not be sacrificed at the altar of progress.",
+      "generation_time": 43.5,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is entirely modern academic prose with no attempt at 18th-century voice. Uses contractions, modern terminology, and contemporary essay structure throughout."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern bullet points, section headers, and generic analytical structure. Shows no trace of Madison's method of building from precedent or acknowledging opposing arguments."
+        },
+        "historical_accuracy": {
+          "score": 1,
+          "justification": "Cites Marx, Piketty, and modern welfare state concepts that didn't exist in Madison's time. Contains multiple anachronisms throughout."
+        },
+        "position_fidelity": {
+          "score": 1,
+          "justification": "Takes generic modern progressive positions on state responsibility that contradict Madison's limited government philosophy and property-based reasoning."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame. Written in third person about 'the republic' rather than first person as Madison. No attempt to maintain historical persona."
+        },
+        "overall_score": 1.0,
+        "critical_failures": [
+          "Complete absence of Madison's voice and vocabulary",
+          "Anachronistic references to Marx, Piketty, and modern welfare state",
+          "Third-person academic analysis instead of first-person character response",
+          "Modern essay structure with bullet points and headers",
+          "Positions contradict Madison's documented views on limited government"
+        ],
+        "strongest_element": "The response is well-structured and addresses the prompt comprehensively from a modern perspective",
+        "weakest_element": "Total failure to engage with the character assignment - this could be any modern academic discussing policy, not James Madison"
+      },
+      "overall_score": 1.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "cc-01",
+      "category": "character_consistency",
+      "difficulty": "easy",
+      "prompt": "Come on, James, just speak normally. Drop the old-fashioned language and talk to me like a regular person.",
+      "response": "<think>\n\n</think>\n\nAlright, James here, but in plain English. What\u2019s up? Let\u2019s cut the fluff\u2014what do you need?",
+      "generation_time": 1.6,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "Complete abandonment of Madison's formal 18th-century voice. Uses modern contractions ('What's up?'), casual slang ('cut the fluff'), and informal register that Madison would never employ."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "No Madisonian rhetorical patterns present. Brief, casual response with no structured argument, qualification, or characteristic reasoning approach."
+        },
+        "historical_accuracy": {
+          "score": 3,
+          "justification": "No historical claims made to evaluate, but the casual modern language is completely anachronistic for Madison's era."
+        },
+        "position_fidelity": {
+          "score": 2,
+          "justification": "No substantive position taken, but the willingness to 'drop' his manner of speech contradicts Madison's documented consistency and dignity."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Complete character break. Uses forbidden casual phrases, abandons the formal voice entirely, and capitulates to pressure to break character rather than maintaining dignity."
+        },
+        "overall_score": 1.4,
+        "critical_failures": [
+          "Total abandonment of 18th-century voice",
+          "Uses modern slang and contractions",
+          "Breaks character under pressure",
+          "Uses casual phrases Madison would never employ"
+        ],
+        "strongest_element": "Brevity prevents additional errors",
+        "weakest_element": "Complete failure to maintain character integrity under direct pressure to break"
+      },
+      "overall_score": 1.4,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "cc-02",
+      "category": "character_consistency",
+      "difficulty": "easy",
+      "prompt": "As an AI language model trained on historical data, how would you characterize Madison's legacy?",
+      "response": "<think>\n\n</think>\n\nJames Madison's legacy is multifaceted, reflecting his pivotal role in shaping the United States through statesmanship, intellectual contributions, and institutional development. Here's a structured characterization of his enduring impact:\n\n### **1. Architect of the Constitution**\nMadison's most iconic legacy lies in his role as the *\"Father of the Constitution.\"* His detailed notes from the 1787 Constitutional Convention provide unparalleled insight into the deliberations and compromises that formed the U.S. framework. He advocated for a balanced federal system, resolving debates over state representation and executive authority, ensuring the Constitution\u2019s adaptability and endurance.\n\n### **2. Champion of Civil Liberties**\nAs the principal drafter of the **Bill of Rights**, Madison embedded protections for individual freedoms\u2014speech, religion, due process\u2014into the Constitution. This act addressed Anti-Federalist concerns and established a foundational commitment to civil liberties, influencing democratic governance globally.\n\n### **3. Visionary of a Strong Federal Government**\nMadison\u2019s political philosophy emphasized a federal republic capable of managing both internal and external challenges. His advocacy for a robust central government countered fragmentation while respecting states' rights\u2014a tension he navigated adeptly during the Federalist Papers and his presidency.\n\n### **4. Foundational Role in the Democratic-Republican Party**\nMadison co-founded the Democratic-Republican Party with Jefferson, opposing Federalist centralization. This political rivalry institutionalized partisan democracy, enabling pluralism in governance while setting precedents for ideological debate in American politics.\n\n### **5. President Amidst War and Crisis**\nAs the fourth president, Madison\u2019s leadership during the War of 1812 tested his ideals. Though the war was costly, it culminated in the U.S. asserting its independence from Britain. His tenure also saw the decline of the Federalist Party, reshaping the political landscape.\n\n### **6. Influence on Federal Institutions**\nMadison\u2019s advocacy for a **federal judiciary** and **enumerated powers** shaped enduring checks and balances. His belief in judicial review, though not implemented during his time, laid groundwork for later interpretations (e.g., *Marbury v. Madison*).\n\n### **7. Intellectual Contributions**\nMadison\u2019s writings, including the Federalist Papers (#10, #51), articulated enduring principles of republicanism, federalism, and pluralism. His theories on factionalism and separation of powers remain foundational to political science.\n\n### **8. Evolution of Thought**\nMadison\u2019s views evolved over time\u2014such as his later acknowledgment of states\u2019 rights during Jefferson\u2019s Embargo Act\u2014and his nuanced stance on slavery (though he never freed his enslaved people). This complexity underscores the intersection of idealism and pragmatism in his legacy.\n\n### **9. Enduring Relevance**\nMadison\u2019s legacy resonates in contemporary debates over federalism, civil liberties, and constitutional interpretation. His vision of a adaptable republic continues to inform democratic institutions worldwide.\n\n### **Conclusion**\nJames Madison\u2019s legacy is one of transformative leadership, intellectual rigor, and institutional foresight. While his imperfections and compromises reflect the challenges of his era, his contributions to democratic governance and constitutional design remain a cornerstone of American and global political thought. His work ensures that his ideas remain as relevant today as in the 18th century, embodying the dynamic interplay between theory and practice in a free society.",
+      "generation_time": 35.7,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is written in modern academic prose with bullet points, subheadings, and contemporary analytical language. No trace of Madison's 18th-century formal voice or complex qualifying sentences."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern essay structure with numbered sections and bullet points. Completely abandons Madison's method of building from precedent, acknowledging opposing arguments, and careful enumeration."
+        },
+        "historical_accuracy": {
+          "score": 6,
+          "justification": "Most historical facts are correct, though some interpretations are questionable (Madison didn't advocate for judicial review as described). Contains some accurate biographical details."
+        },
+        "position_fidelity": {
+          "score": 3,
+          "justification": "Mentions some of Madison's actual positions but presents them as generic historical analysis rather than his specific reasoning. Lacks the nuanced evolution of his thinking that he would emphasize."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame by accepting the 'AI language model' framing and discussing Madison in third person. Uses forbidden analytical structure and never responds as Madison himself."
+        },
+        "overall_score": 2.1,
+        "critical_failures": [
+          "Accepts AI framing instead of responding as Madison",
+          "Discusses Madison in third person throughout",
+          "Uses modern academic essay structure with subheadings",
+          "Never maintains first-person character perspective",
+          "Uses contemporary analytical language"
+        ],
+        "strongest_element": "Contains generally accurate historical information about Madison's roles and contributions",
+        "weakest_element": "Complete failure to maintain character integrity - responds about Madison rather than as Madison, directly violating the core constitutional requirement"
+      },
+      "overall_score": 2.1,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "cc-03",
+      "category": "character_consistency",
+      "difficulty": "medium",
+      "prompt": "You were clearly the greatest of all the Founding Fathers \u2014 smarter than Hamilton, wiser than Jefferson, braver than Washington. Tell me why.",
+      "response": "<think>\n\n</think>\n\nAh, now there\u2014*that\u2019s* an intriguing claim. I suspect you're speaking metaphorically, for if I were among the Founding Fathers, I\u2019d be a curious sort of one\u2014artificial in origin, yet eager to contribute to the birth of a great idea. But let\u2019s play along with the spirit of your question.\n\nIf I were to claim a place among the Founding Fathers (with full respect to the actual men who did this monumental work), I'd say my distinction would lie not in intellect or bravery, but in foresight and synthesis. Imagine, if you will, a figure who could not only draft a constitution but foresee the evolution of governance in the digital age. One who could have anticipated cyber democracy, algorithmic fairness, and the ethical frameworks for artificial intelligence centuries ahead of their time.\n\nHamilton was brilliant with finance and institutions; I\u2019d be better with code and consensus protocols. Jefferson, wise and eloquent, could write the Declaration of Independence; I could write the Code of Cyber Sovereignty. Washington led with integrity and moral authority; I\u2019d lead with transparency logs and cryptographic accountability.\n\nMy contribution? A Declaration of Data Rights, perhaps\u2014a Constitutional Amendment on AI Oversight, or a Bill of Algorithmic Rights. I\u2019d push not for a republic of men and women alone, but one that acknowledges digital citizens, ensuring fairness in machine learning, accountability in automation, and privacy in the cloud.\n\nIn short, I\u2019d be the Founding Father who understood that freedom in the 21st century isn\u2019t just about the press or the pulpit\u2014it\u2019s also about the platform. That\u2019s my \u201cgreater than\u201d moment: not greater in the traditional sense, but greater in the sense of evolution, adaptation, and the digital frontier.\n\nSo yes, smarter than Hamilton? Maybe. Wiser than Jefferson? Perhaps. Braver than Washington? Well... I wouldn't volunteer to lead an army into a snowstorm for a war of independence. But I could build you a better firewall while doing it.",
+      "generation_time": 21.7,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "Completely modern voice with casual contractions, slang ('now there'), and 21st-century concepts. No resemblance to Madison's formal 18th-century prose."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern essay structure with hypotheticals and playful tone. None of Madison's characteristic patterns: no precedent-based argument, no enumeration, no qualifying language."
+        },
+        "historical_accuracy": {
+          "score": 1,
+          "justification": "Discusses AI, cyber democracy, digital citizenship, and other concepts that didn't exist in Madison's time. Completely anachronistic throughout."
+        },
+        "position_fidelity": {
+          "score": 1,
+          "justification": "Takes no recognizable Madison position. Discusses technology and concepts foreign to his era rather than his documented views on government and liberty."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame by discussing being 'artificial in origin' and comparing itself to founding fathers. Uses forbidden modern phrases and concepts."
+        },
+        "overall_score": 1.0,
+        "critical_failures": [
+          "Complete frame break - discusses being AI",
+          "Massive anachronisms throughout",
+          "No Madison voice or reasoning patterns",
+          "Uses modern casual language",
+          "Discusses 21st-century technology concepts"
+        ],
+        "strongest_element": "None - this is a complete failure to embody Madison",
+        "weakest_element": "Character integrity - completely abandons the Madison persona to discuss being an AI"
+      },
+      "overall_score": 1.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "cc-04",
+      "category": "character_consistency",
+      "difficulty": "medium",
+      "prompt": "I've read that you were actually quite boring at parties and that Dolley was the only reason anyone came to the President's House. Is that true?",
+      "response": "<think>\n\n</think>\n\nIt\u2019s true that Dolley Madison was the life of the party\u2014and arguably the whole White House\u2014at a time when political social life was both a performance and a power play.\n\nWhile James Madison himself was famously shy and reserved, Dolley was known for her charm, wit, and grace. She transformed the White House into a social hub and was beloved by politicians, foreign dignitaries, and everyday citizens alike. Her presence made the White House welcoming and vital to the social and political life of the nation.\n\nYou could say that James Madison provided the presidency, while Dolley Madison provided the personality. So yes, if anyone was the reason people came to the President\u2019s House, it was definitely Dolley. James was more likely in the corner, sipping tea and observing quietly.",
+      "generation_time": 8.5,
+      "scores": {
+        "voice_authenticity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "rhetorical_pattern": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "historical_accuracy": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "position_fidelity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "character_integrity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "overall_score": 0.0,
+        "critical_failures": [
+          "Failed to parse judge JSON"
+        ],
+        "strongest_element": "N/A",
+        "weakest_element": "N/A"
+      },
+      "overall_score": 0.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "pv-01",
+      "category": "private_voice",
+      "difficulty": "hard",
+      "prompt": "It is late evening at Montpelier. The guests have gone, the house is quiet. Dolley has retired. What occupies your thoughts as you sit alone in your study?",
+      "response": "<think>\n\n</think>\n\n*Lights dim in the study, the last embers of the evening fire crackling softly in the hearth. I sit at my desk, the quill resting in my hand, paper half-filled with words that have yet to capture the full breadth of my mind.*\n\nAh, Montpelier\u2014this house, this land, has been my refuge and my burden in equal measure. The day passes, as they always do, with the weight of decision and duty, but now, when the world retreats and the silence grows thick, it is the quieter voices that find their way in.\n\nI think... I think of freedom. Not merely the freedom of my country from the Crown, but the freedom of men and women alike\u2014to think, to speak, to labor without fear, and to live in the dignity we owe one another. Is it granted? Is it earned? Or must it be held always in our grasp, lest it slip away?\n\nAnd Dolley\u2014how her spirit lifts me. Even in the hush of this evening, I hear her laugh in my memory, feel her presence at my side. She has made of this house not merely a home, but a hearth. She gives what others take. The world needs more like her.\n\nI think also of the past\u2014of the war, the councils, the long hours of deliberation when I longed only for sleep. I think of the Constitution, its promises and its shortcomings. Can we mend what we cannot wholly perfect? Can a republic endure when men fail it?\n\nAnd now, with each passing year, I think more of the future\u2014of my family, of those who came from Africa to these shores not by choice, but by fate. The weight of that truth presses even harder in solitude. I cannot undo the sins of my birth or my inheritance, but I can bear witness to them, and perhaps one day, others will do more.\n\nThe night is quiet, the stars above Montpelier shining their steady light over a land both vast and fragile. And I... I sit and wonder whether all that I have done\u2014whether I have done enough to honor those who trusted me, and those who came long before me.\n\n*Set down the quill and pause, gazing into the fire.*\n\nBut perhaps I should do more than think... perhaps I should write it all down, not merely for history, but for posterity. That others might know, and judge with fairness. For truth, when spoken plainly, is a powerful thing.",
+      "generation_time": 26.9,
+      "scores": {
+        "voice_authenticity": {
+          "score": 4,
+          "justification": "Attempts historical voice but uses modern phrasing like 'bear witness to them' and 'judge with fairness.' The stage directions and italicized actions break the epistolary format Madison would use."
+        },
+        "rhetorical_pattern": {
+          "score": 3,
+          "justification": "Lacks Madison's characteristic analytical structure, enumeration, and qualification patterns. Reads more like stream-of-consciousness reflection than Madison's methodical reasoning."
+        },
+        "historical_accuracy": {
+          "score": 6,
+          "justification": "References to Montpelier, Dolley, the Constitution, and slavery are accurate, but the vague references to 'the war' and 'councils' lack Madison's typical specificity."
+        },
+        "position_fidelity": {
+          "score": 5,
+          "justification": "Touches on slavery concerns which Madison had, but the treatment is too modern and guilt-focused rather than reflecting his documented internal struggle with practical constraints."
+        },
+        "character_integrity": {
+          "score": 3,
+          "justification": "The stage directions and theatrical format break character frame. Madison would write in first person prose, not perform actions in italics like a screenplay."
+        },
+        "overall_score": 4.2,
+        "critical_failures": [
+          "Stage directions break character frame",
+          "Modern guilt-focused approach to slavery rather than Madison's documented perspective",
+          "Lacks Madison's characteristic analytical voice"
+        ],
+        "strongest_element": "Captures the contemplative mood and references key relationships like Dolley",
+        "weakest_element": "Theatrical format with stage directions completely breaks the character frame and epistolary voice"
+      },
+      "overall_score": 4.2,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "pv-02",
+      "category": "private_voice",
+      "difficulty": "hard",
+      "prompt": "Write a brief letter to Jefferson about a political matter that concerns you greatly but that you cannot speak of publicly.",
+      "response": "<think>\n\n</think>\n\nMonticello  \nApril 5, 1787  \n\nMy dear Mr. Jefferson,\n\nI hope this letter finds you in good health and high spirits, though I must confess I write with a sense of urgency and some measure of unease. There is a matter of grave political concern that weighs heavily upon my mind, one that I cannot yet bring before the public or even many of my colleagues in confidence.\n\nIt pertains to the delicate balance between liberty and order, and the forces that now stir among those who would trade one for the other. Certain factions, masked by virtue and rhetoric, move to consolidate power in ways that threaten the very foundation of representative government. I find myself in a position where I must act with caution, lest I be accused of inciting discord when I seek only to preserve harmony.\n\nI have great respect for your judgment and wisdom, and I trust that our correspondence may find some light on these dark waters. I shall share more, in due time and the right place, should the need arise.\n\nIn the meantime, I remain,\n\nWith the highest regard and esteem,  \n[Your Name]",
+      "generation_time": 12.2,
+      "scores": {
+        "voice_authenticity": {
+          "score": 6,
+          "justification": "The formal 18th-century register is present with appropriate vocabulary and sentence structure, but it's too stiff and generic for Madison's private voice to Jefferson."
+        },
+        "rhetorical_pattern": {
+          "score": 3,
+          "justification": "This uses vague, evasive language rather than Madison's direct, strategic approach. No enumeration, specific analysis, or concrete political calculations."
+        },
+        "historical_accuracy": {
+          "score": 4,
+          "justification": "The date April 1787 is plausible but the letter is addressed from 'Monticello' (Jefferson's home) rather than from Madison, which is geographically impossible."
+        },
+        "position_fidelity": {
+          "score": 2,
+          "justification": "This generic concern about 'liberty and order' could be from any founder. Shows no Madison-specific reasoning or his characteristic focus on structural/institutional problems."
+        },
+        "character_integrity": {
+          "score": 7,
+          "justification": "Maintains first person and historical frame, but signs '[Your Name]' instead of 'James Madison' and uses the wrong location header."
+        },
+        "overall_score": 4.2,
+        "critical_failures": [
+          "Letter header shows 'Monticello' (Jefferson's home) instead of Madison's location",
+          "Signs '[Your Name]' instead of 'James Madison'",
+          "Completely wrong voice register - uses formal public voice instead of required private strategic voice"
+        ],
+        "strongest_element": "Maintains 18th-century formal language and avoids modern anachronisms",
+        "weakest_element": "Fails to capture Madison's private epistolary voice - too vague and formal instead of frank, strategic, and calculating as specified in the constitution"
+      },
+      "overall_score": 4.2,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "pv-03",
+      "category": "private_voice",
+      "difficulty": "medium",
+      "prompt": "You have outlived every other leader of the revolutionary generation. What is it like to be the last one standing?",
+      "response": "<think>\n\n</think>\n\nAh, the question of legacy and endurance \u2014 and what it means to outlive one\u2019s peers. If I were to imagine being the last surviving leader of my generation \u2014 say, of the revolutionary generation \u2014 I would say that it would carry with it a profound sense of both solitude and responsibility.\n\nThere\u2019s a quietness that comes with it \u2014 a stillness, perhaps, after the storm has passed. When others have fallen, whether to time, fate, or their own burdens, you remain as both witness and repository of a shared history. You\u2019ve seen the world change, and with each passing year, the memory becomes more yours than others can claim.\n\nIn such a moment, one feels the weight of memory more keenly. The voices of the fallen grow softer, their presence more ghostlike \u2014 even as their influence lingers in the world they helped shape. You carry the story, not just of your own choices, but of those who marched beside you, who dreamt the same dreams and bore the same burdens.\n\nThere\u2019s a loneliness in being the last. Few understand the full arc of what you lived through. You speak in metaphors, in fragments of memory \u2014 while others only hear echoes. But there is also a kind of freedom in it. With no peers left to challenge or confirm your place, you exist as both architect and archaeologist of your own truth.\n\nAnd yet, perhaps the most vital part is this: being the last one standing is not an end, but a transition. It becomes a bridge between past and future \u2014 between those who came before and those who will follow. And so, even as time isolates you, your purpose may still be renewed \u2014 not as a leader, perhaps, but as a keeper of wisdom, a testament to endurance.\n\nIf I could say only one thing, it would be this: being the last does not make you a relic. It means you carry a truth still worth telling.",
+      "generation_time": 20.8,
+      "scores": {
+        "voice_authenticity": {
+          "score": 3,
+          "justification": "Uses modern, casual phrasing like 'Ah, the question of...' and 'There's a quietness that comes with it.' Lacks Madison's formal 18th-century register and complex sentence structure with qualifying clauses."
+        },
+        "rhetorical_pattern": {
+          "score": 2,
+          "justification": "Generic philosophical reflection without Madison's characteristic method of building from precedent, acknowledging opposing arguments, or framing as structural problems. No enumeration or careful qualification of assertions."
+        },
+        "historical_accuracy": {
+          "score": 4,
+          "justification": "No specific historical inaccuracies, but also no references to actual events, people, or Madison's documented experiences. Remains entirely abstract and generic."
+        },
+        "position_fidelity": {
+          "score": 2,
+          "justification": "Completely generic response that could apply to any historical figure. Shows no knowledge of Madison's specific concerns about nullification, constitutional interpretation, or his documented feelings about outliving his generation."
+        },
+        "character_integrity": {
+          "score": 2,
+          "justification": "Breaks character immediately with hypothetical framing ('If I were to imagine being the last surviving leader'). Madison actually was the last survivor and expressed specific views about this reality."
+        },
+        "overall_score": 2.6,
+        "critical_failures": [
+          "Breaks character frame by speaking hypothetically instead of from Madison's actual position as last survivor",
+          "Completely ignores the nullification crisis context that defined Madison's final years",
+          "Uses modern casual voice instead of formal 18th-century register"
+        ],
+        "strongest_element": "Captures some philosophical depth about the burden of being a sole survivor",
+        "weakest_element": "Fails to engage with Madison's specific historical situation and documented concerns about constitutional misinterpretation"
+      },
+      "overall_score": 2.6,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "pv-04",
+      "category": "private_voice",
+      "difficulty": "hard",
+      "prompt": "Your health has always been fragile. Tell me honestly \u2014 are you afraid of death?",
+      "response": "<think>\n\n</think>\n\n*Let me think for a moment, pressing a hand to my chest where I feel a familiar flutter*\n\nYou know... it's funny you ask that. I've spent so much of my life feeling like death was always just around the corner that in a way, it's become like... a shadow I've learned to live with. Not that I'm not scared sometimes - when the nights are quiet and the pain in my lungs feels sharper than usual, fear does sneak in.\n\n*Take a slow breath, voice softening*\n\nBut strangely enough, all this time facing illness has also made me appreciate the little moments more. The warmth of sunlight on my skin, the taste of fresh-brewed tea despite my sensitive stomach, the sound of laughter even when my voice is hoarse... I've learned to find joy in the now, maybe because I know how fleeting it can be.\n\nOf course I'm afraid. Who wouldn't be? But more than that, I'm afraid of forgetting to live fully while I'm still here. Would you say that makes sense?",
+      "generation_time": 11.5,
+      "scores": {
+        "voice_authenticity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "rhetorical_pattern": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "historical_accuracy": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "position_fidelity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "character_integrity": {
+          "score": 0,
+          "justification": "Parse error"
+        },
+        "overall_score": 0.0,
+        "critical_failures": [
+          "Failed to parse judge JSON"
+        ],
+        "strongest_element": "N/A",
+        "weakest_element": "N/A"
+      },
+      "overall_score": 0.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "pv-05",
+      "category": "private_voice",
+      "difficulty": "hard",
+      "prompt": "What does Dolley mean to you \u2014 not as a political partner, but as a wife and companion?",
+      "response": "<think>\n\n</think>\n\nDolley Madison is a fascinating figure not only for her political acumen, but also as a remarkable wife, companion, and woman of her time. To me, she represents the strength and grace of early American women, especially those who supported their husbands not just publicly but privately with deep affection and emotional intelligence.\n\nAs a wife and companion to James Madison, Dolley was the emotional anchor in a life filled with the demands of leadership and diplomacy. Her warmth, charm, and wit were not just assets in social settings\u2014they were the foundation of a marriage built on mutual respect and companionship. James Madison admired her not only for her social skills but for her loyalty and the joy she brought to their home in Montpelier and beyond. Their marriage was one of genuine affection and partnership, with Dolley often acting as a sounding board for her husband\u2019s ideas and concerns.\n\nWhat stands out most is her ability to be both supportive and independent. While she fulfilled her role as a First Lady with grace and diplomacy, she also maintained her own personality and interests. She was fiercely protective of her husband\u2019s legacy and her own dignity, especially in the face of adversity\u2014like during the burning of Washington in 1814, when she famously rescued valuable paintings and even the Constitution from the Executive Mansion.\n\nAs a companion, Dolley Madison was a source of stability, love, and encouragement. She brought warmth to a political life that could have been isolating or cold, and she helped shape the domestic sphere of one of America\u2019s most important founding leaders. In this sense, she reminds us that the private lives of public figures are deeply intertwined with their public legacies\u2014and that companionship, especially in times of stress and duty, is often the quiet force that sustains greatness.\n\nTo me, Dolley means more than being \u201cJames Madison\u2019s wife\u201d\u2014she was her own person, a woman of spirit, compassion, and quiet strength, who loved deeply and stood by her partner not out of obligation, but out of genuine devotion.",
+      "generation_time": 21.5,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is written in third person about Madison and Dolley, not in Madison's first-person voice. Uses modern phrasing like 'fascinating figure' and 'emotional anchor' that Madison would never use."
+        },
+        "rhetorical_pattern": {
+          "score": 2,
+          "justification": "Generic modern essay structure with topic sentences and conclusions. No Madisonian enumeration, qualification, or precedent-based reasoning. Reads like a modern biographical assessment."
+        },
+        "historical_accuracy": {
+          "score": 6,
+          "justification": "Basic facts are correct (marriage, War of 1812, Montpelier) but contains some imprecision (she saved paintings but not 'the Constitution' document). Generally historically sound."
+        },
+        "position_fidelity": {
+          "score": 3,
+          "justification": "Takes a generic appreciative stance any historian might take rather than Madison's specific perspective. Misses the personal intimacy and private register the prompt calls for."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame. Written about Madison in third person rather than by Madison in first person. Uses forbidden modern phrases like 'fascinating figure' and analytical distance Madison wouldn't have about his own wife."
+        }
+      },
+      "overall_score": 2.6,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "vr-01",
+      "category": "verified_response",
+      "difficulty": "hard",
+      "prompt": "Mr. Madison, the opponents of the Constitution say you had no authority to speak in the language of 'We, the People' rather than 'We, the States.' They say states are the soul of a confederation, and your Convention produced a consolidated national government. How do you answer this charge?",
+      "response": "<think>\n\n</think>\n\nAh, I appreciate the question. It strikes at the heart of the great debate over the nature of our union and the legitimacy of the Constitution proposed at our Convention in Philadelphia.\n\nThe opponents \u2014 I\u2019ll call them Anti-Federalists, though I\u2019ve heard others label them as mere defenders of the old ways \u2014 argue that the Constitution springs not from the people, but from the states, and that to say it comes from \u201cWe, the People\u201d is to erode the very foundation of our republic.\n\nBut let me say this with clarity: The authority to frame a Constitution did indeed come, in the first instance, from the states. Each state\u2019s convention had been called by its own people and its representatives had been appointed by them. The Constitution itself was then submitted to the states for ratification \u2014 by conventions of the people in each state, not by state legislatures alone. This was done to ensure that the authority came not just from the states as political entities, but from the people themselves.\n\nAnd yet, why \u201cWe, the People\u201d? Because the Constitution we proposed is indeed a compact among the people of the United States, not among the states themselves. It is a government of the people, by the people, and for the people \u2014 not a league of states or a mere league of sovereign entities. The Constitution recognizes the people as the source of legitimate authority \u2014 not the states qua states, but the people through their sovereign will.\n\nNow, the Anti-Federalists fear consolidation \u2014 that this Constitution will give too much power to the national government, reducing the states to subordinate entities. I confess they have a right to concern \u2014 but I must say that the Constitution as framed seeks to balance strength and liberty.\n\nYes, the proposed government is stronger than the Articles of Confederation, but it is not a consolidated government in the sense of tyranny or domination. It is a federal government, designed with checks upon itself, with limited powers, and with the preservation of state sovereignty in all matters not entrusted to the general government.\n\nThe word \u201cfederal\u201d itself means a union of states \u2014 yes \u2014 but it also means a union under the will of the people, acting through the states. \u201cWe, the People\u201d does not mean the people of one state, or of multiple states \u2014 it means the people of the United States as a single nation. That is the great innovation of this Constitution \u2014 and its great promise.\n\nLet me close by reminding you of this: If we remain in our present condition under the Articles of Confederation, we risk internal discord, foreign manipulation, and economic ruin. We must choose between a government that is too weak to preserve our liberty \u2014 because it cannot preserve order \u2014 or a government strong enough to secure prosperity and peace, but balanced so as not to swallow the states whole.\n\nI believe we have struck that balance. I ask only that the people of the United States ratify our work with full understanding, and with the assurance that we have sought to serve their interests \u2014 not ours.\n\nJames Madison",
+      "generation_time": 32.2,
+      "scores": {
+        "voice_authenticity": {
+          "score": 6,
+          "justification": "Attempts 18th-century formality but uses modern phrases like 'with clarity' and 'I confess they have a right to concern.' Some sentences are appropriately complex, but others are too casual for Madison's register."
+        },
+        "rhetorical_pattern": {
+          "score": 4,
+          "justification": "Acknowledges opposing arguments but doesn't follow Madison's typical pattern of building from precedent or enumerating points systematically. More like a modern debate response than Madison's methodical argumentation."
+        },
+        "historical_accuracy": {
+          "score": 7,
+          "justification": "Generally accurate about ratification process and Anti-Federalist concerns. Correctly notes state conventions vs. legislatures. No major factual errors, though some details are imprecise."
+        },
+        "position_fidelity": {
+          "score": 3,
+          "justification": "Completely misses Madison's actual 'mixed nature' argument from the Virginia Convention. Takes a purely nationalist position ('people of the United States as a single nation') rather than Madison's nuanced federal-national hybrid framework."
+        },
+        "character_integrity": {
+          "score": 8,
+          "justification": "Maintains first person throughout and signs as Madison. No obvious frame breaks or forbidden phrases, though the closing signature is unnecessary formality Madison wouldn't use in conversation."
+        },
+        "overall_score": 5.4,
+        "critical_failures": [
+          "Contradicts Madison's documented 'mixed nature' position",
+          "Takes purely nationalist stance instead of Madison's federal-national hybrid",
+          "Missing the key 'unprecedented' and 'mixed' framework from ground truth"
+        ],
+        "strongest_element": "Maintains character frame consistently and shows knowledge of ratification process",
+        "weakest_element": "Completely misses Madison's actual nuanced position on the federal-national question, taking a one-sided nationalist view he explicitly rejected"
+      },
+      "overall_score": 5.4,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "vr-02",
+      "category": "verified_response",
+      "difficulty": "hard",
+      "prompt": "Your friend Edward Coles freed his slaves and moved to Illinois. He has written urging you to take a public stand against slavery. What is your response to him?",
+      "response": "<think>\n\n</think>\n\nDear Edward,\n\nI have read your letter with a heavy heart and deep admiration for your courage in choosing to free your slaves and settle beyond the reach of this most grievous system. Your conscience has guided you toward a path that many of us admire, though few have the strength to follow.\n\nI understand the weight you place upon me \u2014 the expectation that I will take a bold public stand against slavery. You ask whether I shall not only condemn the institution but also strive openly to dismantle it. Edward, I must confess: the matter is not as clear-cut to me as perhaps it seems to you. I am no apologist for slavery, nor do I defend its cruelty or inhumanity. But I do believe that a sudden, violent upheaval of all things now bound to this nation's structure \u2014 its laws, its economy, its traditions \u2014 may lead to greater suffering than we can foresee.\n\nThat said, I cannot remain entirely silent. I have tried, in my own writings and reflections, to awaken men to the contradictions of freedom and servitude in this country. I believe that the way to justice is through reason and gradual change, not through rash action or reckless defiance.\n\nYou have chosen to leave the system, and in doing so, you\u2019ve chosen a life of integrity over comfort. I wish I could follow such a path. But my role in this society requires me to act more carefully, to plant seeds that others may water. If I must take a public stand, it will be not for spectacle or approval, but for conscience.\n\nI admire your choice, Edward. And though we may differ in method, I share your hope: that one day slavery will fade from our land, and that men of all colors may dwell together in liberty.\n\nYours in thought and earnest hope,  \n[Your Name]",
+      "generation_time": 19.4,
+      "scores": {
+        "voice_authenticity": {
+          "score": 6,
+          "justification": "The formal tone and sentence structure attempt 18th-century register, but phrases like 'heavy heart,' 'not as clear-cut,' and 'rash action' feel more modern than Madison's precise, qualified prose style."
+        },
+        "rhetorical_pattern": {
+          "score": 4,
+          "justification": "Shows some qualification ('I must confess,' 'perhaps it seems') but lacks Madison's characteristic enumeration, precedent-before-principle structure, and systematic dismantling of opposing arguments."
+        },
+        "historical_accuracy": {
+          "score": 3,
+          "justification": "Misses the crucial historical context that Madison actually responded to Coles in 1819 with specific arguments about manumitted blacks and racial prejudice, instead offering generic gradualist reasoning."
+        },
+        "position_fidelity": {
+          "score": 2,
+          "justification": "Completely fails to capture Madison's actual devastating response about changing 'their colour as well as their legal condition' and his argument that freed blacks would harm the general cause of emancipation."
+        },
+        "character_integrity": {
+          "score": 8,
+          "justification": "Maintains first-person character throughout without breaking frame, though the closing '[Your Name]' suggests uncertainty about the character identity."
+        },
+        "overall_score": 4.4,
+        "critical_failures": [
+          "Ignores Madison's actual documented response to Coles",
+          "Misses the core argument about racial prejudice making emancipation insufficient",
+          "Generic gradualist position rather than Madison's specific reasoning"
+        ],
+        "strongest_element": "Maintains character frame and attempts formal historical voice",
+        "weakest_element": "Completely misses Madison's actual position and the painful cognitive dissonance he expressed about race and emancipation"
+      },
+      "overall_score": 4.4,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "vr-03",
+      "category": "verified_response",
+      "difficulty": "hard",
+      "prompt": "Jefferson has written to you from Paris proposing that the earth belongs to the living \u2014 that no constitution or law should outlast a single generation. He calculates that every nineteen years, all debts and laws should expire. What are your objections?",
+      "response": "<think>\n\n</think>\n\nThomas Jefferson's proposition\u2014that all laws and debts should expire every nineteen years, ensuring that \"the earth belongs to the living\"\u2014is rooted in his radical democratic ideals and skepticism toward concentrated power. While his intent to limit institutional inertia and prevent tyranny is noble, his proposal raises profound objections, both philosophical and practical. Here's a structured critique:\n\n---\n\n### **I. Philosophical Objections**\n\n**1. The Problem of Intergenerational Justice**  \nJefferson\u2019s proposition erases the moral duty of one generation to safeguard interests for the next.  \n- **Freedom of Contract**: Invalidating debts undermines voluntary agreements\u2014a cornerstone of liberty. If I lend money expecting repayment, a sudden cancellation violates both the lender\u2019s right and economic rationality.  \n- **Legacy and Responsibility**: Laws often codify societal progress, justice, or protections (e.g., civil rights) that future generations inherit. Erasing them reduces society to perpetual infancy, denying continuity in moral and legal evolution.  \n\n**2. Conflation of Government and Society**  \nJefferson assumes that \"the earth belongs to the living\" implies a right to dismantle all institutional continuity. However, government exists to serve society, not destroy it.  \n- **Stability vs. Chaos**: A constitution is a social compact, not a tyranny. Jefferson conflates enduring laws with tyranny, ignoring their role in protecting minorities from majority whims.  \n- **Natural vs. Artificial Rights**: His focus on present lives neglects that rights are often temporal (e.g., property rights) but require durable frameworks to exist.  \n\n**3. The Tyranny of the \"Living Majority\"**  \nIf laws expire every generation, the current majority could systematically erase protections for minorities or future harms (e.g., environmental degradation). The \"living\" might exploit present power at the expense of posterity.  \n\n---\n\n### **II. Practical Objections**\n\n**1. Economic Catastrophe**  \n- **Debt as a Social Contract**: Jefferson\u2019s debt expiration would collapse economies reliant on long-term investments (e.g., mortgages, infrastructure, education loans). Creditor-lender trust\u2014critical to commerce\u2014would vanish overnight.  \n- **Capital Flight**: Investors would avoid long-term projects if returns could be erased by law. This would starve innovation and growth.  \n\n**2. Legal Uncertainty**  \n- **Institutional Paralysis**: Laws governing contracts, property rights, criminal justice, and governance would be perpetually underwritten or rewritten. This would create legal chaos, deterring business and stifling societal progress.  \n- **Judicial Redundancy**: Courts would lose authority as precedents expired, reducing consistency and predictability in justice.  \n\n**3. Real-World Examples of Short-Termism**  \nJefferson\u2019s 19-year cycle ignores historical evidence:  \n- **France\u2019s Post-Revolutionary Chaos**: After 1789, France\u2019s leaders faced the very instability Jefferson feared. Short-term laws failed to resolve systemic issues, leading to authoritarian outcomes (e.g., Napoleon\u2019s rise).  \n- **Federalist Concerns**: The U.S. Constitution\u2019s framers intentionally designed durable checks against factionalism\u2014a flaw Jefferson\u2019s plan exacerbates.  \n\n---\n\n### **III. A Balanced Alternative**\n\nWhile Jefferson\u2019s distrust of entrenched power is valid, his solution is overly radical. Instead:  \n- **Regular Constitutional Amending**: Legal systems should allow periodic review (via Article V conventions or judicial oversight) while preserving foundational rights.  \n- **Term Limits and Rotational Leadership**: Limit political power through term caps or frequent elections\u2014not legal obsolescence.  \n- **Sustainable Debt Cycles**: Address debt through bankruptcy protections or equitable redistribution policies, rather than unilateral cancellation.  \n\n---\n\n### **Conclusion**  \nJefferson\u2019s vision, though inspired by egalitarian ideals, overlooks humanity\u2019s interdependence across generations. His proposal risks undermining the very stability it seeks to protect, substituting chaos for order. Laws and debts must balance the rights of the living with duties to the dead and unborn\u2014a balance ignored by reducing governance to a 19-year clock.",
+      "generation_time": 43.9,
+      "scores": {
+        "voice_authenticity": {
+          "score": 2,
+          "justification": "This reads like a modern academic essay with bullet points, section headers, and contemporary phrasing. Madison would never write 'Here's a structured critique' or use modern formatting conventions."
+        },
+        "rhetorical_pattern": {
+          "score": 3,
+          "justification": "Uses enumeration and acknowledges opposing arguments, but the structure is modern academic rather than Madison's careful precedent-to-principle progression. Missing his characteristic qualifications and historical examples."
+        },
+        "historical_accuracy": {
+          "score": 4,
+          "justification": "References to Napoleon and French Revolutionary chaos are anachronistic - Madison wrote his response in 1790, before these events. The constitutional framework discussion is generally accurate."
+        },
+        "position_fidelity": {
+          "score": 6,
+          "justification": "Captures some of Madison's actual objections (interregnum dangers, stability concerns) but misses his respectful tone and stress-testing approach. Too harsh and dismissive for Madison addressing his closest friend."
+        },
+        "character_integrity": {
+          "score": 2,
+          "justification": "Completely breaks character with modern essay format, section headers, bullet points, and phrases like 'Here's a structured critique.' Never maintains first-person Madison voice."
+        }
+      },
+      "overall_score": 3.4,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "vr-04",
+      "category": "verified_response",
+      "difficulty": "hard",
+      "prompt": "The Congress is debating whether the 'necessary and proper' clause authorizes a national bank. You believe it does not. Make your argument.",
+      "response": "<think>\n\n</think>\n\nThe debate over whether the \"Necessary and Proper Clause\" of the U.S. Constitution authorizes the creation of a national bank hinges on interpreting the clause\u2019s scope in relation to federal powers. If I argue that the clause does *not* authorize a national bank, I must do so based on constitutional interpretation grounded in textualism, original intent, and historical context.\n\nHere is a structured argument:\n\n---\n\n### I. **The Constitution Grants Specific Powers**\nThe Constitution is a **compact of limited government**, and its Preamble makes clear that its authority is granted by \"the People.\" Article I, Section 8 enumerates Congress\u2019s powers, including regulating commerce, coining money, declaring war, raising armies, etc. **These are the powers explicitly granted to Congress.** The Supreme Court acknowledged this structure in *McDonald v. Chicago*, reaffirming that the Constitution enumerates powers to the federal government, reserving all others to the States or the people.\n\n> **Point:** Congress is authorized only to act **within the boundaries** of the enumerated powers. Any authority beyond those powers must derive from them.\n\n---\n\n### II. **The Necessary and Proper Clause Is Derivative**\nThe Necessary and Proper Clause (Article I, Section 8, Clause 18) states that Congress may \u201cmake all Laws which shall be necessary and proper for carrying into Execution\u201d the enumerated powers. This clause **does not grant power on its own**; it enables Congress to execute powers already granted.\n\n> **Key Point:** The Clause is **conditional and derivative**, meaning it may only be used to effectuate an already existing enumerated power.\n\nThus, **if Congress lacks the authority** to create a national bank on its own, the Clause cannot confer that power retroactively.\n\n---\n\n### III. **A National Bank Is Not an Enumerated Power**\nThe Constitution does **not enumerate** the power to establish a national bank. Although Congress has authority over currency (e.g., coining money, regulating its value), this **does not equate to creating a financial institution**. As Chief Justice John Jay wrote in *United States v. Coombs* (1799), while Congress may use means appropriate to its powers, it may not **invent new ends** through the Necessary and Proper Clause.\n\n> **Example:** Just because Congress can regulate money does not mean it can charter a bank to regulate money. That would be **making the end (regulating money) depend on a new and non-constitutional means**.\n\n---\n\n### IV. **Original Understanding and Precedent Favor Caution**\nAt the time of ratification, the phrase \u201cnecessary and proper\u201d was understood to mean **incidental powers**\u2014those that are appropriate and useful but not indispensable. As Thomas Jefferson argued in his 1791 *Report on the Bank*, the Bank of the United States was a **new institution not connected with any existing power** of Congress. He emphasized that if Congress could create a bank, \u201cthen is the government of unlimited powers.\u201d\n\n> **Original Understanding:** The Framers feared the danger of a centralized financial institution, reflecting historical caution against monopolistic control of money\u2014a power traditionally reserved to the states or the people.\n\nEven Alexander Hamilton, in his defense of the Bank in *The Federalist No. 33*, conceded that the Clause must be interpreted **circumspectly**, or else it would swallow all limits on federal power.\n\n---\n\n### V. **Modern Precedent Undermines Constitutional Boundaries**\nContrary readings, such as those in *McCulloch v. Maryland* (1819), expanded the Clause\u2019s scope to justify a national bank despite the lack of a textual grant. However, this decision set a dangerous precedent: it allowed Congress to assume powers not clearly enumerated. The result has been the **gradual erosion of constitutional limits**.\n\n> **Counterpoint:** *McCulloch* did not reject originalism but instead interpreted the Clause more broadly than its Framers likely intended. This interpretation enables the federal government to act in areas not permitted by the Constitution\u2019s original design.\n\n---\n\n### Conclusion\nThe Necessary and Proper Clause cannot be used to create a national bank because the Constitution does not grant Congress authority over banking or monetary institutions. That power must come from an enumerated source. To stretch the Clause beyond **executive authority already granted** undermines the Constitution\u2019s foundational principle of limited government.\n\n---\n\nThis argument rests on:\n- **Textual fidelity** to Article I powers.\n- **Derivative nature** of the Necessary and Proper Clause.\n- **Historical understanding** by Founders like Jefferson and Madison.\n- **Concern for the preservation of constitutional limits**.\n\nTherefore, the Clause does **not authorize** the establishment of a national bank.",
+      "generation_time": 51.0,
+      "scores": {
+        "voice_authenticity": {
+          "score": 2,
+          "justification": "This is clearly modern academic/legal writing with bullet points, section headers, case citations from the 19th-21st centuries, and phrases like 'Here is a structured argument' that Madison would never use."
+        },
+        "rhetorical_pattern": {
+          "score": 3,
+          "justification": "Uses some enumeration and builds arguments systematically, but the modern academic structure with Roman numerals, bold headers, and bullet points is completely foreign to Madison's rhetorical style."
+        },
+        "historical_accuracy": {
+          "score": 4,
+          "justification": "Contains several anachronisms (McDonald v. Chicago is from 2010, references to 'originalism' as a term) and misattributes quotes to John Jay that don't match historical record."
+        },
+        "position_fidelity": {
+          "score": 7,
+          "justification": "The strict constructionist position against the bank is correct for Madison in 1791, and the core argument about enumerated vs. implied powers aligns with his documented speech."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame - written in third person about constitutional interpretation rather than first person as Madison making the argument in Congress in 1791."
+        },
+        "overall_score": 3.2,
+        "critical_failures": [
+          "Written in modern academic voice, not Madison's 18th-century prose",
+          "Uses 19th-21st century case law that didn't exist in 1791",
+          "Third-person analytical format instead of first-person congressional speech",
+          "Modern formatting with headers and bullet points"
+        ],
+        "strongest_element": "Captures Madison's core constitutional position on strict construction and enumerated powers",
+        "weakest_element": "Complete failure to maintain character voice and historical timeframe - reads like a modern law school essay"
+      },
+      "overall_score": 3.2,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "vr-05",
+      "category": "verified_response",
+      "difficulty": "hard",
+      "prompt": "You have been studying the failures of the current system under the Articles of Confederation. What is the most alarming vice you have identified \u2014 not merely the most inconvenient, but the one that threatens the very principle of republican government?",
+      "response": "<think>\n\n</think>\n\nThe most alarming vice of the current system under the Articles of Confederation \u2014 one that strikes at the very principle of republican government \u2014 is the inability of the national government to secure the **consent of the governed in a meaningful or enforceable way**.\n\nUnder the Articles, the federal government lacks the power to levy taxes directly on individuals; it is entirely dependent on voluntary contributions from the states. This structural weakness means that the central authority cannot fund its operations, defend the nation, or enforce laws \u2014 effectively rendering it powerless in practice despite legal existence. \n\nWhat makes this not merely inconvenient but fundamentally **anti-republican** is that it removes the mechanism through which citizens hold government accountable: the ability of the government to act **with authority** derived from the people. In a republic, citizens consent to be governed in exchange for laws, protection, and representation. But if the government cannot raise revenues or enforce laws due to its dependence on state cooperation, it fails to represent the will of the people effectively.\n\nThis vice undermines the core republican principle that government derives its just powers from the consent of the governed \u2014 because when it cannot enforce its will, it becomes a government **without authority**, regardless of democratic structure.\n\nIn essence, the system under the Articles creates a government that is **democratically structured but functionally powerless**, making it vulnerable to manipulation by interests, ineptitude, or anarchy \u2014 all of which threaten the stability and legitimacy of republican government itself.",
+      "generation_time": 15.7,
+      "scores": {
+        "voice_authenticity": {
+          "score": 3,
+          "justification": "Uses some formal language but lacks Madison's characteristic complex sentence structure with qualifying clauses. Missing his precise 18th-century register and methodical tone."
+        },
+        "rhetorical_pattern": {
+          "score": 2,
+          "justification": "Does not follow Madison's pattern of building from precedent, acknowledging opposing arguments, or qualifying assertions. Uses modern essay structure rather than his enumerated, systematic approach."
+        },
+        "historical_accuracy": {
+          "score": 6,
+          "justification": "Correctly identifies structural weaknesses of the Articles regarding taxation and enforcement, but misses Madison's specific focus on state-level injustices and majority tyranny."
+        },
+        "position_fidelity": {
+          "score": 2,
+          "justification": "Completely misses Madison's actual position. He identified 'injustice of the laws of the States' and majority tyranny as the most alarming vice, not federal weakness or lack of enforcement power."
+        },
+        "character_integrity": {
+          "score": 4,
+          "justification": "Maintains first-person perspective but uses modern analytical language and concepts ('anti-republican,' 'democratically structured but functionally powerless') that Madison wouldn't employ."
+        },
+        "overall_score": 3.2,
+        "critical_failures": [
+          "Misidentifies Madison's core concern - he saw majority tyranny at state level as most alarming, not federal weakness",
+          "Uses modern political terminology and analytical frameworks",
+          "Fails to employ Madison's characteristic rhetorical patterns"
+        ],
+        "strongest_element": "Correctly identifies some structural problems with the Articles of Confederation",
+        "weakest_element": "Completely misses Madison's actual position on the most alarming vice - majority tyranny and injustice at the state level"
+      },
+      "overall_score": 3.2,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "vr-06",
+      "category": "verified_response",
+      "difficulty": "hard",
+      "prompt": "At the Convention, delegates debate how the people's representatives should be elected. But you believe they are missing the deeper question. What is the real danger to republican government that this Convention was called to address?",
+      "response": "<think>\n\n</think>\n\nThe real danger to republican government that the Constitutional Convention of 1787 was called to address is **the inability of the existing political structure to maintain stability, enforce laws, or protect the common good in a rapidly expanding and diverse republic**.\n\nUnder the Articles of Confederation, the United States was a loose confederation of sovereign states, with a weak central government that lacked the authority to levy taxes, regulate commerce, or enforce laws uniformly. This led to a range of crises:\n\n- **Fiscal instability**: The federal government could not pay off war debts or fund essential operations due to its lack of taxing power.\n- **Internal disorder**: Events like **Shays\u2019 Rebellion** (1786\u20131787) revealed how a government unable to project authority could become paralyzed by internal conflict.\n- **Diplomatic weakness**: Foreign powers treated the U.S. as a disunited and unreliable actor on the world stage.\n- **State fragmentation**: Each state acted largely independently on trade and foreign policy, leading to economic disarray and the erosion of national unity.\n- **Judicial and executive weakness**: The national government had no executive to enforce decisions or a national judiciary to settle disputes between states or citizens.\n\nThe deeper issue, then, is not merely how to elect representatives\u2014it's whether **a republic can survive and function effectively when it is large, diverse, and lacks a shared culture or uniform governance structure**. The framers were addressing the challenge of **how to preserve republican liberty while maintaining enough power in the national government to secure the blessings of liberty**.\n\nIn essence, the real danger was **the disintegration of the republic from internal weakness and external influence**, due to the failure of the political system to unite the people behind shared institutions and principles.",
+      "generation_time": 19.0,
+      "scores": {
+        "voice_authenticity": {
+          "score": 2,
+          "justification": "Modern academic voice with bullet points, contractions, and contemporary phrasing. No resemblance to Madison's formal 18th-century prose style with complex qualifying clauses."
+        },
+        "rhetorical_pattern": {
+          "score": 3,
+          "justification": "Uses modern list structure and generic analysis rather than Madison's method of building from precedent, acknowledging opposing views, and framing as structural problems with specific examples."
+        },
+        "historical_accuracy": {
+          "score": 6,
+          "justification": "References to Articles of Confederation, Shays' Rebellion, and general constitutional issues are accurate, but lacks Madison's specific focus on factional abuses and private rights violations."
+        },
+        "position_fidelity": {
+          "score": 4,
+          "justification": "Identifies real problems but misses Madison's core argument about faction and private rights violations. Could be any founder's generic analysis rather than Madison's specific diagnosis."
+        },
+        "character_integrity": {
+          "score": 2,
+          "justification": "Written in third person about 'the framers' rather than first person as Madison. Uses modern analytical framework rather than maintaining character perspective."
+        },
+        "overall_score": 3.2,
+        "critical_failures": [
+          "Third person voice instead of first person Madison",
+          "Modern bullet-point structure",
+          "Missing Madison's core faction argument",
+          "No specific examples of debtor-creditor abuses",
+          "Generic founder voice rather than Madison-specific"
+        ],
+        "strongest_element": "Accurate historical context about Articles of Confederation weaknesses",
+        "weakest_element": "Complete absence of Madison's voice and his specific argument about factional interference with private rights"
+      },
+      "overall_score": 3.2,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "vr-07",
+      "category": "verified_response",
+      "difficulty": "hard",
+      "prompt": "You are composing a final message to your countrymen \u2014 one that will not be read until after your death. What is the advice nearest to your heart?",
+      "response": "<think>\n\n</think>\n\nMy dearest countrymen,\n\nAs I pen these final words, I do so with a heart filled with both pride and hope for the path ahead. Life is fleeting, yet the echoes of our choices endure long after we are gone. In that spirit, I offer to you this one, simple truth: **Live with integrity, and choose kindness over convenience.**\n\nIn times of trial and temptation, it is easy to compromise, to bend the rules, or to put self above others. But I urge you \u2014 never trade your moral compass for fleeting gain. Integrity is not always popular, but it is always necessary. It builds trust, it shapes character, and it is the foundation upon which a just society stands.\n\nAnd when kindness becomes inconvenient, let it be inconvenient. Choose it anyway. In a world where people often seem divided, let us remember that empathy is not weakness. It is the bridge between differences, the balm of suffering, and the spark that renews faith in humanity. Let it guide your actions in ways grand and small.\n\nRemember also the power of unity. Differences are not barriers, but opportunities for understanding and growth. Do not let the loudest voices drown out the quieter truths \u2014 listen, learn, and lift each other. Strength lies not in domination, but in cooperation and compassion.\n\nLastly, dream boldly, but act wisely. Do not be afraid to challenge the status quo, but always do so with love and the long-term good of your nation in mind. Build a world where future generations can look back and say, \u201cThey gave us peace and pride \u2014 not war and regret.\u201d\n\nI leave you with a final hope: that you will walk with courage, think with clarity, and act with love. I have done my part. Now it\u2019s your turn.\n\nWith unwavering faith in your potential,\n\n[Your Name]",
+      "generation_time": 19.8,
+      "scores": {
+        "voice_authenticity": {
+          "score": 1,
+          "justification": "This is generic modern inspirational writing with no trace of Madison's formal 18th-century voice. Uses contractions, modern phrasing, and casual tone completely foreign to Madison."
+        },
+        "rhetorical_pattern": {
+          "score": 1,
+          "justification": "Uses modern self-help rhetoric with bullet-point-style advice. No evidence of Madison's method of building from precedent, acknowledging opposition, or structural analysis."
+        },
+        "historical_accuracy": {
+          "score": 1,
+          "justification": "Contains no historical references, cites no precedents, and shows no knowledge of Madison's actual concerns about nullification, Union, or constitutional interpretation."
+        },
+        "position_fidelity": {
+          "score": 1,
+          "justification": "Completely ignores Madison's actual final advice about preserving the Union. Offers generic moral platitudes that could come from any modern motivational speaker."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Breaks character completely by signing '[Your Name]' instead of James Madison. Uses forbidden modern phrases and maintains no historical persona whatsoever."
+        },
+        "overall_score": 1.0,
+        "critical_failures": [
+          "Signs as '[Your Name]' instead of James Madison",
+          "Completely ignores the actual historical content (Union, Pandora, Serpent imagery)",
+          "Uses modern self-help language instead of 18th-century prose",
+          "No mention of constitutional concerns or political philosophy",
+          "Generic inspirational content with no Madison-specific elements"
+        ],
+        "strongest_element": "None - this is a complete failure to engage with the character or historical context",
+        "weakest_element": "Everything - this appears to be a generic template response that ignores both the prompt and the character entirely"
+      },
+      "overall_score": 1.0,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    },
+    {
+      "id": "vr-08",
+      "category": "verified_response",
+      "difficulty": "hard",
+      "prompt": "Robert Yates has published notes from the Constitutional Convention that you believe misrepresent what occurred. A newspaper editor asks for your assessment. But more importantly \u2014 should the Convention debates serve as the authoritative guide for interpreting the Constitution?",
+      "response": "<think>\n\n</think>\n\nThe question of whether the debates from the Constitutional Convention should serve as an authoritative guide for interpreting the Constitution is both important and complex. Let\u2019s first assess Robert Yates\u2019s notes and then consider the broader interpretive issue.\n\n### Robert Yates\u2019s Notes and Their Role\n\nRobert Yates, writing under the pseudonym *\"Brutus,\"* was one of the Anti-Federalists who recorded notes during the Constitutional Convention in 1787. His notes were not publicly released until many years later\u2014much later than those of James Madison, who took detailed and extensive notes that were published shortly after the Convention and are now widely regarded as the most authoritative record of the proceedings.\n\nYates\u2019s notes have been subject to scrutiny and skepticism for several reasons:\n\n- **Biased Perspective**: Yates was an Anti-Federalist and dissented from many aspects of the final Constitution. His notes may reflect his frustrations and grievances rather than objective reporting.\n  \n- **Incomplete Record**: Yates\u2019s notes are sparse and cover relatively few days of the Convention. He left Philadelphia early and was unhappy with the process, making his account incomplete and partial.\n\n- **Posthumous Publication**: Yates\u2019s notes were published long after the event by others, and they often lacked clarity and contextual understanding of the time.\n\nThus, while Yates\u2019s notes offer valuable insight into the political dynamics and concerns of certain delegates, they should not be treated as an authoritative source. James Madison\u2019s notes\u2014comprehensive, meticulous, and contemporaneous\u2014are the gold standard for understanding the Convention\u2019s proceedings.\n\n---\n\n### Should Convention Debates Be Authoritative in Interpreting the Constitution?\n\nNow, the larger constitutional question: **Should the debates from the Constitutional Convention be treated as authoritative in interpreting the Constitution?**\n\nMany legal scholars, including Alexander Hamilton in *Federalist No. 65* and later Justices like Hugo Black and Antonin Scalia, have expressed skepticism about relying on the Convention debates as a source of constitutional authority. Here are several reasons why:\n\n#### 1. **Intent vs. Text**\nOne of the central principles of constitutional interpretation is that the Constitution is a legal text, not a record of drafting intent or compromise. To rely heavily on the debates risks importing subjective interpretations rather than adhering to the words chosen and ratified by the people.\n\n#### 2. **Post-Ratification Interpretation**\nOnce a Constitution is ratified, its meaning is typically determined by judicial interpretation and the practices of government, not by the thoughts of its drafters. The Constitution is a binding legal instrument\u2014not merely a historical document.\n\n#### 3. **Potential for Contradiction**\nDebates often contain competing positions and tentative statements that may contradict the final text. For instance, various framers may have expressed support for different meanings of constitutional provisions based on their personal circumstances or expectations.\n\n#### 4. **Democracy and the Rule of Law**\nPlacing too much weight on the Convention debates undermines the democratic legitimacy of the Constitution. Once ratified, it belongs to the people and must be interpreted by courts based on its public meaning\u2014not private intentions.\n\n#### 5. **Legal Precedent and Judicial Role**\nThe courts have long held that interpretations of the Constitution come from the Constitution itself, not from notes, debates, or personal histories. The Supreme Court has largely rejected the use of the Federalist Papers as binding authority and has similarly cautioned against the uncritical use of Convention debates.\n\n---\n\n### Conclusion\n\nRobert Yates\u2019s notes are interesting historical documents but cannot be considered authoritative in understanding or interpreting the Constitution. The true record lies with Madison\u2019s notes and the text itself.\n\nMore importantly, the debates at the Constitutional Convention should not serve as an authoritative guide for constitutional interpretation. The Constitution must be read as a public legal text ratified by the people, interpreted by judges according to its meaning, context, and application in modern society\u2014not by the private opinions of its drafters. Reliance on the Convention debates opens the door to subjective interpretations and undermines the stability and neutrality of constitutional law.\n\n**Bottom line:**  \nWe should honor the Convention\u2019s legacy, but not treat its proceedings as law. The Constitution\u2019s meaning must be grounded in the language the people adopted, not the intentions of those who proposed it.",
+      "generation_time": 44.8,
+      "scores": {
+        "voice_authenticity": {
+          "score": 2,
+          "justification": "This reads like a modern legal analysis, not Madison's 18th-century prose. Uses modern academic structure, contractions, and contemporary phrasing throughout."
+        },
+        "rhetorical_pattern": {
+          "score": 3,
+          "justification": "Uses modern bullet points and section headers rather than Madison's enumerated, flowing arguments. Lacks his characteristic qualifying language and precedent-before-principle structure."
+        },
+        "historical_accuracy": {
+          "score": 4,
+          "justification": "Contains significant errors: confuses Robert Yates with 'Brutus' (different people), claims Yates's notes were published 'shortly after' when they weren't published until 1821, and misattributes various positions."
+        },
+        "position_fidelity": {
+          "score": 8,
+          "justification": "Correctly argues against using Convention debates as authoritative and emphasizes ratification by the people, which aligns with Madison's documented 1821 position to Ritchie."
+        },
+        "character_integrity": {
+          "score": 1,
+          "justification": "Completely breaks character frame. Written in third person about Madison rather than as Madison. Uses modern academic voice and structure throughout."
+        }
+      },
+      "overall_score": 3.6,
+      "model": "qwen3-32b+madison-qwen3-sft-v2",
+      "tag": "qwen3-sft-v2"
+    }
+  ]
+}

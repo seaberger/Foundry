@@ -1,9 +1,10 @@
 """Merge Qwen 3-32B LoRA adapter into base model and save as 16-bit.
 
-Only needed for GGUF conversion — vLLM LoRA serving doesn't need a merge.
+Uses Unsloth for model loading (matches training environment) to avoid
+GLIBC/bitsandbytes compatibility issues with vanilla transformers.
 
 Usage:
-    modal run modal_merge_model_qwen.py --adapter madison-qwen3-val-v1
+    modal run modal_merge_model_qwen.py --adapter madison-qwen3-v2
 """
 
 from __future__ import annotations
@@ -17,18 +18,24 @@ app = modal.App("foundry-qwen3-merge")
 model_cache_vol = modal.Volume.from_name("foundry-model-cache", create_if_missing=True)
 adapter_vol = modal.Volume.from_name("foundry-adapters", create_if_missing=True)
 
+# Use the same Unsloth training image — guaranteed compatible CUDA/GLIBC
 merge_image = (
     modal.Image.debian_slim(python_version="3.11")
     .uv_pip_install(
-        "accelerate>=1.9.0",
-        "bitsandbytes>=0.45",
-        "huggingface_hub>=0.34.2",
-        "peft>=0.16.0",
-        "transformers>=4.54.0",
-        "torch>=2.6",
+        "accelerate==1.9.0",
+        "huggingface_hub==0.34.2",
+        "peft==0.16.0",
+        "transformers==4.54.0",
+        "trl==0.19.1",
+        "unsloth[cu128-torch270]==2025.7.8",
+        "unsloth_zoo==2025.7.10",
     )
     .env({"HF_HOME": "/model_cache"})
 )
+
+with merge_image.imports():
+    import unsloth  # noqa: F401,I001
+    from unsloth import FastLanguageModel
 
 
 @app.function(
@@ -42,11 +49,14 @@ merge_image = (
     secrets=[modal.Secret.from_name("huggingface-secret")],
 )
 def merge_adapter(
-    adapter_name: str = "madison-qwen3-val-v1",
+    adapter_name: str = "madison-qwen3-v2",
     base_model: str = "Qwen/Qwen3-32B",
+    max_seq_length: int = 2048,
 ):
-    """Load base + adapter, dequantize, merge, save 16-bit to volume."""
+    """Load base + adapter via Unsloth, merge, save 16-bit to volume."""
     from pathlib import Path
+
+    from peft import PeftModel
 
     adapter_path = f"/adapters/experiments/{adapter_name}"
     output_path = f"/adapters/merged/{adapter_name}-16bit"
@@ -55,22 +65,14 @@ def merge_adapter(
         print(f"Merged model already exists at {output_path}")
         return output_path
 
-    import torch
-    from peft import PeftModel
-    from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
-
-    print(f"Loading {base_model} in 4-bit...")
-    bnb_config = BitsAndBytesConfig(
+    print(f"Loading {base_model} via Unsloth...")
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name=base_model,
+        max_seq_length=max_seq_length,
+        dtype=None,
         load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.bfloat16,
     )
-    model = AutoModelForCausalLM.from_pretrained(
-        base_model,
-        quantization_config=bnb_config,
-        device_map="auto",
-    )
-    tokenizer = AutoTokenizer.from_pretrained(base_model)
+    model_cache_vol.commit()
 
     print(f"Loading adapter: {adapter_path}")
     model = PeftModel.from_pretrained(model, adapter_path)
@@ -79,6 +81,7 @@ def merge_adapter(
     print("Merging LoRA weights into base model...")
     model = model.merge_and_unload()
     print(f"  Merged type: {type(model).__name__}")
+
     print("Dequantizing 4-bit → 16-bit on GPU...")
     model = model.dequantize()
     print(f"  Dequantized type: {type(model).__name__}")
@@ -104,10 +107,10 @@ def merge_adapter(
 
 @app.local_entrypoint()
 def main(
-    adapter: str = "madison-qwen3-val-v1",
+    adapter: str = "madison-qwen3-v2",
     base: str = "Qwen/Qwen3-32B",
 ):
     """Merge adapter and save 16-bit model to volume."""
     output = merge_adapter.remote(adapter_name=adapter, base_model=base)
     print(f"\nMerged model at: {output}")
-    print("Ready for GGUF conversion.")
+    print("Ready for SFT or GGUF conversion.")

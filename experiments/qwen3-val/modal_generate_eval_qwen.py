@@ -267,6 +267,7 @@ def main(
     num_prompts: int = 12,
     fresh: bool = False,
     baseline: bool = False,
+    base_model: str = "Qwen/Qwen3-32B",
 ):
     """Generate eval responses from Qwen 3-32B + LoRA on Modal, save locally.
 
@@ -333,6 +334,7 @@ def main(
         responses = generate_vllm_lora.remote(
             eval_prompts=prompts,
             tag=tag,
+            base_model=base_model,
             adapter_name=adapter,
             fresh=fresh,
         )
