@@ -5,7 +5,7 @@ an OpenAI-compatible /v1/chat/completions endpoint.
 
 Usage:
     # Start serving (keeps running until stopped)
-    modal serve modal_serve_madison.py
+    modal serve scripts/modal/serve_madison.py
 
     # Then run eval from local machine:
     cd ~/Repositories/Foundry

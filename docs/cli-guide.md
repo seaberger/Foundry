@@ -20,7 +20,7 @@ All commands run from the Foundry repo root.
 # Steps 2-3: Teacher responses (via Claude Code subagent fleet)
 .venv/bin/python -m foundry.press.student               # Step 4: Student responses
 .venv/bin/python -m foundry.press.format_dpo            # Step 5: Format DPO pairs
-modal run modal_train_dpo.py                            # Step 6: Train on Modal A100
+modal run scripts/modal/train_dpo.py                            # Step 6: Train on Modal A100
 .venv/bin/python -m foundry.press.evaluate              # Step 7: Evaluate results
 ```
 
@@ -121,7 +121,7 @@ Runs QLoRA DPO training on a Modal A100 GPU. Uploads data, trains the LoRA adapt
 Download Gemma 3 27B once and cache it on the Modal volume. Subsequent training runs load from cache, skipping the ~5 minute HuggingFace download.
 
 ```bash
-modal run modal_train_dpo.py --download-only
+modal run scripts/modal/train_dpo.py --download-only
 ```
 
 This costs ~$0.10 (5 min on A100) and only needs to run once. The model is cached at `/vol/models/google--gemma-3-27b-it/` on the persistent volume.
@@ -130,17 +130,17 @@ This costs ~$0.10 (5 min on A100) and only needs to run once. The model is cache
 
 ```bash
 # Default settings (research-informed)
-cd Foundry && modal run modal_train_dpo.py
+cd Foundry && modal run scripts/modal/train_dpo.py
 
 # Custom hyperparameters
-modal run modal_train_dpo.py --beta 0.2 --rank 32 --lr 1e-5 --epochs 5
+modal run scripts/modal/train_dpo.py --beta 0.2 --rank 32 --lr 1e-5 --epochs 5
 
 # Named output for comparison runs
-modal run modal_train_dpo.py --beta 0.05 --output-name madison-lora-aggressive
-modal run modal_train_dpo.py --beta 0.5 --output-name madison-lora-conservative
+modal run scripts/modal/train_dpo.py --beta 0.05 --output-name madison-lora-aggressive
+modal run scripts/modal/train_dpo.py --beta 0.5 --output-name madison-lora-conservative
 
 # Skip data upload (already on volume from previous run)
-modal run modal_train_dpo.py --no-upload-data --output-name madison-lora-v3
+modal run scripts/modal/train_dpo.py --no-upload-data --output-name madison-lora-v3
 ```
 
 **Options:**
@@ -168,10 +168,10 @@ modal run modal_train_dpo.py --no-upload-data --output-name madison-lora-v3
 
 ```bash
 # List all saved adapters on the volume
-modal run modal_train_dpo.py --list-models
+modal run scripts/modal/train_dpo.py --list-models
 
 # Download raw LoRA adapter files to local machine
-modal run modal_train_dpo.py --get-adapter madison-lora-v1
+modal run scripts/modal/train_dpo.py --get-adapter madison-lora-v1
 # Saves to: adapters/madison-lora-v1/
 ```
 
@@ -181,7 +181,7 @@ After training, merge the LoRA into the base model and quantize to GGUF format. 
 
 ```bash
 # Merge LoRA + quantize to Q4_K_M GGUF (~10 min on A100, ~$0.20)
-modal run modal_train_dpo.py --export-gguf madison-lora-v1
+modal run scripts/modal/train_dpo.py --export-gguf madison-lora-v1
 # Saves to: adapters/madison-lora-v1/madison-madison-lora-v1.Q4_K_M.gguf
 ```
 
@@ -207,16 +207,16 @@ The container is ephemeral — `modal run` spins up, does its work, and terminat
 
 ```bash
 # 1. One-time setup: cache the base model (~5 min, ~$0.10)
-modal run modal_train_dpo.py --download-only
+modal run scripts/modal/train_dpo.py --download-only
 
 # 2. Train the LoRA adapter (~30-60 min, ~$5-20)
-modal run modal_train_dpo.py
+modal run scripts/modal/train_dpo.py
 
 # 3. Check what's on the volume
-modal run modal_train_dpo.py --list-models
+modal run scripts/modal/train_dpo.py --list-models
 
 # 4. Export as GGUF for local inference (~10 min, ~$0.20)
-modal run modal_train_dpo.py --export-gguf madison-lora-v1
+modal run scripts/modal/train_dpo.py --export-gguf madison-lora-v1
 
 # 5. Copy GGUF to LMStudio, load it, run eval
 .venv/bin/python -m foundry.press.evaluate \
@@ -376,7 +376,7 @@ src/foundry/press/
     student.py                       # Step 4: Student generation
     format_dpo.py                    # Step 5: DPO pair formatting
     evaluate.py                      # Step 7: Multi-backend evaluation harness
-modal_train_dpo.py                   # Step 6: Modal A100 DPO training + export
+scripts/modal/train_dpo.py                   # Step 6: Modal A100 DPO training + export
 adapters/                            # Local adapter/GGUF downloads from Modal
   madison-lora-v1/                   #   Downloaded adapter or exported GGUF
 docs/

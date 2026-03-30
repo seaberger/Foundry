@@ -8,28 +8,28 @@ Uses vLLM with the original merged BF16 model (ForConditionalGeneration) and
 limit_mm_per_prompt={"image": 0} to skip vision initialization.
 
 Markdown artifacts (headers, emphasis) are expected from current vLLM — the
-filter_introspection.py script strips these in post-processing.
+scripts/data/filter_introspection.py script strips these in post-processing.
 
 Budget: $20 Modal for full generation run.
 
 Usage:
     # Probe run (5 reflections from prompt 1, 1 dialogue)
-    modal run modal_generate_introspection.py --probe
+    modal run scripts/modal/generate_introspection.py --probe
 
     # Full reflection generation (default 300 reps per prompt)
-    modal run modal_generate_introspection.py --mode reflection
+    modal run scripts/modal/generate_introspection.py --mode reflection
 
     # Full dialogue generation (default 100 dialogues)
-    modal run modal_generate_introspection.py --mode dialogue
+    modal run scripts/modal/generate_introspection.py --mode dialogue
 
     # Both
-    modal run modal_generate_introspection.py --mode both
+    modal run scripts/modal/generate_introspection.py --mode both
 
     # Resume interrupted run
-    modal run modal_generate_introspection.py --mode reflection
+    modal run scripts/modal/generate_introspection.py --mode reflection
 
     # Fresh start (clear checkpoints)
-    modal run modal_generate_introspection.py --mode reflection --fresh
+    modal run scripts/modal/generate_introspection.py --mode reflection --fresh
 """
 
 from __future__ import annotations
@@ -414,10 +414,10 @@ def main(
     """Generate introspection SFT data on Modal.
 
     Usage:
-        modal run modal_generate_introspection.py --probe
-        modal run modal_generate_introspection.py --mode reflection --reps 300
-        modal run modal_generate_introspection.py --mode dialogue --num-dialogues 100
-        modal run modal_generate_introspection.py --mode both
+        modal run scripts/modal/generate_introspection.py --probe
+        modal run scripts/modal/generate_introspection.py --mode reflection --reps 300
+        modal run scripts/modal/generate_introspection.py --mode dialogue --num-dialogues 100
+        modal run scripts/modal/generate_introspection.py --mode both
     """
     import json
     from pathlib import Path

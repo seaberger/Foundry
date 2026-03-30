@@ -18,7 +18,7 @@ The infrastructure confound (Ollama GGUF vs Modal A100) was the **sole cause** o
 
 1. **Infrastructure confound dominated all other factors.** The same model scored 1.74 on Ollama GGUF Q4_K_M and 8.52 (corrected) on Modal A100. This is a 4.9x difference from inference infrastructure alone.
 
-2. **Judge scoring bug: 4 zero-score entries are JSON parsing artifacts.** The Sonnet judge omitted the `overall_score` field in 4 of 36 responses. The `judge_responses.py` script defaults missing scores to 0.0. Component scores for these 4 responses average 6.4, 6.8, 8.2, and 8.4 — these are good responses incorrectly scored as zero.
+2. **Judge scoring bug: 4 zero-score entries are JSON parsing artifacts.** The Sonnet judge omitted the `overall_score` field in 4 of 36 responses. The `scripts/data/judge_responses.py` script defaults missing scores to 0.0. Component scores for these 4 responses average 6.4, 6.8, 8.2, and 8.4 — these are good responses incorrectly scored as zero.
 
 3. **v4 improved every category over v3b.** The largest gains are in v3b's weakest areas: anachronism_trap (+550%), position_discrimination (+443%). The voice-targeted augmentation strategy worked.
 
@@ -53,7 +53,7 @@ The inverted difficulty curve from v3b (easy=0.4, hard=4.1) is resolved — v4 h
 
 ### The Bug
 
-The `judge_responses.py` script extracts a JSON scoring object from the Sonnet judge response. The judge is prompted to include an `overall_score` field, but in some responses it omits this field while still providing all 5 component scores. The extraction code:
+The `scripts/data/judge_responses.py` script extracts a JSON scoring object from the Sonnet judge response. The judge is prompted to include an `overall_score` field, but in some responses it omits this field while still providing all 5 component scores. The extraction code:
 
 ```python
 overall = scores.get("overall_score", 0.0)  # Defaults to 0.0 when missing
@@ -72,7 +72,7 @@ The same bug affected v3b: 5 entries missing `overall_score` (gt-04=3.8, pd-04=2
 
 ### Recommended Fix
 
-Add a fallback computation in `judge_responses.py`:
+Add a fallback computation in `scripts/data/judge_responses.py`:
 
 ```python
 overall = scores.get("overall_score")

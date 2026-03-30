@@ -1,15 +1,15 @@
-"""Convert merged FP16 model to GGUF format on Modal.
+"""Convert merged Qwen 3-32B model to GGUF Q4_K_M format on Modal.
 
 Steps:
   1. Clone latest llama.cpp
-  2. Copy tokenizer.model from original google/gemma-3-27b-it (workaround for #19152)
-  3. Convert HF model to F16 GGUF
-  4. Quantize to Q4_K_M
-  5. Save GGUF to Modal volume for download
+  2. Convert HF model to F16 GGUF
+  3. Quantize to Q4_K_M
+  4. Save GGUF to Modal volume for download
 
 Usage:
-    modal run modal_convert_gguf.py
-    modal run modal_convert_gguf.py --quant Q5_K_M
+    modal run modal_convert_gguf_qwen.py
+    modal run modal_convert_gguf_qwen.py --quant Q5_K_M
+    modal run modal_convert_gguf_qwen.py --model-name madison-qwen3-val-v1
 """
 
 from __future__ import annotations
@@ -18,17 +18,15 @@ import modal
 
 MINUTES = 60
 
-app = modal.App("foundry-gguf-convert")
+app = modal.App("foundry-qwen3-gguf")
 
 adapter_vol = modal.Volume.from_name("foundry-adapters", create_if_missing=True)
 model_cache_vol = modal.Volume.from_name("foundry-model-cache", create_if_missing=True)
 
-# Image with llama.cpp build tools and Python deps for conversion
 convert_image = (
     modal.Image.debian_slim(python_version="3.11")
     .apt_install("git", "cmake", "build-essential")
     .run_commands(
-        # Clone and build llama.cpp (CPU only — conversion doesn't need GPU)
         "git clone https://github.com/ggml-org/llama.cpp.git /opt/llama.cpp",
         "cd /opt/llama.cpp && cmake -B build && cmake --build build --config Release -j$(nproc)",
     )
@@ -53,14 +51,14 @@ convert_image = (
         "/model_cache": model_cache_vol,
     },
     secrets=[modal.Secret.from_name("huggingface-secret")],
-    memory=65536,  # 64GB RAM for loading model tensors
+    memory=65536,
     timeout=60 * MINUTES,
     cpu=8,
 )
 def convert_and_quantize(
-    merged_model_path: str = "/adapters/merged/madison-orpo-v4-16bit",
+    merged_model_path: str = "/adapters/merged/madison-qwen3-val-v1-16bit",
     output_dir: str = "/adapters/gguf",
-    model_name: str = "madison-orpo-v4",
+    model_name: str = "madison-qwen3-val-v1",
     quant: str = "Q4_K_M",
 ):
     """Convert merged HF model to GGUF and quantize."""
@@ -71,7 +69,6 @@ def convert_and_quantize(
     out_dir = Path(output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    # Verify model exists
     config_path = model_dir / "config.json"
     if not config_path.exists():
         raise FileNotFoundError(f"No config.json at {model_dir}")
@@ -80,22 +77,9 @@ def convert_and_quantize(
         size_mb = f.stat().st_size / 1024 / 1024
         print(f"  {f.name} ({size_mb:.1f} MB)")
 
-    # Step 1: Copy tokenizer.model from original model (workaround for #19152)
-    tokenizer_model_path = model_dir / "tokenizer.model"
-    if not tokenizer_model_path.exists():
-        print("\ntokenizer.model not found — downloading from google/gemma-3-27b-it...")
-        from huggingface_hub import hf_hub_download
-        downloaded = hf_hub_download(
-            repo_id="google/gemma-3-27b-it",
-            filename="tokenizer.model",
-            local_dir=str(model_dir),
-        )
-        print(f"Downloaded tokenizer.model to {downloaded}")
-        adapter_vol.commit()
-    else:
-        print(f"\ntokenizer.model already exists ({tokenizer_model_path.stat().st_size / 1024:.0f} KB)")
+    # Qwen 3 doesn't need the tokenizer.model workaround that Gemma 3 required
 
-    # Step 2: Convert to F16 GGUF
+    # Convert to F16 GGUF
     f16_gguf = out_dir / f"{model_name}-f16.gguf"
     print(f"\nConverting to F16 GGUF: {f16_gguf}")
 
@@ -108,7 +92,7 @@ def convert_and_quantize(
         ],
         capture_output=True,
         text=True,
-        timeout=1800,  # 30 min max
+        timeout=1800,
     )
     print(result.stdout[-2000:] if len(result.stdout) > 2000 else result.stdout)
     if result.returncode != 0:
@@ -118,7 +102,7 @@ def convert_and_quantize(
     f16_size = f16_gguf.stat().st_size / 1024 / 1024 / 1024
     print(f"F16 GGUF created: {f16_size:.1f} GB")
 
-    # Step 3: Quantize
+    # Quantize
     quant_gguf = out_dir / f"{model_name}-{quant.lower()}.gguf"
     print(f"\nQuantizing to {quant}: {quant_gguf}")
 
@@ -141,11 +125,10 @@ def convert_and_quantize(
     quant_size = quant_gguf.stat().st_size / 1024 / 1024 / 1024
     print(f"\n{quant} GGUF created: {quant_size:.1f} GB")
 
-    # Step 4: Clean up F16 GGUF (it's ~52GB, we don't need it on the volume)
+    # Clean up F16 GGUF
     print(f"\nRemoving F16 GGUF to save volume space...")
     f16_gguf.unlink()
 
-    # Commit to volume
     adapter_vol.commit()
 
     print(f"\n{'='*60}")
@@ -167,7 +150,7 @@ def convert_and_quantize(
 @app.local_entrypoint()
 def main(
     quant: str = "Q4_K_M",
-    model_name: str = "madison-orpo-v4",
+    model_name: str = "madison-qwen3-val-v1",
     merged_path: str = "",
 ):
     if not merged_path:

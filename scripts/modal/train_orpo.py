@@ -1,16 +1,19 @@
-"""QLoRA DPO/ORPO training for Madison character on Modal A100.
+"""QLoRA ORPO training for Madison character on Modal A100.
 
-Trains a LoRA adapter on Gemma 3 27B using DPO preference pairs.
-Teacher (chosen) = Sonnet 4.6 as Madison. Student (rejected) = base Gemma 3 27B.
+ORPO (Odds Ratio Preference Optimization) — reference-model-free preference
+training that integrates SFT and preference learning in a single objective.
 
-Based on Modal's official Unsloth example (modal-labs/modal-examples)
-and Unsloth's DPO documentation.
+Chosen over DPO for v2 based on:
+  - "Objective Matters" paper: ORPO shows zero persona drift at our data scale
+  - v1 DPO collapsed (loss→0, margins→15) by epoch 0.6 on 475 pairs
+  - ORPO's SFT component prevents likelihood displacement
+  - No reference model = ~50% less VRAM (no OOM risk on A100-40GB)
 
 Usage:
-    modal run modal_train_dpo.py --output-name madison-dpo-v1
-    modal run modal_train_dpo.py --objective orpo --beta 0.05 --output-name madison-orpo-v1
-    modal run modal_train_dpo.py --list-models
-    modal run modal_train_dpo.py --get-adapter madison-dpo-v1
+    modal run scripts/modal/train_orpo.py --output-name madison-orpo-v1
+    modal run scripts/modal/train_orpo.py --lr 8e-6 --output-name madison-orpo-v2
+    modal run scripts/modal/train_orpo.py --list-models
+    modal run scripts/modal/train_orpo.py --get-adapter madison-orpo-v1
 """
 
 from __future__ import annotations
@@ -23,11 +26,11 @@ import modal
 
 MINUTES = 60
 GPU = "A100"
-TIMEOUT = 120 * MINUTES
+TIMEOUT = 240 * MINUTES
 
-app = modal.App("foundry-madison-dpo")
+app = modal.App("foundry-madison-orpo")
 
-# Persistent volumes — separate concerns like Modal's example
+# Persistent volumes — reuse model cache from DPO runs
 model_cache_vol = modal.Volume.from_name("foundry-model-cache", create_if_missing=True)
 adapter_vol = modal.Volume.from_name("foundry-adapters", create_if_missing=True)
 
@@ -53,13 +56,13 @@ with training_image.imports():
     import unsloth  # noqa: F401,I001
     from unsloth import FastLanguageModel, PatchDPOTrainer
 
-    PatchDPOTrainer()
+    PatchDPOTrainer()  # Patches both DPO and ORPO trainers
 
     import datasets
     import torch
     import wandb
     from transformers import AutoTokenizer
-    from trl import DPOConfig, DPOTrainer, ORPOConfig, ORPOTrainer
+    from trl import ORPOConfig, ORPOTrainer
     from unsloth import is_bfloat16_supported
 
 # LoRA target modules — attention + MLP (all linear layers)
@@ -86,8 +89,8 @@ LORA_TARGET_MODULES = [
         modal.Secret.from_name("wandb-secret"),
     ],
 )
-def train_madison_dpo(
-    # Data (uploaded to volume before training)
+def train_madison_orpo(
+    # Data
     dpo_data_path: str = "/adapters/data/madison-dpo.jsonl",
     # Model
     base_model: str = "google/gemma-3-27b-it",
@@ -95,52 +98,54 @@ def train_madison_dpo(
     # LoRA config
     lora_rank: int = 16,
     lora_alpha: int = 16,
-    lora_dropout: float = 0.05,
-    # DPO/ORPO hyperparameters
-    objective: str = "dpo",
-    beta: float = 0.1,
+    lora_dropout: float = 0.0,  # Unsloth recommends 0 for fast patching
+    # ORPO hyperparameters
+    beta: float = 0.1,  # Odds ratio weight (ORPO paper default)
     learning_rate: float = 5e-6,
     num_epochs: int = 3,
-    per_device_batch_size: int = 4,
-    gradient_accumulation_steps: int = 8,
+    per_device_batch_size: int = 1,  # Conservative for A100-40GB (no ref model but still 27B)
+    gradient_accumulation_steps: int = 4,  # Effective batch = 4
+    max_grad_norm: float = 1.0,  # Clip gradient spikes (v1 DPO had norms 14-708)
     # Output
-    output_name: str = "madison-lora-v1",
+    output_name: str = "madison-orpo-v1",
+    # Resume
+    resume_from_checkpoint: str = "",  # e.g. "/adapters/experiments/madison-orpo-v4/checkpoint-650"
     # Tracking
     wandb_project: str = "foundry",
     wandb_run_name: str | None = None,
 ):
-    """Run QLoRA DPO/ORPO training on Modal A100."""
+    """Run QLoRA ORPO training on Modal A100."""
     import json
     import os
     from pathlib import Path
 
     print(f"{'='*60}")
-    print(f"Foundry — Madison {objective.upper()} Training")
+    print(f"Foundry — Madison ORPO Training")
     print(f"{'='*60}")
     print(f"Base model:  {base_model}")
     print(f"LoRA:        rank={lora_rank}, alpha={lora_alpha}, dropout={lora_dropout}")
     print(f"Beta:        {beta}, LR: {learning_rate}")
     print(f"Epochs:      {num_epochs}")
-    print(f"Batch:       {per_device_batch_size} x {gradient_accumulation_steps} accum")
+    print(f"Batch:       {per_device_batch_size} x {gradient_accumulation_steps} accum = {per_device_batch_size * gradient_accumulation_steps} effective")
+    print(f"Grad clip:   {max_grad_norm}")
     print(f"Output:      {output_name}")
     print(f"{'='*60}")
 
     # ----- Load data -----
     data_path = Path(dpo_data_path)
-    print(f"\nLoading DPO data from {data_path}...")
+    print(f"\nLoading preference data from {data_path}...")
     records = []
     with open(data_path) as f:
         for line in f:
             records.append(json.loads(line))
-    print(f"Loaded {len(records)} DPO pairs")
+    print(f"Loaded {len(records)} preference pairs")
 
-    # Convert to HF Dataset — plain string format (avoids Arrow serialization issues
-    # with nested list-of-dict conversational format)
+    # Plain string format — avoids Arrow serialization issues with Gemma 3 tokenizer
     dataset_dict = {"prompt": [], "chosen": [], "rejected": []}
     for r in records:
-        dataset_dict["prompt"].append(r["chosen"][0]["content"])     # user prompt text
-        dataset_dict["chosen"].append(r["chosen"][1]["content"])     # teacher response text
-        dataset_dict["rejected"].append(r["rejected"][1]["content"]) # student response text
+        dataset_dict["prompt"].append(r["chosen"][0]["content"])
+        dataset_dict["chosen"].append(r["chosen"][1]["content"])
+        dataset_dict["rejected"].append(r["rejected"][1]["content"])
 
     dataset = datasets.Dataset.from_dict(dataset_dict)
     split = dataset.train_test_split(test_size=0.1, seed=42)
@@ -148,8 +153,12 @@ def train_madison_dpo(
     eval_dataset = split["test"]
     print(f"Train: {len(train_dataset)}, Eval: {len(eval_dataset)}")
 
+    # With effective batch=4 and 427 train examples: ~107 steps/epoch, ~321 steps total
+    steps_per_epoch = len(train_dataset) // (per_device_batch_size * gradient_accumulation_steps)
+    total_steps = steps_per_epoch * num_epochs
+    print(f"Estimated: ~{steps_per_epoch} steps/epoch, ~{total_steps} steps total")
+
     # ----- Load model -----
-    # HF_HOME is set to /model_cache volume — caching is automatic
     print(f"\nLoading {base_model}...")
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=base_model,
@@ -159,9 +168,9 @@ def train_madison_dpo(
     )
     model_cache_vol.commit()
 
-    # Use AutoTokenizer for DPO — Unsloth's tokenizer causes Arrow serialization
-    # issues with Gemma 3 during TRL's dataset preparation (unslothai/unsloth#2310)
-    dpo_tokenizer = AutoTokenizer.from_pretrained(base_model)
+    # AutoTokenizer for ORPO — Unsloth's tokenizer causes Arrow serialization
+    # issues with Gemma 3 (unslothai/unsloth#2310, #2214)
+    orpo_tokenizer = AutoTokenizer.from_pretrained(base_model)
 
     # ----- Configure LoRA -----
     model = FastLanguageModel.get_peft_model(
@@ -189,22 +198,29 @@ def train_madison_dpo(
             name=run_name,
             config={
                 "base_model": base_model,
-                "objective": objective,
+                "objective": "orpo",
                 "lora_rank": lora_rank,
                 "lora_alpha": lora_alpha,
+                "lora_dropout": lora_dropout,
                 "beta": beta,
                 "learning_rate": learning_rate,
                 "num_epochs": num_epochs,
                 "batch_size": per_device_batch_size,
                 "gradient_accumulation_steps": gradient_accumulation_steps,
+                "effective_batch_size": per_device_batch_size * gradient_accumulation_steps,
+                "max_grad_norm": max_grad_norm,
+                "max_seq_length": max_seq_length,
                 "num_pairs": len(records),
+                "train_size": len(train_dataset),
+                "eval_size": len(eval_dataset),
             },
         )
 
     # ----- Training Config -----
     output_dir = f"/adapters/experiments/{output_name}"
 
-    common_args = dict(
+    training_args = ORPOConfig(
+        beta=beta,
         output_dir=output_dir,
         learning_rate=learning_rate,
         num_train_epochs=num_epochs,
@@ -213,47 +229,40 @@ def train_madison_dpo(
         gradient_accumulation_steps=gradient_accumulation_steps,
         max_length=max_seq_length,
         max_prompt_length=512,
+        max_grad_norm=max_grad_norm,
         warmup_ratio=0.1,
         lr_scheduler_type="cosine",
         logging_steps=1,
         eval_strategy="steps",
         eval_steps=50,
         save_strategy="steps",
-        save_steps=100,
-        save_total_limit=3,
+        save_steps=50,
+        save_total_limit=5,
         fp16=not is_bfloat16_supported(),
         bf16=is_bfloat16_supported(),
         optim="adamw_8bit",
         seed=42,
         report_to="wandb" if os.environ.get("WANDB_API_KEY") else "none",
         run_name=run_name,
-        dataset_num_proc=1,  # Avoid Arrow serialization issues with multiprocessing
+        dataset_num_proc=1,
     )
 
-    if objective == "orpo":
-        training_args = ORPOConfig(beta=beta, **common_args)
-        TrainerClass = ORPOTrainer
-    else:
-        training_args = DPOConfig(
-            beta=beta,
-            loss_type="sigmoid",
-            **common_args,
-        )
-        TrainerClass = DPOTrainer
-
     # ----- Train -----
-    # ref_model=None — Unsloth handles reference model internally
-    print(f"\nStarting {objective.upper()} training...")
-    trainer = TrainerClass(
+    # ORPO is reference-model-free — no ref_model needed
+    checkpoint = resume_from_checkpoint if resume_from_checkpoint else None
+    if checkpoint:
+        print(f"\nResuming ORPO training from {checkpoint}...")
+    else:
+        print(f"\nStarting ORPO training...")
+    trainer = ORPOTrainer(
         model=model,
-        ref_model=None,
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
-        tokenizer=dpo_tokenizer,
+        tokenizer=orpo_tokenizer,
     )
 
-    train_result = trainer.train()
+    train_result = trainer.train(resume_from_checkpoint=checkpoint)
 
     # ----- Save -----
     print(f"\nSaving adapter to {output_dir}...")
@@ -261,10 +270,12 @@ def train_madison_dpo(
     tokenizer.save_pretrained(output_dir)
 
     metrics = train_result.metrics
-    metrics["objective"] = objective
+    metrics["objective"] = "orpo"
     metrics["beta"] = beta
     metrics["lora_rank"] = lora_rank
+    metrics["lora_dropout"] = lora_dropout
     metrics["learning_rate"] = learning_rate
+    metrics["max_grad_norm"] = max_grad_norm
     metrics["num_pairs"] = len(records)
 
     with open(f"{output_dir}/training_metrics.json", "w") as f:
@@ -317,6 +328,33 @@ def list_adapters():
     image=modal.Image.debian_slim(),
     volumes={"/adapters": adapter_vol},
 )
+def inspect_experiment(experiment_name: str):
+    """List all files and subdirectories in an experiment directory."""
+    from pathlib import Path
+
+    exp_dir = Path("/adapters/experiments") / experiment_name
+    if not exp_dir.exists():
+        print(f"Experiment '{experiment_name}' not found")
+        return
+
+    def walk(path, indent=0):
+        for item in sorted(path.iterdir()):
+            if item.is_dir():
+                sub_files = list(item.rglob("*"))
+                sub_size = sum(f.stat().st_size for f in sub_files if f.is_file()) / 1024 / 1024
+                print(f"{'  ' * indent}📁 {item.name}/ ({len(sub_files)} files, {sub_size:.1f} MB)")
+                walk(item, indent + 1)
+            else:
+                size_kb = item.stat().st_size / 1024
+                print(f"{'  ' * indent}  {item.name} ({size_kb:.0f} KB)")
+
+    walk(exp_dir)
+
+
+@app.function(
+    image=modal.Image.debian_slim(),
+    volumes={"/adapters": adapter_vol},
+)
 def download_adapter(adapter_name: str) -> dict[str, bytes]:
     """Download an adapter's files from the volume."""
     from pathlib import Path
@@ -339,8 +377,8 @@ def download_adapter(adapter_name: str) -> dict[str, bytes]:
     image=modal.Image.debian_slim(),
     volumes={"/adapters": adapter_vol},
 )
-def upload_dpo_data(data_bytes: bytes):
-    """Upload DPO training data to the persistent volume."""
+def upload_data(data_bytes: bytes):
+    """Upload preference training data to the persistent volume."""
     from pathlib import Path
 
     data_dir = Path("/adapters/data")
@@ -350,7 +388,7 @@ def upload_dpo_data(data_bytes: bytes):
     output_path.write_bytes(data_bytes)
 
     line_count = sum(1 for _ in output_path.open())
-    print(f"Uploaded {line_count} DPO pairs to {output_path}")
+    print(f"Uploaded {line_count} preference pairs to {output_path}")
     adapter_vol.commit()
     return line_count
 
@@ -365,25 +403,34 @@ def main(
     rank: int = 16,
     lr: float = 5e-6,
     epochs: int = 3,
-    objective: str = "dpo",
-    output_name: str = "madison-lora-v1",
-    upload_data: bool = True,
+    output_name: str = "madison-orpo-v1",
+    dataset: str = "data/training/madison-dpo.jsonl",
+    upload_data_flag: bool = True,
     list_models: bool = False,
     get_adapter: str = "",
+    inspect: str = "",
+    resume_from: str = "",
 ):
-    """Run Madison DPO/ORPO training on Modal.
+    """Run Madison ORPO training on Modal.
 
     Usage:
-        modal run modal_train_dpo.py --output-name madison-dpo-v1
-        modal run modal_train_dpo.py --objective orpo --beta 0.05 --output-name madison-orpo-v1
-        modal run modal_train_dpo.py --list-models
-        modal run modal_train_dpo.py --get-adapter madison-dpo-v1
+        modal run scripts/modal/train_orpo.py --output-name madison-orpo-v1
+        modal run scripts/modal/train_orpo.py --lr 8e-6 --output-name madison-orpo-v2
+        modal run scripts/modal/train_orpo.py --list-models
+        modal run scripts/modal/train_orpo.py --get-adapter madison-orpo-v1
+        modal run scripts/modal/train_orpo.py --inspect madison-orpo-v4
+        modal run scripts/modal/train_orpo.py --resume-from madison-orpo-v4/checkpoint-650 --output-name madison-orpo-v4
     """
     from pathlib import Path
 
     if list_models:
         print("Adapters on Modal volume:")
         list_adapters.remote()
+        return
+
+    if inspect:
+        print(f"Inspecting experiment '{inspect}':")
+        inspect_experiment.remote(inspect)
         return
 
     if get_adapter:
@@ -397,27 +444,27 @@ def main(
         print(f"\nAdapter saved to {local_dir}/")
         return
 
-    data_path = Path("data/training/madison-dpo.jsonl")
+    data_path = Path(dataset)
 
-    if upload_data and data_path.exists():
+    if upload_data_flag and data_path.exists():
         print(f"Uploading {data_path}...")
         data_bytes = data_path.read_bytes()
-        n = upload_dpo_data.remote(data_bytes)
+        n = upload_data.remote(data_bytes)
         print(f"Uploaded {n} pairs to Modal volume")
     elif not data_path.exists():
         print(f"WARNING: {data_path} not found. Assuming data already on volume.")
 
-    print(f"\nLaunching {objective.upper()} training on {GPU}...")
+    print(f"\nLaunching ORPO training on {GPU}...")
     print(f"  beta={beta}, rank={rank}, lr={lr}, epochs={epochs}")
 
-    metrics = train_madison_dpo.remote(
+    metrics = train_madison_orpo.remote(
         beta=beta,
         lora_rank=rank,
         lora_alpha=rank,
         learning_rate=lr,
         num_epochs=epochs,
-        objective=objective,
         output_name=output_name,
+        resume_from_checkpoint=f"/adapters/experiments/{resume_from}" if resume_from else "",
     )
 
     print(f"\nTraining complete! Metrics:")

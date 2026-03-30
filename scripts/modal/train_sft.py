@@ -12,11 +12,11 @@ Loads the merged ORPO v4 16-bit model from the Modal volume, applies fresh
 LoRA rank 16 on top, and fine-tunes on messages-format JSONL data.
 
 Usage:
-    modal run modal_train_sft.py --output-name madison-sft-v1
-    modal run modal_train_sft.py --lr 1e-5 --output-name madison-sft-v2
-    modal run modal_train_sft.py --list-models
-    modal run modal_train_sft.py --get-adapter madison-sft-v1
-    modal run modal_train_sft.py --dataset data/training/my-data.jsonl
+    modal run scripts/modal/train_sft.py --output-name madison-sft-v1
+    modal run scripts/modal/train_sft.py --lr 1e-5 --output-name madison-sft-v2
+    modal run scripts/modal/train_sft.py --list-models
+    modal run scripts/modal/train_sft.py --get-adapter madison-sft-v1
+    modal run scripts/modal/train_sft.py --dataset data/training/my-data.jsonl
 """
 
 from __future__ import annotations
@@ -438,12 +438,12 @@ def main(
     """Run Madison SFT introspection training on Modal.
 
     Usage:
-        modal run modal_train_sft.py --output-name madison-sft-v1
-        modal run modal_train_sft.py --lr 1e-5 --output-name madison-sft-v2
-        modal run modal_train_sft.py --list-models
-        modal run modal_train_sft.py --get-adapter madison-sft-v1
-        modal run modal_train_sft.py --inspect madison-sft-v1
-        modal run modal_train_sft.py --resume-from madison-sft-v1/checkpoint-50 --output-name madison-sft-v1
+        modal run scripts/modal/train_sft.py --output-name madison-sft-v1
+        modal run scripts/modal/train_sft.py --lr 1e-5 --output-name madison-sft-v2
+        modal run scripts/modal/train_sft.py --list-models
+        modal run scripts/modal/train_sft.py --get-adapter madison-sft-v1
+        modal run scripts/modal/train_sft.py --inspect madison-sft-v1
+        modal run scripts/modal/train_sft.py --resume-from madison-sft-v1/checkpoint-50 --output-name madison-sft-v1
     """
     from pathlib import Path
 

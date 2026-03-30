@@ -9,8 +9,8 @@ caching support and imports only constants from evaluate.py.
 
 Usage:
     cd ~/Repositories/Foundry
-    python judge_responses.py --tag orpo-v3b
-    python judge_responses.py --tag orpo-v3b --responses data/eval/responses/responses-orpo-v3b.jsonl
+    python scripts/data/judge_responses.py --tag orpo-v3b
+    python scripts/data/judge_responses.py --tag orpo-v3b --responses data/eval/responses/responses-orpo-v3b.jsonl
 """
 
 from __future__ import annotations

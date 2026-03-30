@@ -159,7 +159,7 @@ Key findings from NeurIPS 2025, ICML 2025, and Gemma-specific research:
 Critical findings from detailed analysis of DeePer, MentalArena, Objective Matters, Chauhan AI Founding Fathers, OpenCharacter, and CoSER. Full analysis in `docs/prior-art/`.
 
 **Pipeline changes adopted:**
-- **DPO + SFT loss (alpha=0.1)** — DeePer showed this prevents likelihood displacement where chosen response probability decreases during training. Added to `modal_train_dpo.py`.
+- **DPO + SFT loss (alpha=0.1)** — DeePer showed this prevents likelihood displacement where chosen response probability decreases during training. Added to `scripts/modal/train_dpo.py`.
 - **ORPO support added** — Objective Matters paper found DPO causes persona drift at 200K-400K tokens (our ~245K is at onset). ORPO shows zero drift at any budget. Run both in parallel and compare. Use `--objective orpo --beta 0.05`.
 - **LoRA dropout=0.05** — Confirmed by Objective Matters Gemma ablations. Updated from 0.0.
 - **Adversarial stress-testing** — Chauhan's Red Team Agent approach for systematic character-breaking probes. Need to expand eval prompts.

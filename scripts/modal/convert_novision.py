@@ -14,9 +14,9 @@ This script strips the VLM wrapper:
 Based on gghfez/gemma-3-27b-novision approach.
 
 Usage:
-    modal run modal_convert_novision.py
-    modal run modal_convert_novision.py --input /adapters/merged/madison-orpo-v4-16bit
-    modal run modal_convert_novision.py --output-name madison-orpo-v4-novision
+    modal run scripts/modal/convert_novision.py
+    modal run scripts/modal/convert_novision.py --input /adapters/merged/madison-orpo-v4-16bit
+    modal run scripts/modal/convert_novision.py --output-name madison-orpo-v4-novision
 """
 
 from __future__ import annotations

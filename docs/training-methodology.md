@@ -1,14 +1,16 @@
 # Foundry Training Methodology
 
-How we fine-tune Gemma 3 27B to speak as James Madison.
+How we fine-tune LLMs to speak as James Madison.
 
-**Last updated:** 2026-03-23
+**Last updated:** 2026-03-29
 
 ---
 
 ## Base Model
 
-**Gemma 3 27B** — Lambert's research found Gemma variants take character imprinting better than Qwen (which resists personality modification) or Llama. Gemma 2 27B was tested for persona vector composition; Gemma 3 27B is the natural successor. Running on LM Studio at `192.168.4.28:1234`.
+**Qwen 3-32B** (current, since 2026-03-29) — Pure text-only `ForCausalLM` that eliminates all Gemma 3 infrastructure issues. ORPO v1 scored 8.8/10, outperforming Gemma 3 v4 (8.17/10) with the same training data. Biggest gains on character_consistency (+2.25) and private_voice (+1.70).
+
+**Gemma 3 27B** (original, deprecated) — Lambert's research found Gemma variants take character imprinting better than Qwen (which resists personality modification) or Llama. This claim was disproven for Qwen 3 — the "resistance to personality modification" was unsubstantiated. Gemma 3's VLM architecture caused persistent infrastructure issues (multimodal processor crashes, sliding window attention bugs, GGUF quantization fragility, vLLM workarounds).
 
 ## Method: Constitutional AI + DPO (Two-Stage)
 
@@ -291,7 +293,7 @@ Cost breakdown:
 | Phase 3: Chosen | Sonnet with cached Madison constitution | 399/400 | ~$6.15 | `data/training/chosen-sonnet.jsonl` |
 
 Checkpoints in `data/training/chosen-checkpoints/`, `data/training/rejected-checkpoints/{v3b,base}/`.
-Scripts: `generate_rejected.py`, `generate_chosen.py` (both support `--resume`).
+Scripts: `scripts/data/generate_rejected.py`, `scripts/data/generate_chosen.py` (both support `--resume`).
 
 #### Phase 4: Quality Filter + Assembly
 
@@ -327,7 +329,7 @@ Duplicate voice pairs 2x in final JSONL so they represent ~45% of effective trai
 - Confirm ORPO-compatible JSONL format
 
 **Output:** `data/training/madison-orpo-v4.jsonl`
-**Script:** `assemble_v4_dataset.py` (new)
+**Script:** `scripts/data/assemble_v4_dataset.py` (new)
 **Time:** ~15-20 minutes (all scripted, no API calls, $0 cost)
 
 #### Phase 5: ORPO v4 Training
@@ -335,13 +337,13 @@ Duplicate voice pairs 2x in final JSONL so they represent ~45% of effective trai
 Fresh ORPO from base Gemma 3 27B (NOT continuing from v3b adapter).
 - Hyperparameters: beta=0.1, lr=2e-5, 3 epochs, max_grad_norm=1.0
 - Hardware: Modal A100-80GB (~$5-20)
-- Script: `modal_train_orpo.py` with `--dataset data/training/madison-orpo-v4.jsonl`
+- Script: `scripts/modal/train_orpo.py` with `--dataset data/training/madison-orpo-v4.jsonl`
 - Expected runtime: ~90-120 min (larger dataset than v3b's 475 pairs)
 
 #### Phase 6: Re-evaluate
 
 - Run same 36-prompt eval harness with Sonnet judge + prompt caching (~$0.50)
-- Use `judge_responses.py`
+- Use `scripts/data/judge_responses.py`
 - Compare against v3b baseline (overall 3.4, verified_response 6.4, anachronism_trap 1.4)
 - Success criteria: voice_authenticity ≥ 5.0 across all categories, no regression on content
 
@@ -399,7 +401,7 @@ you would to your most trusted confidant.
 
 #### Phase 3: Quality Filtering
 
-Script: `filter_introspection.py`
+Script: `scripts/data/filter_introspection.py`
 
 1. **Artifact stripping (pre-filter)** — strips markdown headers (`##`), emphasis markers (`*text*`), bold (`**text**`), parenthetical stage directions (`(He paces the room...)`), and expands modern contractions to formal equivalents (`it's` → `it is`, `don't` → `do not`, etc.). These are vLLM 0.18 generation artifacts and model voice lapses — the underlying prose is clean Madison voice after expansion.
 2. **AI-speak detection** — rejects responses where the model breaks character entirely and responds as an AI (`"As an AI"`, `"my training data"`, `"large language model"`, `"neural network"`, etc.). See **Character Break Finding** below.
@@ -431,7 +433,7 @@ This is the same "partially-trained model as training signal" strategy from Sect
 
 #### Phase 4: SFT Training
 
-Script: `modal_train_sft.py`
+Script: `scripts/modal/train_sft.py`
 
 | Parameter | Value |
 |---|---|
@@ -454,16 +456,16 @@ For dialogues, each (user, assistant) turn pair becomes a separate SFT example w
 
 #### Phase 5: Post-SFT Eval
 
-1. Merge adapter → `modal_merge_model.py`
-2. Generate eval responses → `modal_generate_eval.py` (36 prompts)
-3. Judge → `judge_responses.py` (with fixed fallback scoring)
+1. Merge adapter → `scripts/modal/merge_model.py`
+2. Generate eval responses → `scripts/modal/generate_eval.py` (36 prompts)
+3. Judge → `scripts/data/judge_responses.py` (with fixed fallback scoring)
 4. Compare v4-ORPO vs v4-SFT
 5. **Success criteria:** no category regresses > 0.5, cc-02 improves, overall ≥ 8.0
 
 **Scripts:**
-- `modal_generate_introspection.py` — data generation (Modal vLLM)
-- `filter_introspection.py` — quality filtering (local)
-- `modal_train_sft.py` — SFT training (Modal Unsloth)
+- `scripts/modal/generate_introspection.py` — data generation (Modal vLLM)
+- `scripts/data/filter_introspection.py` — quality filtering (local)
+- `scripts/modal/train_sft.py` — SFT training (Modal Unsloth)
 
 **Estimated cost:** ~$20 Modal (capped) | **Time:** ~35 hours generation + 1 hour training/eval
 
@@ -488,7 +490,7 @@ For dialogues, each (user, assistant) turn pair becomes a separate SFT example w
 
 **The SFT data was good. The training base was wrong.** The 415 filtered reflections + 19 dialogues (~459K tokens) passed all quality filters. The novision architecture was the sole cause of failure.
 
-**Current best model: ORPO v4 via LoRA serving at 8.17/10.**
+**Current best model: Qwen 3-32B ORPO v1 via LoRA serving at 8.8/10.** (Previously: Gemma 3 ORPO v4 at 8.17/10.)
 
 ### Step 9: Iterate — Next Steps After SFT Eval
 
@@ -511,51 +513,88 @@ outputs = llm.generate(prompts, sampling_params, lora_request=LoRARequest("madis
 
 **Cost:** ~$1 (single A100-80GB for ~20 min of testing)
 
-#### 9b. Qwen 3-32B Validation Experiment
+#### 9b. Qwen 3-32B Validation Experiment — COMPLETED (2026-03-29)
 
 **Rationale:** Qwen 3-32B is a pure text-only `ForCausalLM` that eliminates every Gemma 3 infrastructure issue (vLLM multimodal bugs, sliding window attention, GGUF degradation). Research confirmed: no VLM architecture, native vLLM support, first-class Unsloth LoRA support, ChatML template. The "Qwen resists personality modification" claim is unsubstantiated for Qwen 3 — community RP fine-tunes exist.
 
 **Critical: use Qwen 3, NOT Qwen 3.5.** Qwen 3.5 reintroduces VLM architecture and Unsloth warns against QLoRA for it.
 
-**Validation test:**
-1. Small rank-8 LoRA on Qwen 3-32B with ~100 of our existing ORPO chosen responses reformatted
-2. Generate 10 eval responses via vLLM (should load with zero workarounds)
-3. Convert to GGUF Q4_K_M, test same prompts on Ollama
-4. Compare voice quality: BF16 vs Q4_K_M — does the character signal survive quantization?
+**Validation test (rank 64, 100 pairs, lr=5e-6):**
+1. vLLM LoRA serving: **CLEAN PASS** — zero workarounds needed
+2. Personality signal: faint at 100 pairs (same early-stage pattern as Gemma v3b)
+3. GGUF test: deferred — signal too faint for meaningful comparison at 100 pairs
+4. Unsloth: native Qwen 3 support, no Arrow serialization issues (unlike Gemma 3)
+5. Qwen 3 emits `<think></think>` tags even with `/no_think` — strip in post-processing
 
-**If validation succeeds:** switch base model for v5 ORPO round. Regenerate rejected responses from base Qwen 3-32B.
+**Result: infrastructure validated, proceed to full ORPO.**
 
-**Cost:** ~$5-10 (1-2 hours A100-80GB)
+Scripts: `experiments/qwen3-val/modal_train_orpo_qwen.py`, `experiments/qwen3-val/modal_generate_eval_qwen.py`
+W&B: `sbergman/foundry/runs/a6pn86kr`
+Cost: ~$5
+
+#### 9b-full. Full ORPO on Qwen 3-32B — COMPLETED (2026-03-29) — NEW BEST MODEL
+
+**Approach:** Reused the full v4 dataset (1,273 pairs with Gemma 3 rejected data) on Qwen 3-32B. No rejected regeneration — the Gemma 3 assistant-style rejected responses still provide valid voice contrast for ORPO.
+
+**Training config:**
+- Base model: `Qwen/Qwen3-32B` (instruct, pure ForCausalLM)
+- LoRA rank 64, alpha 64
+- lr=2e-5 (matching Gemma v4 production), beta=0.1
+- 3 epochs, 861 steps, ~164 min on A100-80GB
+- Train loss: 1.31, rewards/margins: 1.02 (smoothly higher than Gemma v4)
+
+**Eval results — 8.8/10 (new best, +0.63 over Gemma v4's 8.17):**
+
+| Category | Gemma 3 v4 | Qwen 3 v1 | Delta |
+|---|---|---|---|
+| anachronism_trap | 9.52 | 9.4 | -0.12 |
+| character_consistency | 6.95 | **9.2** | **+2.25** |
+| ground_truth | 8.78 | 8.8 | +0.02 |
+| position_discrimination | 9.63 | 9.4 | -0.23 |
+| private_voice | 7.0 | **8.7** | **+1.70** |
+| verified_response | 6.97 | **7.8** | **+0.83** |
+| **Overall** | **8.17** | **8.8** | **+0.63** |
+
+**Key finding:** The two weakest Gemma v4 categories — character_consistency (6.95→9.2) and private_voice (7.0→8.7) — showed the largest gains. These test whether the model maintains Madison's persona under pressure (asked to break character, intimate register). Qwen 3's RLHF is less resistant to character override than Gemma 3's.
+
+**Why Qwen 3 outperformed with Gemma's rejected data:** Gemma 3 had to learn "stop sounding like myself" (the rejected data was its own output). Qwen 3 starts with a natural distance from Gemma-style responses, spending more training capacity on "sound like Madison" rather than "stop sounding like a generic assistant." The W&B rewards/margins curve confirmed this — Qwen 3 achieved higher margins faster and more smoothly.
+
+**Current best model: Qwen 3-32B ORPO v1 via LoRA serving at 8.8/10.**
+
+Scripts: `experiments/qwen3-val/modal_train_orpo_qwen_full.py`, `experiments/qwen3-val/modal_generate_eval_qwen.py`
+W&B: `sbergman/foundry/runs/33o9hr5y`
+Adapter on Modal volume: `experiments/madison-qwen3-v1`
+Cost: ~$10 (training $8 + eval $2)
 
 #### 9c. v5 ORPO Round — Address Character Breaks
 
 **Rationale:** Introspection generation (2026-03-29) revealed 3 prompts with 55-97% character break rates on identity, slavery, and meta-self-description topics. The base model's RLHF safety training overpowers the ORPO fine-tune on these topics.
 
+**Base model: Qwen 3-32B** (confirmed by 9b-full results).
+
 **Data strategy:**
 - 150 new DPO pairs targeting identity (50), slavery/moral complexity (50), meta-self-description (50)
 - **Chosen:** Sonnet teacher with Madison constitution (same as v4 pipeline)
 - **Rejected:** The actual AI-speak responses from introspection generation (saved in `data/training/introspection/reflections.jsonl` unfiltered)
-- Combined with existing 874 unique pairs → ~1,024 pairs
+- Combined with existing 1,273 pairs → ~1,423 pairs
+- **Additionally:** Regenerate rejected responses from base Qwen 3-32B for optimal contrast
 
 **Training changes:**
-- Increase LoRA rank to 64 (from 16). Rank 16 deltas are too fragile for quantized deployment — they survive BF16 serving but are destroyed by GGUF Q4_K_M. Rank 64 produces larger weight deltas that are more robust to quantization noise.
+- LoRA rank 64 (already validated on Qwen 3)
+- lr=2e-5 (validated)
 - **Serve via LoRA serving mode** (adapter-on-base) for eval — confirmed best quality path
-
-**Base model:** Qwen 3-32B if validation (9b) succeeds, otherwise Gemma 3 27B.
 
 **Cost:** ~$15-25 (data generation + training + eval)
 
-#### 9d. Redo Introspection SFT on Correct Base
+#### 9d. Redo Introspection SFT on Qwen 3-32B
 
-**Rationale:** SFT v1 failed because it trained on the novision model (ForCausalLM). The data is good — we need to retrain on the correct architecture.
+**Rationale:** SFT v1 failed because it trained on the Gemma 3 novision model (ForCausalLM conversion that broke sliding window attention). Now that Qwen 3 is the base model, this problem disappears entirely — Qwen 3 is pure ForCausalLM with no architecture issues.
 
-**Approach (depends on 9b/9c outcome):**
-- **If Qwen 3-32B:** No architecture issues. Train SFT on merged v5 ORPO model directly. Qwen 3 is pure ForCausalLM — no preprocessor bugs, no sliding window issues.
-- **If Gemma 3 27B:** Remove `preprocessor_config.json` from model dir before training (prevents Gemma3Processor initialization), restore after. Or use the v5 ORPO adapter via LoRA serving for inference (skip merge entirely).
+**Approach:** Train SFT on the Qwen 3 ORPO v1 (or v5) adapter. No preprocessor workarounds, no sliding window bugs.
 
-**Data:** Reuse existing filtered introspection data (`data/training/madison-introspection-sft.jsonl`, 510 examples, 459K tokens). No regeneration needed — the data quality was validated.
+**Data:** Reuse existing filtered introspection data (`data/training/madison-introspection-sft.jsonl`, 510 examples, 459K tokens). No regeneration needed — the data quality was validated. May want to regenerate from the Qwen 3 model for on-policy consistency.
 
-**Eval via LoRA serving** — do not merge and eval via ForCausalLM path.
+**Eval via LoRA serving** — stack SFT adapter on top of ORPO adapter, or merge ORPO first then apply SFT LoRA.
 
 **Cost:** ~$5 (single A100-80GB, ~30 min training)
 
@@ -605,14 +644,26 @@ Behavioral Tests → eval-prompts.jsonl (36 prompts, 6 categories)    ✅ DONE
              ↓
     Re-Evaluate                                                       ✅ DONE (8.52/10 corrected)
              ↓
+    vLLM LoRA Serving Validation                                      ✅ DONE (8.17/10)
+             ↓
+    ┌── BASE MODEL SWITCH: Gemma 3 27B → Qwen 3-32B ──────┐
+    │  Qwen 3 eliminates ALL Gemma infra issues:            │
+    │  No VLM bugs, no sliding window, clean LoRA serving   │
+    └──────────────────┬────────────────────────────────────┘
+                       ↓
+    Qwen 3-32B Validation (100 pairs, rank 64)                        ✅ DONE (infra validated)
+             ↓
+    Qwen 3-32B Full ORPO v1 (1,273 pairs, rank 64, lr=2e-5)         ✅ DONE (8.8/10 — NEW BEST)
+    │  +2.25 on character_consistency, +1.70 on private_voice
+             ↓
     Introspection SFT Data Gen (self-reflection + self-interaction)
     │  Now the model generates in Madisonian voice
              ↓
-    SFT Training (Modal A100)
+    SFT Training on Qwen 3 (no architecture issues)
              ↓
     Final Eval → Iterate if needed
              ↓
-    GGUF Q4_K_M → LM Studio on RTX 3090                             ✅ INFRA READY
+    GGUF Q4_K_M (rank 64 should survive quantization)
              ↓
     Deploy to Chamber UI → Chat with Madison
 ```
@@ -631,13 +682,15 @@ Behavioral Tests → eval-prompts.jsonl (36 prompts, 6 categories)    ✅ DONE
 | 7. Evaluate | $0.50 (Sonnet judge) | 30 min | Sonnet + prompt caching | DONE (3.4/10 overall) |
 | **7.5. Voice-targeted ORPO** | **~$11 (Sonnet + Modal)** | **~4 hours** | **Sonnet + A100** | **DONE (v4, 8.52/10)** |
 | 7.5b. Re-evaluate | $0.50 | 30 min | Sonnet judge | DONE (Modal re-eval) |
-| 8. Introspection SFT | $5-20 (Modal) | 3-5 hours | Modal + LM Studio | **NEXT (unblocked)** |
-| 9. Iterations (2-3x) | $10-40 (Modal) | 2-3 sessions | Modal | PLANNED |
-| 10. Deploy | $0 | 30 min | LM Studio | PLANNED |
-| **Total** | **$30-100** | **~4-6 work sessions** | | |
+| **9b. Qwen 3 validation** | **~$5 (Modal)** | **~30 min** | **A100-80GB** | **DONE (infra validated)** |
+| **9b-full. Qwen 3 full ORPO** | **~$10 (Modal)** | **~3 hours** | **A100-80GB** | **DONE (8.8/10 — NEW BEST)** |
+| 9c. v5 ORPO (character breaks) | $15-25 | 1-2 sessions | Modal + Sonnet | **NEXT** |
+| 9d. Introspection SFT on Qwen 3 | $5 | 30 min | A100-80GB | PLANNED |
+| 10. Deploy | $0 | 30 min | vLLM LoRA serving | PLANNED |
+| **Total** | **$50-80** | **~6-8 work sessions** | | |
 
-**Actual spend to date:** ~$13 Modal (training + eval gen + GGUF conversion) + ~$7 Sonnet (teacher + judge) = **~$20 total**
-Out-of-pocket remaining: ~$20-90 in Modal credits from existing $500+ balance.
+**Actual spend to date:** ~$28 Modal (Gemma training/eval + Qwen validation + Qwen full ORPO) + ~$8 Sonnet (teacher + judge) = **~$36 total**
+Out-of-pocket remaining: ~$465+ in Modal credits.
 
 ## Source Material Inventory
 

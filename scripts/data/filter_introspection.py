@@ -1,12 +1,12 @@
 """Quality filtering for introspection SFT data.
 
 Applies voice contamination, length, and dedup filters to reflection and
-dialogue JSONL files produced by modal_generate_introspection.py.
+dialogue JSONL files produced by scripts/modal/generate_introspection.py.
 
 Usage:
-    python filter_introspection.py
-    python filter_introspection.py --reflections path --dialogues path
-    python filter_introspection.py --similarity-threshold 0.90
+    python scripts/data/filter_introspection.py
+    python scripts/data/filter_introspection.py --reflections path --dialogues path
+    python scripts/data/filter_introspection.py --similarity-threshold 0.90
 """
 
 from __future__ import annotations

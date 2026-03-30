@@ -57,5 +57,5 @@ print(f'Assembled {len(files)} dialogues → data/training/introspection/dialogu
 "
 
     echo ""
-    echo "Done. Run filter_introspection.py next."
+    echo "Done. Run scripts/data/filter_introspection.py next."
 fi

@@ -183,7 +183,7 @@ foundry/
     eval/          — Evaluation prompts and results
   sources/         — Primary source corpus (public domain texts)
   docs/            — CLI guide, training methodology, research
-  modal_train_dpo.py — Modal A100 DPO training + GGUF export
+  scripts/modal/train_dpo.py — Modal A100 DPO training + GGUF export
 ```
 
 ## Tech Stack

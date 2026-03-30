@@ -80,10 +80,10 @@ This was patched during the merge process. If you're starting fresh, check wheth
 
 ```bash
 # Generate remaining eval responses (resumes from checkpoints)
-modal run modal_generate_eval.py --tag orpo-v3b
+modal run scripts/modal/generate_eval.py --tag orpo-v3b
 
 # Force regenerate all
-modal run modal_generate_eval.py --tag orpo-v3b --fresh
+modal run scripts/modal/generate_eval.py --tag orpo-v3b --fresh
 ```
 
 ### Current Status (2026-03-28)
@@ -113,7 +113,7 @@ llm = LLM(
 )
 ```
 
-Also requires patching `rope_parameters` → `rope_scaling` in `config.json` (see below). The script `modal_generate_introspection.py` handles both patches automatically.
+Also requires patching `rope_parameters` → `rope_scaling` in `config.json` (see below). The script `scripts/modal/generate_introspection.py` handles both patches automatically.
 
 **Performance:** ~20-35s per 1024-token response on A100-80GB. Comparable to native vLLM serving.
 
@@ -155,7 +155,7 @@ outputs = llm.generate(prompts, sampling_params, lora_request=lora_req)
 
 #### Failed Approach: ForCausalLM Conversion (DO NOT USE)
 
-We also tried converting the model to `Gemma3ForCausalLM` by stripping the `language_model.` prefix from weights and flattening `text_config` (script: `modal_convert_novision.py`). This loads in vLLM but produces **degraded output** with excessive markdown formatting.
+We also tried converting the model to `Gemma3ForCausalLM` by stripping the `language_model.` prefix from weights and flattening `text_config` (script: `scripts/modal/convert_novision.py`). This loads in vLLM but produces **degraded output** with excessive markdown formatting.
 
 Root cause: vLLM routes `Gemma3ForCausalLM` and `Gemma3ForConditionalGeneration` through entirely different code paths. The ForCausalLM path has confirmed bugs with Gemma 3's interleaved 5:1 sliding window attention pattern ([#20865](https://github.com/vllm-project/vllm/issues/20865), [#22270](https://github.com/vllm-project/vllm/issues/22270)). FlashInfer backend silently disables interleaved attention for `gemma3_text`, breaking the attention pattern and causing the model to over-attend to formatting patterns. Issue [#16360](https://github.com/vllm-project/vllm/issues/16360) is the exact reproduction — remains open with no fix.
 
@@ -163,7 +163,7 @@ Root cause: vLLM routes `Gemma3ForCausalLM` and `Gemma3ForConditionalGeneration`
 
 #### vLLM Version Note: Markdown Artifacts
 
-vLLM 0.18.0 produces markdown headers (`##`) and emphasis (`*text*`) in Gemma 3 output that earlier versions did not. This is a vLLM-version artifact, not a model quality issue — the underlying prose is clean. The `filter_introspection.py` script strips these in post-processing.
+vLLM 0.18.0 produces markdown headers (`##`) and emphasis (`*text*`) in Gemma 3 output that earlier versions did not. This is a vLLM-version artifact, not a model quality issue — the underlying prose is clean. The `scripts/data/filter_introspection.py` script strips these in post-processing.
 
 ### References
 - [vLLM PR #14660: Gemma 3 support](https://github.com/vllm-project/vllm/pull/14660)
@@ -256,10 +256,10 @@ vLLM 0.18.0 produces markdown headers (`##`) and emphasis (`*text*`) in Gemma 3 
 
 ### Automated Conversion Script
 
-`modal_convert_gguf.py` handles the full pipeline on Modal (no GPU needed, just CPU + 64GB RAM):
+`scripts/modal/convert_gguf.py` handles the full pipeline on Modal (no GPU needed, just CPU + 64GB RAM):
 ```bash
-modal run modal_convert_gguf.py              # default Q4_K_M
-modal run modal_convert_gguf.py --quant Q5_K_M  # alternative quant
+modal run scripts/modal/convert_gguf.py              # default Q4_K_M
+modal run scripts/modal/convert_gguf.py --quant Q5_K_M  # alternative quant
 ```
 
 The script:

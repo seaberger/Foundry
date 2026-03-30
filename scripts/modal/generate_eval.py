@@ -2,26 +2,26 @@
 
 Two modes:
   1. vLLM (fast, ~10-30s/prompt) — requires merged 16-bit model on volume
-     First run: modal run modal_merge_model.py --adapter madison-orpo-v3b-lr2e5
-     Then: modal run modal_generate_eval.py --tag orpo-v3b
+     First run: modal run scripts/modal/merge_model.py --adapter madison-orpo-v3b-lr2e5
+     Then: modal run scripts/modal/generate_eval.py --tag orpo-v3b
 
   2. Unsloth fallback (slow, ~160-200s/prompt) — uses adapter directly
-     modal run modal_generate_eval.py --tag orpo-v3b --use-unsloth
+     modal run scripts/modal/generate_eval.py --tag orpo-v3b --use-unsloth
 
 Supports checkpointing and resume for both modes.
 
 Usage:
     # Fast mode (vLLM with merged model)
-    modal run modal_generate_eval.py --tag orpo-v3b
+    modal run scripts/modal/generate_eval.py --tag orpo-v3b
 
     # Resume interrupted run
-    modal run modal_generate_eval.py --tag orpo-v3b
+    modal run scripts/modal/generate_eval.py --tag orpo-v3b
 
     # Slow fallback (Unsloth, no merge needed)
-    modal run modal_generate_eval.py --tag orpo-v3b --use-unsloth
+    modal run scripts/modal/generate_eval.py --tag orpo-v3b --use-unsloth
 
     # Force regenerate
-    modal run modal_generate_eval.py --tag orpo-v3b --fresh
+    modal run scripts/modal/generate_eval.py --tag orpo-v3b --fresh
 """
 
 from __future__ import annotations
@@ -328,7 +328,7 @@ def main(
     else:
         merged_path = f"/adapters/merged/{adapter}-16bit"
         print(f"Using vLLM with merged model at {merged_path}...")
-        print("(Run modal_merge_model.py first if this fails)")
+        print("(Run scripts/modal/merge_model.py first if this fails)")
         responses = generate_vllm.remote(
             eval_prompts=prompts,
             tag=tag,
