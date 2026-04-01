@@ -21,11 +21,13 @@
 
 ---
 
+*The documents survived. The voices didn't. Madison left behind 468,000 words — every argument he made, every position he took. What was lost is the reasoning: the way he built from historical precedent before invoking principle, the way he held tension between federal power and liberty. The Foundry is an attempt to recover it.*
+
 The Foundry uses Constitutional AI and ORPO fine-tuning to capture the distinctive voices, reasoning patterns, and philosophical positions of key US Founding Fathers — starting with James Madison. Users can engage in one-on-one conversation with a historically grounded founder, or watch two founders debate modern topics from their documented perspectives.
 
 ## Why Madison First
 
-Madison wrote 29 Federalist Papers, kept the most detailed record of the Constitutional Convention, served as Secretary of State and President, and spent his retirement years defending the Union against nullification. His voice is documented across **468,000 words of primary sources** spanning 8 distinct registers — from polished political theory to sharp convention debate to candid private correspondence. This makes him an ideal subject for character fine-tuning: the ground truth is extensive, the voice is distinctive, and authenticity is verifiable against the historical record.
+Madison is the only historical figure whose voice is both extensive enough to train on and verifiable enough to evaluate against. He wrote 29 Federalist Papers, kept the most detailed record of the Constitutional Convention, served as Secretary of State and President, and spent his retirement years defending the Union against nullification. His voice is documented across **468,000 words of primary sources** spanning 8 distinct registers — from polished political theory to sharp convention debate to candid private correspondence. The ground truth is extensive, the voice is distinctive, and authenticity is falsifiable against the historical record.
 
 ## Key Findings (March 2026)
 
@@ -40,6 +42,8 @@ Beyond building a working Madison voice model, this project has produced several
 **4. RLHF safety vs. persona training topology.** The base model's safety training overpowers character fine-tuning on specific topic categories — identity ("describe your drives" → 97% break), moral complexity ("write about slavery" → 83% break), meta-self-description ("write a biography" → 55% break) — while leaving other topics virtually unaffected (0-6% break). This reveals discoverable structure in where safety alignment is strongest vs. weakest.
 
 **5. Gemma 3 VLM architecture complications.** Gemma 3 27B is architecturally a vision-language model (ForConditionalGeneration) even for text-only use, creating cascading vLLM compatibility issues. Converting to ForCausalLM breaks the interleaved sliding window attention pattern. The working workaround is `limit_mm_per_prompt={"image": 0}`. Qwen 3-32B (pure ForCausalLM) avoids this entire class of issues and is now the production base model. ([Details](docs/inference-guide.md))
+
+**6. ORPO→SFT structural incompatibility.** Subsequent SFT after ORPO training catastrophically destroys the ORPO-trained character signal — even at 100× lower learning rate with half the LoRA rank (2.0–2.2/10, down from 8.8). Root cause is structural: ORPO's monolithic objective encodes SFT and preference signal into the same parameter subspace with no reference anchor. A subsequent SFT stage overwrites this jointly-learned manifold completely. This contrasts with DPO→SFT pipelines, where DPO's KL constraint stores preferences as a delta from a reference model that SFT cannot fully displace. **Implication: ORPO trades extensibility for efficiency. Choose DPO if your pipeline requires a subsequent SFT stage.** ([Details](docs/training-methodology.md))
 
 ## Current Status
 
@@ -98,6 +102,10 @@ Beyond the Lambert/Maiya baseline, our pipeline incorporates recent findings:
 - **Chosen quality dominates** — Teacher response quality is the #1 factor in preference optimization success; rejected quality barely matters ([Pan et al., NeurIPS 2025](https://arxiv.org/html/2508.18312v1))
 - **Difficulty filtering** — Remove hardest 15-20% of pairs after first training pass ([ICML 2025](https://arxiv.org/html/2502.09650v1))
 - **Learning rate sensitivity** — Our sweep found lr=2×10⁻⁵ optimal for character imprinting on Qwen 3-32B, contradicting the ORPO paper's recommended lr=8×10⁻⁶. Lower LR disproportionately sacrifices factual grounding while voice categories remain robust.
+
+### Future Research: Pulpit to Parchment
+
+Madison was born Anglican and educated Presbyterian at Princeton under John Witherspoon, whose lectures on moral philosophy blended Scottish Reformed theology with Aristotelian civic virtue. "If men were angels, no government would be necessary" is Reformed doctrine about human corruption translated into institutional design. A natural extension of the Foundry methodology is tracing the intellectual genealogy of American constitutional thought through its theological sources — training character models for Witherspoon, Jonathan Edwards, and George Whitefield, and examining how denominational competition among colonial colleges (Harvard Congregationalism, Princeton Presbyterianism, William and Mary Anglicanism) shaped systematically different political philosophies in Adams, Madison, and Jefferson. Documentation: [`docs/future-research-denominational-roots.md`](docs/future-research-denominational-roots.md)
 
 ## Pipeline
 
@@ -221,6 +229,7 @@ foundry/
 - Pan, Y., et al. (2025). [What Matters in Data for DPO?](https://arxiv.org/html/2508.18312v1). NeurIPS 2025.
 - Gemma 3 Ablations. (2025). [Distillation in Practice](https://huggingface.co/blog/tawnymanticore/gemma3-ablations). HuggingFace.
 - Hunt, G. (ed.) (1900-1910). *The Writings of James Madison*, 9 vols. [Online Library of Liberty](https://oll.libertyfund.org/titles/madison-the-writings-of-james-madison-9-vols).
+- Fernando, H., et al. (2025). [Understanding Forgetting in LLM Supervised Fine-Tuning and Preference Learning](https://arxiv.org/abs/2410.15483). ICLR 2025.
 - Askell, A. et al. (Anthropic). [Claude's Character](https://www.anthropic.com/research/claude-character).
 
 ## License
