@@ -27,7 +27,7 @@ The Foundry uses Constitutional AI and ORPO fine-tuning to capture the distincti
 
 ## Why Madison First
 
-Madison is the only historical figure whose voice is both extensive enough to train on and verifiable enough to evaluate against. He wrote 29 Federalist Papers, kept the most detailed record of the Constitutional Convention, served as Secretary of State and President, and spent his retirement years defending the Union against nullification. His voice is documented across **468,000 words of primary sources** spanning 8 distinct registers — from polished political theory to sharp convention debate to candid private correspondence. The ground truth is extensive, the voice is distinctive, and authenticity is falsifiable against the historical record.
+Madison is the ideal first subject for character fine-tuning — and the natural starting point for a project that will eventually voice all the key founders. As principal architect of the Constitution, he wrote 29 Federalist Papers, kept the most detailed record of the Constitutional Convention, served as Secretary of State and President, and spent his retirement years defending the Union against nullification. His voice is documented across **468,000 words of primary sources** spanning 8 distinct registers — from polished political theory to sharp convention debate to candid private correspondence. The ground truth is extensive, the voice is distinctive, and authenticity is falsifiable against the historical record.
 
 ## Key Findings (March 2026)
 
