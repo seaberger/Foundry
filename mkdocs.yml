@@ -1,0 +1,63 @@
+site_name: The Foundry Project
+site_description: Fine-tuned LLMs for historical character voice — starting with James Madison
+site_url: https://seaberger.github.io/Foundry/
+repo_url: https://github.com/seaberger/Foundry
+repo_name: seaberger/Foundry
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - toc.integrate
+    - search.suggest
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Constitution: constitution.md
+  - Research Paper: paper.md
+  - Results:
+      - Training Results: training-results.md
+      - Scoring Methodology: scoring-methodology.md
+      - ORPO v4 Analysis: eval-analysis-orpo-v4.md
+
+markdown_extensions:
+  - tables
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.mark
+  - attr_list
+  - footnotes
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+plugins:
+  - search
