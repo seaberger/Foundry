@@ -21,7 +21,7 @@
 
 ---
 
-*The documents survived. The voices didn't. Madison left behind 468,000 words — every argument he made, every position he took. What was lost is the reasoning: the way he built from historical precedent before invoking principle, the way he held tension between federal power and liberty. The Foundry is an attempt to recover it.*
+*The documents survived. The voices didn't. Madison left behind every argument he made, every position he took. What was lost is the reasoning: the way he built from historical precedent before invoking principle, the way he held tension between federal power and liberty. The Foundry is an attempt to recover it.*
 
 The Foundry uses Constitutional AI and ORPO fine-tuning to capture the distinctive voices, reasoning patterns, and philosophical positions of key US Founding Fathers — starting with James Madison. Users can engage in one-on-one conversation with a historically grounded founder, or watch two founders debate modern topics from their documented perspectives.
 
@@ -67,7 +67,6 @@ Beyond building a working Madison voice model, this project has produced several
 - [x] Judge bias fix — weighted average override eliminates systematic scoring bias
 - [x] JSON parse repair — fixes judge output parse failures
 - [x] SFT after ORPO proven catastrophic — ORPO's built-in SFT makes subsequent SFT harmful (abandoned)
-
 - [x] GGUF quantization — Q4_K_M (18.4 GB) and Q5_K_M (21.6 GB) on Modal volume
 - [x] Local deployment — Q5_K_M loaded in LM Studio on Mac Mini M4 Pro (64 GB)
 - [x] Learning rate sweep — lr=2e-5 optimal, contradicts ORPO paper's lr=8e-6 recommendation
@@ -230,7 +229,7 @@ foundry/
 - Gemma 3 Ablations. (2025). [Distillation in Practice](https://huggingface.co/blog/tawnymanticore/gemma3-ablations). HuggingFace.
 - Hunt, G. (ed.) (1900-1910). *The Writings of James Madison*, 9 vols. [Online Library of Liberty](https://oll.libertyfund.org/titles/madison-the-writings-of-james-madison-9-vols).
 - Fernando, H., et al. (2025). [Understanding Forgetting in LLM Supervised Fine-Tuning and Preference Learning](https://arxiv.org/abs/2410.15483). ICLR 2025.
-- Askell, A. et al. (Anthropic). [Claude's Character](https://www.anthropic.com/research/claude-character).
+- Askell, A. et al. (2023). [Claude's Character](https://www.anthropic.com/research/claude-character). Anthropic.
 
 ## License
 
