@@ -173,6 +173,32 @@
   margin: 2em 0;
 }
 
+/* Citation links */
+.paper-content .cite-link {
+  text-decoration: none;
+  color: #C5A55A;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.paper-content .cite-link:hover {
+  color: #d4b86a;
+  text-decoration: underline;
+}
+
+.paper-content .cite-link sup {
+  font-size: 0.7em;
+  font-weight: 600;
+  padding: 0 1px;
+}
+
+/* Reference list anchors */
+.paper-content span[id^="ref-"] {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.9em;
+  color: #C5A55A;
+  scroll-margin-top: 80px;
+}
+
 /* Abstract styling */
 .paper-content h2 + p:first-of-type,
 .paper-content .abstract {
