@@ -1,13 +1,13 @@
 # The Foundry Project
 
 ## What This Is
-Fine-tuned character AI that brings America's Founding Fathers into modern conversation. Users chat with or watch debates between historical figures, each voiced by a LoRA fine-tuned model trained on their actual writings.
+Fine-tuned character AI that brings America's Founding Fathers into modern conversation. Users chat with or watch debates between historical figures, each voiced by an ORPO fine-tuned model trained on their actual writings.
 
 ## Architecture
 - **Chamber** (`src/foundry/chamber/`) — Chat and debate web UI. FastAPI + HTMX + SSE streaming. Session persistence in SQLite.
 - **Press** (`src/foundry/press/`) — Training data pipeline. Converts historical writings to ShareGPT format, generates DPO pairs.
 - **Characters** (`src/foundry/characters/`) — Character card loading, validation. YAML profiles in `config/characters/`.
-- **Inference** (`src/foundry/inference/`) — Model serving, LoRA adapter loading/swapping on shared Gemma 3 27B base.
+- **Inference** (`src/foundry/inference/`) — Model serving, LoRA adapter loading/swapping on shared Qwen 3-32B base.
 - **Voice** (`src/foundry/voice/`) — ElevenLabs TTS per character.
 
 ## Tech Stack
@@ -36,7 +36,7 @@ uv run ruff check src/                  # Lint
 1. **Chat first, debate later.** Get one character (Madison) working in conversational mode before building debate infrastructure.
 2. **Clean public repo.** This is open source. No private references, no sensitive content.
 3. **Character accuracy matters.** The voice must be distinguishably Madison's, not generic "old-timey" speech. Test against actual writings.
-4. **Constitutional AI + DPO** for training, per Lambert & Maiya (arXiv:2511.01689). Gemma 3 27B base — takes character imprinting better than Qwen.
+4. **Constitutional AI + ORPO** for training, per Lambert & Maiya (arXiv:2511.01689). Qwen 3-32B base. ORPO R2 scores 8.97/10 corrected.
 5. **Blog the journey.** Document learnings on sbergman.net. Build in public.
 
 ## Character Cards
@@ -52,7 +52,7 @@ When adding a new character:
 Training data comes from three tiers:
 1. **Primary sources** — Actual writings converted to conversational format
 2. **Synthetic debates** — Claude-generated DPO pairs in character voice
-3. **Self-reflection** — On-policy data where the model reasons in character
+3. **Self-reflection** — On-policy data where the model reasons in character. *Note: SFT stage abandoned — ORPO's monolithic loss structure makes subsequent SFT catastrophically destructive to character signal.*
 
 ## Database
 SQLite at `data/foundry.db`. Tables: sessions, turns, character_knowledge, schema_info.

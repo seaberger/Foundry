@@ -14,7 +14,7 @@
 
 ---
 
-The Foundry uses Constitutional AI and DPO fine-tuning to capture the distinctive voices, reasoning patterns, and philosophical positions of key US Founding Fathers — starting with James Madison. Users can engage in one-on-one conversation with a historically grounded founder, or watch two founders debate modern topics from their documented perspectives.
+The Foundry uses Constitutional AI and ORPO fine-tuning to capture the distinctive voices, reasoning patterns, and philosophical positions of key US Founding Fathers — starting with James Madison. Users can engage in one-on-one conversation with a historically grounded founder, or watch two founders debate modern topics from their documented perspectives.
 
 ## Why Madison First
 
@@ -26,13 +26,13 @@ Beyond building a working Madison voice model, this project has produced several
 
 **1. Knowledge-voice decoupling.** Preference training (ORPO) transfers factual knowledge before voice register. With 475 pairs: knowledge score 6.4/10, voice score 1.4/10. Voice required 2.7× more targeted data to imprint. This finding has implications for all character training work.
 
-**2. LoRA quantization fragility.** The same rank-16 LoRA fine-tune scores **8.52/10** at BF16 precision and **1.74/10** at GGUF Q4_K_M — a 4.9× degradation from quantization alone. The thin LoRA deltas are noise-floored by 4-bit rounding errors. This affects all LoRA fine-tunes deployed via GGUF, not just ours. ([Details](docs/eval-analysis-orpo-v4.md))
+**2. LoRA quantization fragility.** On Gemma 3 27B with rank-16 LoRA, the same fine-tune scores **8.52/10** (ORPO v4) at BF16 precision and **1.74/10** at GGUF Q4_K_M — a 4.9× degradation from quantization alone. The thin LoRA deltas are noise-floored by 4-bit rounding errors. Rank-64 on Qwen 3-32B avoids this fragility. This affects all low-rank LoRA fine-tunes deployed via GGUF, not just ours. ([Details](docs/eval-analysis-orpo-v4.md))
 
 **3. Merged vs. adapter-on-base serving.** The same LoRA adapter produces *fundamentally different* output depending on serving method. A prompt that triggers **97% AI-speak character breaks** through the merged model path produces **0% breaks** when served via vLLM LoRA serving (adapter applied at inference time, never merged). Merging bakes the LoRA signal into the weight distribution where it interacts with RLHF safety attractors; adapter-on-base preserves the signal at full precision. ([Details](docs/inference-guide.md))
 
 **4. RLHF safety vs. persona training topology.** The base model's safety training overpowers character fine-tuning on specific topic categories — identity ("describe your drives" → 97% break), moral complexity ("write about slavery" → 83% break), meta-self-description ("write a biography" → 55% break) — while leaving other topics virtually unaffected (0-6% break). This reveals discoverable structure in where safety alignment is strongest vs. weakest.
 
-**5. Gemma 3 VLM architecture complications.** Gemma 3 27B is architecturally a vision-language model (ForConditionalGeneration) even for text-only use, creating cascading vLLM compatibility issues. Converting to ForCausalLM breaks the interleaved sliding window attention pattern. The working workaround is `limit_mm_per_prompt={"image": 0}`. Qwen 3-32B (pure ForCausalLM) avoids this entire class of issues and is under evaluation as an alternative base model. ([Details](docs/inference-guide.md))
+**5. Gemma 3 VLM architecture complications.** Gemma 3 27B is architecturally a vision-language model (ForConditionalGeneration) even for text-only use, creating cascading vLLM compatibility issues. Converting to ForCausalLM breaks the interleaved sliding window attention pattern. The working workaround is `limit_mm_per_prompt={"image": 0}`. Qwen 3-32B (pure ForCausalLM) avoids this entire class of issues and is now the production base model. ([Details](docs/inference-guide.md))
 
 ## Current Status
 
@@ -41,24 +41,25 @@ Beyond building a working Madison voice model, this project has produced several
 ### Completed
 - [x] Madison primary source corpus — 140 documents, 468K words, 8 voice registers
 - [x] Madison constitution — 5K word character document from primary sources + 7 biographies
-- [x] 1,273 ORPO training pairs (475 original + 399 voice-targeted + 2x upsample)
 - [x] 36-prompt evaluation harness with LLM judge + prompt caching
 - [x] DPO v1 → collapsed (replicated "Objective Matters" persona drift finding)
 - [x] ORPO v3b → 3.41/10 (knowledge OK, voice failed — knowledge-voice decoupling)
-- [x] ORPO v4 → **8.52/10 corrected** (voice-targeted augmentation succeeded)
+- [x] ORPO v4 (Gemma 3 27B) → **8.52/10 corrected** (voice-targeted augmentation succeeded)
 - [x] Infrastructure confound discovery — Ollama GGUF (1.74) vs Modal BF16 (8.52) was inference, not training
 - [x] Judge scoring bug fix — Sonnet intermittently omits overall_score, fallback computation added
 - [x] vLLM LoRA serving probe — adapter-on-base eliminates character breaks on sensitive topics
 - [x] Introspection SFT data generated — 415 clean reflections + 19 dialogues (~459K tokens)
-
-### In Progress
-- [ ] Introspection SFT training (Stage 2 — running on Modal)
-- [ ] Post-SFT evaluation against v4 baseline
+- [x] Qwen 3-32B validation — pure ForCausalLM, no VLM bugs, now production base model
+- [x] ORPO v1 (Qwen 3-32B) → **8.81/10 corrected** (successful base model migration)
+- [x] ORPO v2 (Qwen 3-32B) → **8.82/10 corrected**
+- [x] ORPO R2 (Qwen 3-32B) → **8.97/10 corrected** (production model, v6 dataset — 1,498 pairs)
+- [x] Judge bias fix — weighted average override eliminates systematic scoring bias
+- [x] JSON parse repair — fixes judge output parse failures
+- [x] SFT after ORPO proven catastrophic — ORPO's built-in SFT makes subsequent SFT harmful (abandoned)
 
 ### Next Steps
-- [ ] Test vLLM LoRA serving mode as production serving path
-- [ ] Qwen 3-32B validation experiment (pure ForCausalLM, no VLM bugs)
-- [ ] v5 ORPO with rank 64 targeting character break prompts
+- [ ] GGUF quantization of R2 model
+- [ ] Hamilton character development
 - [ ] Chamber chat demo for fellowship application
 
 ## Research Approach
@@ -99,7 +100,7 @@ Rich Constitution (5K words, 9 sections)
     |
     v
 Teacher Model ──────────────────── Student Model
-(Sonnet 4.6 as Madison              (Base Gemma 3 27B, no persona
+(Sonnet 4.6 as Madison              (Base Qwen 3-32B, no persona
  with constitution)                   "what Madison wouldn't say")
     |                                     |
     v                                     v
@@ -108,7 +109,7 @@ Teacher Model ──────────────────── Stude
               |
               v
     QLoRA ORPO Training on Modal A100
-    (beta=0.1, lr=2e-5, rank=16)
+    (beta=0.1, lr=2e-5, rank=64)
               |
               v
     Evaluation Harness (36 prompts, 6 categories,
@@ -154,7 +155,7 @@ The evaluation harness scores model responses on 5 dimensions using Sonnet 4.6 a
 
 | Founder | Status | Source Material |
 |---------|--------|----------------|
-| **James Madison** | Active — DPO training in progress | 468K words, 140 documents |
+| **James Madison** | ORPO R2 — **8.97/10** (production) | 468K words, 140 documents |
 | **Alexander Hamilton** | Character card complete, corpus pending | Federalist Papers (51 essays), Treasury reports |
 | Thomas Jefferson | Planned | Declaration, Notes on Virginia, correspondence |
 | John Adams | Planned | Defence of the Constitutions, correspondence |
@@ -189,7 +190,7 @@ foundry/
 ## Tech Stack
 
 - **Training:** Unsloth + QLoRA ORPO on Modal A100-80GB
-- **Base Model:** Gemma 3 27B (evaluating Qwen 3-32B as alternative)
+- **Base Model:** Qwen 3-32B
 - **Serving:** vLLM with LoRA serving mode (adapter-on-base, best quality) or `limit_mm_per_prompt` workaround (merged model)
 - **Teacher Model:** Claude Sonnet 4.6 with prompt caching
 - **Evaluation:** LLM-as-judge (Sonnet 4.6) with constitutional rubric + prompt caching (~$0.50 per 36-prompt eval)

@@ -2,13 +2,13 @@
 
 How we fine-tune LLMs to speak as James Madison.
 
-**Last updated:** 2026-03-29
+**Last updated:** 2026-03-31
 
 ---
 
 ## Base Model
 
-**Qwen 3-32B** (current, since 2026-03-29) — Pure text-only `ForCausalLM` that eliminates all Gemma 3 infrastructure issues. ORPO v1 scored 8.8/10, outperforming Gemma 3 v4 (8.17/10) with the same training data. Biggest gains on character_consistency (+2.25) and private_voice (+1.70).
+**Qwen 3-32B** (PRODUCTION, since 2026-03-29) — Pure text-only `ForCausalLM` that eliminates all Gemma 3 infrastructure issues. Round 2 ORPO scored 8.97/10 corrected (v6 dataset, 1,498 pairs), up from v1's 8.81 corrected. Biggest gains over Gemma 3 v4 (8.17/10) on character_consistency (+2.25) and private_voice (+1.70).
 
 **Gemma 3 27B** (original, deprecated) — Lambert's research found Gemma variants take character imprinting better than Qwen (which resists personality modification) or Llama. This claim was disproven for Qwen 3 — the "resistance to personality modification" was unsubstantiated. Gemma 3's VLM architecture caused persistent infrastructure issues (multimodal processor crashes, sliding window attention bugs, GGUF quantization fragility, vLLM workarounds).
 
@@ -125,15 +125,15 @@ Maiya et al. used ~14M tokens per character per model. Our target is similar.
 
 ## Training Configuration
 
-Based on Maiya et al. and Unsloth recommendations for Gemma:
+Based on Maiya et al. and empirical tuning on Qwen 3-32B:
 
 | Parameter | Value | Source |
 |-----------|-------|--------|
-| Method | QLoRA (4-bit quantized) | Unsloth |
-| LoRA rank | 64 | Maiya et al. |
-| LoRA alpha | 128 | Maiya et al. |
+| Method | QLoRA ORPO (4-bit quantized) | Unsloth |
+| LoRA rank | 64 | Validated on Qwen 3 |
+| LoRA alpha | 64 | Validated on Qwen 3 |
 | Batch size | 32 | Maiya et al. |
-| Learning rate | 5e-5 | Maiya et al. |
+| Learning rate | 2e-5 | Empirical (Qwen 3 production) |
 | DPO beta | 0.1 | Maiya et al. |
 | Max sequence length | 1024 tokens | Maiya et al. |
 | Hardware | Modal A100 80GB | $5-20/run |
@@ -243,7 +243,7 @@ Load the LoRA adapter in LM Studio (or on Modal). Run all behavioral test cases.
 
 ### Step 7.5: Voice-Targeted ORPO Round (NEW — informed by v3b eval)
 
-**Status:** PLANNED — required before introspection SFT
+**Status:** COMPLETED — v4 dataset (1,273 pairs) validated on Gemma 3 and Qwen 3. Extended to v6 dataset (1,498 pairs) for Round 2 ORPO. See "Round 2 ORPO Results" section below.
 
 **Problem discovered:** ORPO v3b eval (2026-03-26) revealed a knowledge-voice decoupling. The model learned Madison's factual positions (verified_response category = 6.4/10) but failed to enforce the voice register (anachronism_trap = 1.4/10). The base Gemma 3 assistant style bleeds through — contractions, bullet points, modern phrasing. See `docs/eval-analysis-orpo-v3b.md` for full analysis.
 
@@ -349,11 +349,11 @@ Fresh ORPO from base Gemma 3 27B (NOT continuing from v3b adapter).
 
 **Total cost for Step 7.5:** ~$6.15 (Sonnet chosen) + ~$0.50 (eval judge) + ~$5-20 (Modal training) = **~$12-27**
 
-### Step 8: Introspection SFT (Stage 2 — Lambert Method)
+### Step 8: Introspection SFT (Stage 2 — Lambert Method) — ABANDONED
 
 **Prerequisite:** Step 7.5 voice-targeted round must achieve voice_authenticity ≥ 5.0 — **MET (8.52 corrected mean, all categories above 7.0)**
 
-**Status:** SFT v1 FAILED — trained on wrong base model (novision/ForCausalLM). Must redo on VLM base or Qwen 3-32B. Data generation complete, SFT data validated. See "SFT v1 Failure Analysis" below.
+**Status:** ABANDONED (2026-03-31). SFT after ORPO is catastrophically destructive to character signal. Empirically confirmed across four attempts: Gemma 3 SFT v1 (1.42/10), Qwen 3 SFT v1 (2.0/10), Qwen 3 SFT v2 (2.2/10) — even at lr=1e-6 with rank 8. ORPO's monolithic loss structure (`SFT_loss + lambda * preference_loss`) means the preference-learned character signal is tightly coupled to the SFT component within ORPO itself. Applying a second SFT stage catastrophically interferes with both, reverting the model to base assistant behavior. The two-stage pattern from Maiya/Lambert (DPO then SFT) does not transfer to ORPO because DPO is a pure preference method with no SFT component — stacking SFT after DPO adds new signal, while stacking SFT after ORPO overwrites existing signal.
 
 The voice-corrected model generates self-reflective data, then we SFT on it to crystallize the character. Based on Maiya et al. Appendix B, adapted for Madison.
 
@@ -490,7 +490,71 @@ For dialogues, each (user, assistant) turn pair becomes a separate SFT example w
 
 **The SFT data was good. The training base was wrong.** The 415 filtered reflections + 19 dialogues (~459K tokens) passed all quality filters. The novision architecture was the sole cause of failure.
 
-**Current best model: Qwen 3-32B ORPO v1 via LoRA serving at 8.8/10.** (Previously: Gemma 3 ORPO v4 at 8.17/10.)
+**Current best model: Qwen 3-32B ORPO R2 via merged 16-bit at 8.97/10 corrected.** (Previously: v1 at 8.81, v2 at 8.82.)
+
+## Round 2 ORPO Results (2026-03-31)
+
+Round 2 (R2) is the current production model, trained on the v6 dataset with source-enriched preference pairs.
+
+### Dataset: v6 (1,498 pairs)
+
+The v6 dataset expands the v4 dataset (1,273 pairs) with Round 2 source-enriched pairs generated from Madison's primary writings:
+
+| Source | Count | Description |
+|---|---|---|
+| Original content pairs | 475 | From initial DPO pipeline (Steps 2-5) |
+| Voice-targeted pairs | 399 | Sonnet chosen + v3b/base rejected (Step 7.5) |
+| Round 2 batch1 + batch2 | 624 | Source-enriched pairs from Madison's actual writings |
+| **Total** | **1,498** | |
+
+The Round 2 pairs were generated from Madison's Federalist Papers, speeches, and correspondence — converting authentic source material into preference pairs where chosen responses draw directly from Madison's vocabulary and reasoning.
+
+### Training Configuration
+
+| Parameter | Value |
+|---|---|
+| Base model | `Qwen/Qwen3-32B` (instruct, pure ForCausalLM) |
+| Method | QLoRA ORPO |
+| LoRA rank | 64 |
+| LoRA alpha | 64 |
+| Learning rate | 2e-5 |
+| Beta | 0.1 |
+| Epochs | 3 |
+| Hardware | Modal A100-80GB |
+
+### Corrected Eval Scores
+
+All scores corrected using weighted average override (replacing the judge's raw averages with properly weighted category means) and JSON repair for malformed judge responses.
+
+| Model | Corrected Score |
+|---|---|
+| Qwen 3 ORPO v1 | 8.81 |
+| Qwen 3 ORPO v2 | 8.82 |
+| **Qwen 3 ORPO R2** | **8.97** |
+
+### R2 Category Breakdown
+
+| Category | R2 Score |
+|---|---|
+| character_consistency | 9.41 |
+| anachronism_trap | 9.39 |
+| position_discrimination | 9.25 |
+| ground_truth | 8.85 |
+| private_voice | 8.75 |
+| verified_response | 8.53 |
+
+### Judge Pipeline Improvements
+
+Two fixes were applied to the evaluation pipeline during R2 development:
+
+1. **Weighted average override** — The Sonnet judge's raw overall score was an unweighted average across categories. The corrected scoring uses a weighted average that accounts for the number of prompts per category. This retroactively corrected v1 (8.8→8.81) and v2 (8.87→8.82).
+
+2. **JSON repair** — The judge occasionally produced malformed JSON (trailing commas, unquoted keys). A repair pass was added to `scripts/data/judge_responses.py` to salvage these responses instead of dropping them.
+
+### Artifacts
+
+- 16-bit merged model: Modal volume at `merged/madison-qwen3-r2-v1-16bit`
+- Dataset: `data/training/madison-orpo-v6.jsonl`
 
 ### Step 9: Iterate — Next Steps After SFT Eval
 
@@ -586,7 +650,7 @@ Cost: ~$10 (training $8 + eval $2)
 
 **Cost:** ~$15-25 (data generation + training + eval)
 
-#### 9d. Introspection SFT on Qwen 3-32B — FAILED (2026-03-30)
+#### 9d. Introspection SFT on Qwen 3-32B — ABANDONED (2026-03-30)
 
 **Two attempts, both catastrophic regressions:**
 
@@ -614,9 +678,9 @@ The failure is structural, not hyperparameter-related. Several hypotheses need i
 
 4. **Adapter stacking via merge.** We merged ORPO into the base weights, then applied fresh SFT LoRA. The merge operation (4-bit → dequantize → merge → re-quantize) introduces quantization noise that may degrade the ORPO character signal before SFT even begins. An alternative approach would be adapter stacking without merging, but vLLM LoRA serving doesn't support multi-adapter stacks.
 
-**Action required before next attempt:** Revisit Maiya & Lambert (arXiv:2511.01689) Appendix B in detail. Their introspection SFT stage used DPO as the first stage (not ORPO), trained smaller models, and generated introspection data from the DPO-tuned model itself (on-policy). All three differences may matter. Document specific methodology differences before designing a new approach.
+**Conclusion (2026-03-31): Stage 2 SFT is ABANDONED.** Hypothesis #2 is confirmed as the primary cause — ORPO's monolithic loss structure means SFT after ORPO catastrophically destroys character signal. The Maiya/Lambert two-stage pattern (DPO then SFT) does not transfer to ORPO. Future character improvement must come through additional ORPO rounds with better data, not through post-ORPO SFT.
 
-**Current best model: Qwen 3-32B ORPO v1 via LoRA serving at 8.8/10.** SFT is not a viable improvement path with current data and methodology.
+**Current best model: Qwen 3-32B ORPO R2 via merged 16-bit at 8.97/10 corrected.** SFT is not a viable improvement path when using ORPO as the preference method.
 
 #### 9e. Quantization-Aware Training (QAT)
 
@@ -673,15 +737,15 @@ Behavioral Tests → eval-prompts.jsonl (36 prompts, 6 categories)    ✅ DONE
                        ↓
     Qwen 3-32B Validation (100 pairs, rank 64)                        ✅ DONE (infra validated)
              ↓
-    Qwen 3-32B Full ORPO v1 (1,273 pairs, rank 64, lr=2e-5)         ✅ DONE (8.8/10 — NEW BEST)
+    Qwen 3-32B Full ORPO v1 (1,273 pairs, rank 64, lr=2e-5)         ✅ DONE (8.81 corrected)
     │  +2.25 on character_consistency, +1.70 on private_voice
              ↓
-    Introspection SFT Data Gen (self-reflection + self-interaction)
-    │  Now the model generates in Madisonian voice
+    Introspection SFT on Qwen 3                                       ❌ ABANDONED (2.0-2.2/10)
+    │  SFT after ORPO catastrophically destroys character signal
              ↓
-    SFT Training on Qwen 3 (no architecture issues)
-             ↓
-    Final Eval → Iterate if needed
+    Round 2 ORPO (v6 dataset, 1,498 pairs, rank 64, lr=2e-5)         ✅ DONE (8.97 corrected — BEST)
+    │  Source-enriched pairs from Madison's writings
+    │  16-bit merged model: merged/madison-qwen3-r2-v1-16bit
              ↓
     GGUF Q4_K_M (rank 64 should survive quantization)
              ↓
@@ -705,7 +769,8 @@ Behavioral Tests → eval-prompts.jsonl (36 prompts, 6 categories)    ✅ DONE
 | **9b. Qwen 3 validation** | **~$5 (Modal)** | **~30 min** | **A100-80GB** | **DONE (infra validated)** |
 | **9b-full. Qwen 3 full ORPO v1** | **~$10 (Modal)** | **~3 hours** | **A100-80GB** | **DONE (8.8/10 — BEST)** |
 | **9b-v2. Qwen 3 ORPO v2 (on-policy rejected)** | **~$15 (Modal)** | **~6 hours** | **A100-80GB** | **DONE (8.87 corrected)** |
-| **9d. Introspection SFT on Qwen 3** | **~$10 (Modal)** | **~2 hours** | **A100-80GB** | **FAILED (2.0-2.2/10)** |
+| **9d. Introspection SFT on Qwen 3** | **~$10 (Modal)** | **~2 hours** | **A100-80GB** | **ABANDONED (2.0-2.2/10)** |
+| **R2. Round 2 ORPO (v6 dataset)** | **~$15 (Modal)** | **~3 hours** | **A100-80GB** | **DONE (8.97/10 — BEST)** |
 | 9c. v5 ORPO (character breaks) | $15-25 | 1-2 sessions | Modal + Sonnet | PLANNED |
 | 10. Deploy | $0 | 30 min | vLLM LoRA serving | PLANNED |
 | **Total** | **$50-80** | **~6-8 work sessions** | | |
