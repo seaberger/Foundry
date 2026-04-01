@@ -33,22 +33,55 @@ jobs:
       - name: Install MkDocs Material
         run: pip install mkdocs-material
 
-      - name: Copy constitution into docs
+      - name: Prepare constitution with sidenotes
         run: |
-          # Wrap constitution in div for custom styling
-          echo '<div class="constitution-content" markdown>' > docs/constitution.md
-          echo '' >> docs/constitution.md
-          cat config/constitutions/madison-5k.md >> docs/constitution.md
-          echo '' >> docs/constitution.md
-          echo '</div>' >> docs/constitution.md
+          python3 << 'PYEOF'
+          import re
 
-      - name: Copy paper into docs with Distill wrapper
+          with open("config/constitutions/madison-5k.md") as f:
+              text = f.read()
+
+          # Convert inline citations like *(Cheney, p.45)* to sidenote spans
+          # Pattern: text in italics that looks like a citation (Author, p.XX) or (Author)
+          def to_sidenote(m):
+              cite = m.group(1)
+              return f'\n<span class="sidenote">{cite}</span>\n'
+
+          # Match *(...citation text...)* patterns that contain author names
+          text = re.sub(
+              r'\*\(([^)]*(?:Cheney|Ketcham|Feldman|Ellis|Leibiger|Burstein|Isenberg|Madison|Hunt|Rakove|McCoy|Banning)[^)]*)\)\*',
+              to_sidenote,
+              text
+          )
+
+          # Also match *(Source: ...)* patterns
+          text = re.sub(
+              r'\*\((Source:[^)]*)\)\*',
+              to_sidenote,
+              text
+          )
+
+          # Wrap in constitution styling div
+          output = '<div class="constitution-content" markdown>\n\n'
+          output += text
+          output += '\n\n</div>\n'
+
+          with open("docs/constitution.md", "w") as f:
+              f.write(output)
+
+          print(f"Constitution processed: {len(text)} chars")
+          PYEOF
+
+      - name: Prepare paper with Distill wrapper
         run: |
-          echo '<div class="paper-content" markdown>' > docs/paper.md
-          echo '' >> docs/paper.md
-          cat paper/drafts/v0.2-draft.md >> docs/paper.md
-          echo '' >> docs/paper.md
-          echo '</div>' >> docs/paper.md
+          {
+            echo '<div class="paper-content" markdown>'
+            echo ''
+            cat paper/drafts/v0.2-draft.md
+            echo ''
+            echo '</div>'
+          } > docs/paper.md
+          echo "Paper prepared: $(wc -c < docs/paper.md) bytes"
 
       - name: Build site
         run: mkdocs build

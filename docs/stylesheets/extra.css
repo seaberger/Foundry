@@ -1,16 +1,110 @@
 /* ============================================================
-   Foundry Docs — Custom Styles
+   Foundry Docs — Gold Anvil Theme
+   Brand: gold (#C5A55A) on dark (#1a1a1a)
    ============================================================ */
 
-/* --- Paper page: Distill/ar5iv scholarly styling --- */
+/* --- Brand colors override Material theme --- */
 
-.md-content[data-md-component="content"] .paper-content {
-  max-width: 720px;
+:root {
+  --md-primary-fg-color: #2c2418;
+  --md-primary-fg-color--light: #3d3225;
+  --md-primary-fg-color--dark: #1a1810;
+  --md-primary-bg-color: #f5f0e6;
+  --md-accent-fg-color: #C5A55A;
+  --md-accent-fg-color--transparent: #C5A55A33;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #1a1810;
+  --md-primary-fg-color--light: #2c2418;
+  --md-primary-fg-color--dark: #0d0c08;
+  --md-primary-bg-color: #e8dcc8;
+  --md-accent-fg-color: #C5A55A;
+  --md-accent-fg-color--transparent: #C5A55A33;
+  --md-default-fg-color: #e0d8c8;
+  --md-default-fg-color--light: #c8bda8;
+  --md-default-fg-color--lighter: #a89878;
+  --md-default-bg-color: #1a1a1a;
+  --md-default-bg-color--light: #222222;
+  --md-code-bg-color: #252520;
+  --md-typeset-color: #e0d8c8;
+  --md-typeset-a-color: #C5A55A;
+}
+
+/* Header bar */
+.md-header {
+  background: #1a1810;
+}
+
+[data-md-color-scheme="slate"] .md-header {
+  background: #0d0c08;
+}
+
+.md-header__title {
+  color: #C5A55A;
+}
+
+/* Tabs */
+.md-tabs {
+  background: #2c2418;
+}
+
+[data-md-color-scheme="slate"] .md-tabs {
+  background: #1a1810;
+}
+
+.md-tabs__link--active, .md-tabs__link:hover {
+  color: #C5A55A;
+}
+
+/* Links */
+.md-typeset a {
+  color: #9a7d3a;
+}
+
+[data-md-color-scheme="slate"] .md-typeset a {
+  color: #C5A55A;
+}
+
+[data-md-color-scheme="slate"] .md-typeset a:hover {
+  color: #d4b86a;
+}
+
+/* Tables */
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) th {
+  background: #2a2520;
+  color: #C5A55A;
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) td {
+  border-color: #3a3530;
+}
+
+/* Nav sidebar */
+[data-md-color-scheme="slate"] .md-nav__link:hover {
+  color: #C5A55A;
+}
+
+[data-md-color-scheme="slate"] .md-nav__link--active {
+  color: #C5A55A;
+}
+
+/* Search */
+[data-md-color-scheme="slate"] .md-search__input {
+  background: #252520;
+  color: #e0d8c8;
+}
+
+/* ============================================================
+   Paper page: Distill/ar5iv scholarly styling
+   ============================================================ */
+
+.paper-content {
+  max-width: 740px;
   margin: 0 auto;
   font-family: "Georgia", "Times New Roman", serif;
   font-size: 1.05rem;
-  line-height: 1.75;
-  color: #333;
+  line-height: 1.78;
 }
 
 .paper-content h1 {
@@ -22,11 +116,11 @@
 }
 
 .paper-content h2 {
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 700;
   margin-top: 2.5em;
   padding-bottom: 0.3em;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--md-default-fg-color--lighter);
 }
 
 .paper-content h3 {
@@ -35,79 +129,67 @@
   margin-top: 1.8em;
 }
 
-.paper-content .authors {
-  text-align: center;
-  font-size: 1.1rem;
-  color: #555;
-  margin-bottom: 0.5em;
+.paper-content h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 1.5em;
 }
 
-.paper-content .paper-date {
-  text-align: center;
-  font-size: 0.95rem;
-  color: #777;
-  margin-bottom: 2em;
-}
-
-.paper-content .abstract {
-  background: #f8f9fa;
-  border-left: 4px solid #6a1b9a;
-  padding: 1.25em 1.5em;
-  margin: 2em 0;
-  font-style: italic;
-  font-size: 0.98rem;
-}
-
-.paper-content .abstract strong {
-  font-style: normal;
+.paper-content p {
+  text-align: justify;
+  hyphens: auto;
+  margin-bottom: 1em;
 }
 
 .paper-content blockquote {
-  border-left: 3px solid #ccc;
+  border-left: 3px solid #C5A55A;
   padding-left: 1em;
-  color: #555;
   font-style: italic;
+  opacity: 0.9;
 }
 
 .paper-content table {
   font-family: "Helvetica Neue", Arial, sans-serif;
   font-size: 0.88rem;
   margin: 1.5em auto;
-}
-
-.paper-content table th {
-  background: #f5f5f5;
-  font-weight: 600;
+  width: auto;
 }
 
 .paper-content code {
   font-size: 0.85em;
-  background: #f5f5f5;
-  padding: 0.15em 0.35em;
-  border-radius: 3px;
 }
 
-.paper-content p {
-  text-align: justify;
-  hyphens: auto;
+.paper-content strong {
+  font-weight: 700;
 }
 
-/* Footnote-style references */
-.paper-content .footnote-ref {
-  font-size: 0.75em;
-  vertical-align: super;
-  color: #6a1b9a;
+.paper-content em {
+  font-style: italic;
 }
 
-/* --- Constitution page: Historical document styling --- */
+.paper-content hr {
+  border: none;
+  border-top: 1px solid var(--md-default-fg-color--lighter);
+  margin: 2em 0;
+}
 
-.md-content[data-md-component="content"] .constitution-content {
+/* Abstract styling */
+.paper-content h2 + p:first-of-type,
+.paper-content .abstract {
+  font-style: normal;
+}
+
+/* ============================================================
+   Constitution page: Historical document styling with sidenotes
+   ============================================================ */
+
+.constitution-content {
   max-width: 680px;
   margin: 0 auto;
   font-family: "Georgia", "Palatino Linotype", "Book Antiqua", serif;
   font-size: 1.08rem;
   line-height: 1.85;
-  color: #2c2c2c;
+  position: relative;
 }
 
 .constitution-content h1 {
@@ -118,8 +200,16 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 0.5em;
-  border-bottom: 2px double #8b7355;
   padding-bottom: 0.5em;
+}
+
+/* Light mode: dark gold border */
+.constitution-content h1 {
+  border-bottom: 2px double #8b7355;
+}
+
+[data-md-color-scheme="slate"] .constitution-content h1 {
+  border-bottom: 2px double #C5A55A;
 }
 
 .constitution-content h2 {
@@ -127,17 +217,32 @@
   font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #5c4a32;
   margin-top: 2.5em;
-  border-bottom: 1px solid #d4c5a9;
   padding-bottom: 0.3em;
+}
+
+.constitution-content h2 {
+  color: #5c4a32;
+  border-bottom: 1px solid #d4c5a9;
+}
+
+[data-md-color-scheme="slate"] .constitution-content h2 {
+  color: #C5A55A;
+  border-bottom: 1px solid #5c4a32;
 }
 
 .constitution-content h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #6b5b45;
   margin-top: 1.5em;
+}
+
+.constitution-content h3 {
+  color: #6b5b45;
+}
+
+[data-md-color-scheme="slate"] .constitution-content h3 {
+  color: #b89a5a;
 }
 
 .constitution-content p {
@@ -146,61 +251,156 @@
   hyphens: auto;
 }
 
-.constitution-content p:first-of-type {
+.constitution-content h1 + p,
+.constitution-content h2 + p,
+.constitution-content h3 + p,
+.constitution-content hr + p,
+.constitution-content ul + p,
+.constitution-content ol + p,
+.constitution-content blockquote + p {
   text-indent: 0;
 }
 
-/* Citation markers */
-.constitution-content em {
-  color: #7a6a52;
-  font-size: 0.92em;
-}
-
-/* Source key styling */
-.constitution-content .source-key {
-  background: #faf6ef;
-  border: 1px solid #e0d5c0;
-  padding: 1em 1.5em;
-  margin: 1.5em 0;
-  font-size: 0.9rem;
-}
-
 .constitution-content blockquote {
-  border-left: 3px solid #c4a96a;
+  border-left: 3px solid #C5A55A;
   padding-left: 1.25em;
-  color: #5c4a32;
   font-style: italic;
 }
 
-/* --- Dark mode overrides --- */
-
-[data-md-color-scheme="slate"] .paper-content {
-  color: #ccc;
+/* Source citations — styled as sidenotes on wide screens */
+.constitution-content .sidenote {
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #8b7355;
+  font-style: italic;
 }
 
-[data-md-color-scheme="slate"] .paper-content .abstract {
-  background: #1e1e2e;
-  border-left-color: #9c4dcc;
+[data-md-color-scheme="slate"] .constitution-content .sidenote {
+  color: #a89060;
 }
 
-[data-md-color-scheme="slate"] .paper-content table th {
-  background: #2a2a3a;
+@media (min-width: 1200px) {
+  .constitution-content {
+    position: relative;
+  }
+
+  .constitution-content .sidenote {
+    position: absolute;
+    right: -220px;
+    width: 190px;
+    font-size: 0.75rem;
+    text-indent: 0;
+    text-align: left;
+    border-left: 2px solid #C5A55A;
+    padding-left: 8px;
+    margin-top: 0;
+  }
 }
 
-[data-md-color-scheme="slate"] .constitution-content {
-  color: #d4c5a9;
+/* Source key box */
+.constitution-content .source-key {
+  padding: 1em 1.5em;
+  margin: 1.5em 0;
+  font-size: 0.9rem;
+  text-indent: 0;
+  border-radius: 4px;
 }
 
-[data-md-color-scheme="slate"] .constitution-content h1 {
-  border-bottom-color: #7a6a52;
-}
-
-[data-md-color-scheme="slate"] .constitution-content h2 {
-  color: #c4a96a;
-  border-bottom-color: #5c4a32;
+.constitution-content .source-key {
+  background: #faf6ef;
+  border: 1px solid #e0d5c0;
 }
 
 [data-md-color-scheme="slate"] .constitution-content .source-key {
-  background: #1e1e2e;
-  border-color: #3a3a4a;
+  background: #222018;
+  border: 1px solid #3a3528;
+}
+
+/* ============================================================
+   Home page fixes
+   ============================================================ */
+
+/* Card grid for home page */
+.doc-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5em;
+  margin: 2em 0;
+}
+
+.doc-card {
+  padding: 1.5em;
+  border-radius: 8px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.doc-card {
+  border: 1px solid #e0d5c0;
+  background: #faf8f2;
+}
+
+[data-md-color-scheme="slate"] .doc-card {
+  border: 1px solid #3a3528;
+  background: #222018;
+}
+
+.doc-card:hover {
+  box-shadow: 0 4px 12px rgba(197, 165, 90, 0.2);
+  transform: translateY(-2px);
+}
+
+.doc-card h3 {
+  margin-top: 0;
+  font-size: 1.15rem;
+}
+
+.doc-card h3 a {
+  text-decoration: none;
+}
+
+.doc-card p {
+  font-size: 0.92rem;
+  margin-bottom: 0;
+  opacity: 0.85;
+}
+
+/* ============================================================
+   General dark mode readability
+   ============================================================ */
+
+[data-md-color-scheme="slate"] .md-typeset {
+  color: #e0d8c8;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1,
+[data-md-color-scheme="slate"] .md-typeset h2,
+[data-md-color-scheme="slate"] .md-typeset h3,
+[data-md-color-scheme="slate"] .md-typeset h4 {
+  color: #f0e8d8;
+}
+
+[data-md-color-scheme="slate"] .md-typeset strong {
+  color: #f0e8d8;
+}
+
+[data-md-color-scheme="slate"] .md-content {
+  background: #1a1a1a;
+}
+
+[data-md-color-scheme="slate"] .md-sidebar {
+  background: #1a1a1a;
+}
+
+[data-md-color-scheme="slate"] .md-footer {
+  background: #0d0c08;
+}
+
+/* Code blocks */
+[data-md-color-scheme="slate"] .md-typeset code {
+  background: #2a2820;
+  color: #d4c8a8;
+}
+
+[data-md-color-scheme="slate"] .md-typeset pre > code {
+  background: #1e1e18;
 }

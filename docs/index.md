@@ -10,40 +10,35 @@ The Foundry uses Constitutional AI and ORPO fine-tuning to capture the distincti
 
 ## Key Documents
 
-<div class="grid cards" markdown>
+<div class="doc-cards" markdown>
+<div class="doc-card" markdown>
 
--   :material-scroll-text:{ .lg .middle } **The Madison Constitution**
+### [The Madison Constitution](constitution.md)
 
-    ---
+5,000-word first-person character document synthesized from 468,000 words of primary sources and 1.8 million words of scholarly biography. The richest character constitution ever used for LLM fine-tuning.
 
-    5,000-word first-person character document synthesized from 468,000 words of primary sources and 1.8 million words of scholarly biography. The richest character constitution ever used for LLM fine-tuning.
+</div>
+<div class="doc-card" markdown>
 
-    [:octicons-arrow-right-24: Read the Constitution](constitution.md)
+### [Research Paper](paper.md)
 
--   :material-file-document:{ .lg .middle } **Research Paper**
+Full methodology and findings: knowledge-voice decoupling, LoRA quantization fragility, ORPO vs SFT, learning rate sensitivity, and source-enriched data generation.
 
-    ---
+</div>
+<div class="doc-card" markdown>
 
-    Full methodology and findings: knowledge-voice decoupling, LoRA quantization fragility, ORPO vs SFT, learning rate sensitivity, and source-enriched data generation.
+### [Training Results](training-results.md)
 
-    [:octicons-arrow-right-24: Read the Paper](paper.md)
+Comprehensive record of every training run from DPO v1 through ORPO R2 with per-run configs, category scores, and detailed analysis.
 
--   :material-chart-line:{ .lg .middle } **Training Results**
+</div>
+<div class="doc-card" markdown>
 
-    ---
+### [Scoring Methodology](scoring-methodology.md)
 
-    Comprehensive record of every training run from DPO v1 through ORPO R2 with per-run configs, category scores, and detailed analysis.
+How we evaluate models: 5 weighted dimensions, LLM judge with constitutional rubric, weighted average override, and JSON parse repair.
 
-    [:octicons-arrow-right-24: View Results](training-results.md)
-
--   :material-scale-balance:{ .lg .middle } **Scoring Methodology**
-
-    ---
-
-    How we evaluate models: 5 weighted dimensions, LLM judge with constitutional rubric, weighted average override, and JSON parse repair.
-
-    [:octicons-arrow-right-24: View Methodology](scoring-methodology.md)
-
+</div>
 </div>
 
 ## Current Status
@@ -57,4 +52,4 @@ The Foundry uses Constitutional AI and ORPO fine-tuning to capture the distincti
 
 ## Source Code
 
-[:fontawesome-brands-github: View on GitHub](https://github.com/seaberger/Foundry){ .md-button }
+[View on GitHub](https://github.com/seaberger/Foundry){ .md-button }
