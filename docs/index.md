@@ -1,5 +1,7 @@
 # The Foundry Project
 
+*The documents survived. The voices didn't.*
+
 *Fine-tuned LLMs to preserve and reanimate the rhetorical voices of America's founders for civic education and constitutional discourse.*
 
 ---
@@ -22,7 +24,7 @@ The Foundry uses Constitutional AI and ORPO fine-tuning to capture the distincti
 
 ### [Research Paper](paper.md)
 
-Full methodology and findings: knowledge-voice decoupling, LoRA quantization fragility, ORPO vs SFT, learning rate sensitivity, and source-enriched data generation.
+Full methodology and findings: knowledge-voice decoupling, LoRA quantization fragility, the structural incompatibility between ORPO and subsequent SFT stages — a finding that directly affects anyone designing multi-stage character training pipelines — learning rate sensitivity, and source-enriched data generation.
 
 </div>
 <div class="doc-card" markdown>
@@ -49,6 +51,8 @@ How we evaluate models: 5 weighted dimensions, LLM judge with constitutional rub
 | Qwen 3-32B v1 | 8.81 | 1,273 pairs | 2026-03-29 |
 | Gemma 3 27B v4 | 8.52 | 1,273 pairs | 2026-03-28 |
 | Gemma 3 27B v3b | 3.41 | 475 pairs | 2026-03-26 |
+
+*Score: 36-prompt LLM judge evaluation (Sonnet 4.6), 1–10 scale, weighted average of 5 dimensions. See [Scoring Methodology](scoring-methodology.md).*
 
 ## Source Code
 
