@@ -47,7 +47,7 @@ Beyond building a working Madison voice model, this project has produced several
 
 ## Current Status
 
-**Active development** (OSV Fellowship deadline: April 30, 2026)
+**Active development**
 
 ### Completed
 - [x] Madison primary source corpus — 140 documents, 468K words, 8 voice registers
@@ -75,7 +75,7 @@ Beyond building a working Madison voice model, this project has produced several
 ### Next Steps
 - [ ] Evaluate GGUF Q5_K_M quality vs BF16 baseline (rank-64 should survive quantization better than rank-16)
 - [ ] Hamilton character development
-- [ ] Chamber chat demo for fellowship application
+- [ ] Chamber chat demo
 
 ## Research Approach
 
