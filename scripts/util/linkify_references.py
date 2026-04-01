@@ -148,10 +148,10 @@ def main():
 
     result = linkify(text)
 
-    # Wrap in paper styling div
-    output = '<div class="paper-content" markdown>\n\n'
-    output += result
-    output += '\n\n</div>\n'
+    # Output as plain markdown — no div wrapper
+    # Per-page styling is handled by body.page-paper CSS class
+    # added by docs/javascripts/page-classes.js
+    output = result
 
     if dry_run:
         import difflib

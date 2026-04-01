@@ -61,13 +61,10 @@ jobs:
               text
           )
 
-          # Wrap in constitution styling div
-          output = '<div class="constitution-content" markdown>\n\n'
-          output += text
-          output += '\n\n</div>\n'
-
+          # Output as plain markdown — no div wrapper
+          # Per-page styling handled by body.page-constitution CSS class
           with open("docs/constitution.md", "w") as f:
-              f.write(output)
+              f.write(text)
 
           print(f"Constitution processed: {len(text)} chars")
           PYEOF

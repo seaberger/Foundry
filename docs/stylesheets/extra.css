@@ -1,6 +1,10 @@
 /* ============================================================
    Foundry Docs — Gold Anvil Theme
    Brand: gold (#C5A55A) on dark (#1a1a1a)
+
+   Per-page styling uses body.page-paper and body.page-constitution
+   classes added by javascripts/page-classes.js at load time.
+   This avoids <div markdown> wrappers that break footnotes.
    ============================================================ */
 
 /* --- Brand colors override Material theme --- */
@@ -96,23 +100,24 @@
 }
 
 /* ============================================================
-   Paper page — high specificity selectors to override md-typeset
+   Paper page — body.page-paper (set by page-classes.js)
+   Distill/ar5iv scholarly typography
    ============================================================ */
 
-.md-typeset .paper-content {
+body.page-paper .md-content__inner {
   max-width: 740px;
   margin: 0 auto;
 }
 
-.md-typeset .paper-content,
-.md-typeset .paper-content p,
-.md-typeset .paper-content li {
+body.page-paper .md-typeset,
+body.page-paper .md-typeset p,
+body.page-paper .md-typeset li {
   font-family: "Georgia", "Times New Roman", serif !important;
   font-size: 1.05rem;
   line-height: 1.78;
 }
 
-.md-typeset .paper-content h1 {
+body.page-paper .md-typeset h1 {
   font-family: "Georgia", "Times New Roman", serif !important;
   font-size: 2rem;
   font-weight: 700;
@@ -121,7 +126,7 @@
   letter-spacing: -0.02em;
 }
 
-.md-typeset .paper-content h2 {
+body.page-paper .md-typeset h2 {
   font-family: "Georgia", "Times New Roman", serif !important;
   font-size: 1.4rem;
   font-weight: 700;
@@ -130,79 +135,82 @@
   border-bottom: 1px solid var(--md-default-fg-color--lighter);
 }
 
-.md-typeset .paper-content h3 {
+body.page-paper .md-typeset h3 {
   font-family: "Georgia", "Times New Roman", serif !important;
   font-size: 1.15rem;
   font-weight: 600;
   margin-top: 1.8em;
 }
 
-.md-typeset .paper-content p {
+body.page-paper .md-typeset h4 {
+  font-family: "Georgia", "Times New Roman", serif !important;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 1.5em;
+}
+
+body.page-paper .md-typeset p {
   text-align: justify;
   hyphens: auto;
   margin-bottom: 1em;
 }
 
-.md-typeset .paper-content blockquote {
+body.page-paper .md-typeset blockquote {
   border-left: 3px solid #C5A55A;
   padding-left: 1em;
   font-style: italic;
   opacity: 0.9;
 }
 
-.md-typeset .paper-content table {
+body.page-paper .md-typeset table {
   font-family: "Helvetica Neue", Arial, sans-serif !important;
   font-size: 0.88rem;
   margin: 1.5em auto;
 }
 
-.md-typeset .paper-content hr {
+body.page-paper .md-typeset hr {
   border: none;
   border-top: 1px solid var(--md-default-fg-color--lighter);
   margin: 2em 0;
 }
 
-/* Footnote-style citation links — gold superscripts */
-.md-typeset .paper-content a[href^="#fn:"] {
+/* Footnote citation links — gold */
+body.page-paper .md-typeset a[href^="#fn:"] {
   color: #C5A55A;
   font-weight: 600;
 }
 
-.md-typeset .paper-content a[href^="#fn:"]:hover {
+body.page-paper .md-typeset a[href^="#fn:"]:hover {
   color: #d4b86a;
 }
 
-/* Footnote list styling */
-.md-typeset .paper-content .footnote {
+/* Footnote list */
+body.page-paper .md-typeset .footnote {
   font-size: 0.9rem;
   border-top: 1px solid var(--md-default-fg-color--lighter);
   margin-top: 2em;
   padding-top: 1em;
 }
 
-/* Reference anchor targets — smooth scroll offset */
-.md-typeset [id^="ref-"] {
-  scroll-margin-top: 80px;
-}
-
 /* ============================================================
-   Constitution page — historical document styling
+   Constitution page — body.page-constitution (set by page-classes.js)
+   Historical document styling with period typography
    ============================================================ */
 
-.md-typeset .constitution-content {
+body.page-constitution .md-content__inner {
   max-width: 680px;
   margin: 0 auto;
 }
 
-.md-typeset .constitution-content,
-.md-typeset .constitution-content p,
-.md-typeset .constitution-content li {
+body.page-constitution .md-typeset,
+body.page-constitution .md-typeset p,
+body.page-constitution .md-typeset li {
   font-family: "Georgia", "Palatino Linotype", "Book Antiqua", serif !important;
   font-size: 1.08rem;
   line-height: 1.85;
 }
 
-.md-typeset .constitution-content h1 {
+body.page-constitution .md-typeset h1 {
   font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
   font-size: 2.2rem;
   font-weight: 400;
@@ -214,11 +222,12 @@
   border-bottom: 2px double #8b7355;
 }
 
-[data-md-color-scheme="slate"] .constitution-content h1 {
+[data-md-color-scheme="slate"] body.page-constitution .md-typeset h1 {
   border-bottom-color: #C5A55A;
 }
 
-.md-typeset .constitution-content h2 {
+body.page-constitution .md-typeset h2 {
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
   font-size: 1.3rem;
   font-weight: 400;
   letter-spacing: 0.04em;
@@ -229,70 +238,40 @@
   padding-bottom: 0.3em;
 }
 
-[data-md-color-scheme="slate"] .md-typeset .constitution-content h2 {
+[data-md-color-scheme="slate"] body.page-constitution .md-typeset h2 {
   color: #C5A55A;
   border-bottom-color: #5c4a32;
 }
 
-.md-typeset .constitution-content h3 {
+body.page-constitution .md-typeset h3 {
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
   font-size: 1.1rem;
   font-weight: 600;
   color: #6b5b45;
   margin-top: 1.5em;
 }
 
-[data-md-color-scheme="slate"] .md-typeset .constitution-content h3 {
+[data-md-color-scheme="slate"] body.page-constitution .md-typeset h3 {
   color: #b89a5a;
 }
 
-.md-typeset .constitution-content p {
+body.page-constitution .md-typeset p {
   text-align: justify;
   text-indent: 1.5em;
   hyphens: auto;
 }
 
-.md-typeset .constitution-content h1 + p,
-.md-typeset .constitution-content h2 + p,
-.md-typeset .constitution-content h3 + p,
-.md-typeset .constitution-content hr + p {
+body.page-constitution .md-typeset h1 + p,
+body.page-constitution .md-typeset h2 + p,
+body.page-constitution .md-typeset h3 + p,
+body.page-constitution .md-typeset hr + p {
   text-indent: 0;
 }
 
-.md-typeset .constitution-content blockquote {
+body.page-constitution .md-typeset blockquote {
   border-left: 3px solid #C5A55A;
   padding-left: 1.25em;
   font-style: italic;
-}
-
-/* Sidenotes for source citations */
-.md-typeset .constitution-content .sidenote {
-  font-size: 0.78rem;
-  line-height: 1.4;
-  color: #8b7355;
-  font-style: italic;
-  display: block;
-  margin: 0.3em 0;
-}
-
-[data-md-color-scheme="slate"] .md-typeset .constitution-content .sidenote {
-  color: #a89060;
-}
-
-@media (min-width: 1200px) {
-  .constitution-content {
-    position: relative;
-  }
-
-  .md-typeset .constitution-content .sidenote {
-    position: absolute;
-    right: -220px;
-    width: 190px;
-    font-size: 0.75rem;
-    text-indent: 0;
-    text-align: left;
-    border-left: 2px solid #C5A55A;
-    padding-left: 8px;
-  }
 }
 
 /* ============================================================
