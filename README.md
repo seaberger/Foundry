@@ -12,6 +12,13 @@
   <img src="static/images/foundry-hero.jpg" alt="Madison and Hamilton in debate" width="800">
 </p>
 
+<p align="center">
+  <a href="https://seaberger.github.io/Foundry/paper/">Research Paper</a> &nbsp;|&nbsp;
+  <a href="https://seaberger.github.io/Foundry/constitution/">The Madison Constitution</a> &nbsp;|&nbsp;
+  <a href="https://seaberger.github.io/Foundry/training-results/">Training Results</a> &nbsp;|&nbsp;
+  <a href="https://seaberger.github.io/Foundry/">Documentation</a>
+</p>
+
 ---
 
 The Foundry uses Constitutional AI and ORPO fine-tuning to capture the distinctive voices, reasoning patterns, and philosophical positions of key US Founding Fathers — starting with James Madison. Users can engage in one-on-one conversation with a historically grounded founder, or watch two founders debate modern topics from their documented perspectives.
