@@ -44,7 +44,7 @@ nav:
 markdown_extensions:
   - tables
   - toc:
-      permalink: true
+      permalink: "#"
   - admonition
   - pymdownx.details
   - pymdownx.superfences

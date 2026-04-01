@@ -31,6 +31,12 @@
   --md-typeset-a-color: #C5A55A;
 }
 
+/* Logo sizing */
+.md-header__button.md-logo img {
+  height: 3rem;
+  width: auto;
+}
+
 /* Header bar */
 .md-header {
   background: #1a1810;
@@ -419,6 +425,26 @@
 
 [data-md-color-scheme="slate"] .md-footer {
   background: #0d0c08;
+}
+
+/* Permalink anchors — subtle, only visible on hover */
+.md-typeset .headerlink {
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-size: 0.7em;
+  margin-left: 0.3em;
+  color: #C5A55A;
+}
+
+.md-typeset h1:hover .headerlink,
+.md-typeset h2:hover .headerlink,
+.md-typeset h3:hover .headerlink,
+.md-typeset h4:hover .headerlink {
+  opacity: 0.5;
+}
+
+.md-typeset .headerlink:hover {
+  opacity: 1;
 }
 
 /* Code blocks */

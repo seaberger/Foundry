@@ -38,9 +38,11 @@ def linkify(text):
         body, refs_section = text, ""
 
     # ---- Pass 1: Anchor the reference list entries ----
+    # Use <a> anchor elements before each list item — more reliable than spans
+    # inside markdown lists when processed by md_in_html
     for num, anchor, _, prefix in REFS:
         old = f"- {prefix}"
-        new = f'- <span id="ref-{anchor}">**[{num}]**</span> {prefix}'
+        new = f'<a id="ref-{anchor}"></a>\n\n**[{num}]** {prefix}'
         refs_section = refs_section.replace(old, new, 1)
 
     # Work on body only from here
