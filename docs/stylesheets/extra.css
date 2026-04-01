@@ -95,25 +95,25 @@
   color: #C5A55A;
 }
 
-/* Search */
-[data-md-color-scheme="slate"] .md-search__input {
-  background: #252520;
-  color: #e0d8c8;
-}
-
 /* ============================================================
-   Paper page: Distill/ar5iv scholarly styling
+   Paper page — high specificity selectors to override md-typeset
    ============================================================ */
 
-.paper-content {
+.md-typeset .paper-content {
   max-width: 740px;
   margin: 0 auto;
-  font-family: "Georgia", "Times New Roman", serif;
+}
+
+.md-typeset .paper-content,
+.md-typeset .paper-content p,
+.md-typeset .paper-content li {
+  font-family: "Georgia", "Times New Roman", serif !important;
   font-size: 1.05rem;
   line-height: 1.78;
 }
 
-.paper-content h1 {
+.md-typeset .paper-content h1 {
+  font-family: "Georgia", "Times New Roman", serif !important;
   font-size: 2rem;
   font-weight: 700;
   text-align: center;
@@ -121,7 +121,8 @@
   letter-spacing: -0.02em;
 }
 
-.paper-content h2 {
+.md-typeset .paper-content h2 {
+  font-family: "Georgia", "Times New Roman", serif !important;
   font-size: 1.4rem;
   font-weight: 700;
   margin-top: 2.5em;
@@ -129,103 +130,80 @@
   border-bottom: 1px solid var(--md-default-fg-color--lighter);
 }
 
-.paper-content h3 {
+.md-typeset .paper-content h3 {
+  font-family: "Georgia", "Times New Roman", serif !important;
   font-size: 1.15rem;
   font-weight: 600;
   margin-top: 1.8em;
 }
 
-.paper-content h4 {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin-top: 1.5em;
-}
-
-.paper-content p {
+.md-typeset .paper-content p {
   text-align: justify;
   hyphens: auto;
   margin-bottom: 1em;
 }
 
-.paper-content blockquote {
+.md-typeset .paper-content blockquote {
   border-left: 3px solid #C5A55A;
   padding-left: 1em;
   font-style: italic;
   opacity: 0.9;
 }
 
-.paper-content table {
-  font-family: "Helvetica Neue", Arial, sans-serif;
+.md-typeset .paper-content table {
+  font-family: "Helvetica Neue", Arial, sans-serif !important;
   font-size: 0.88rem;
   margin: 1.5em auto;
-  width: auto;
 }
 
-.paper-content code {
-  font-size: 0.85em;
-}
-
-.paper-content strong {
-  font-weight: 700;
-}
-
-.paper-content em {
-  font-style: italic;
-}
-
-.paper-content hr {
+.md-typeset .paper-content hr {
   border: none;
   border-top: 1px solid var(--md-default-fg-color--lighter);
   margin: 2em 0;
 }
 
-/* Citation links */
-.paper-content .cite-link {
-  text-decoration: none;
+/* Footnote-style citation links — gold superscripts */
+.md-typeset .paper-content a[href^="#fn:"] {
   color: #C5A55A;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-}
-
-.paper-content .cite-link:hover {
-  color: #d4b86a;
-  text-decoration: underline;
-}
-
-.paper-content .cite-link sup {
-  font-size: 0.7em;
   font-weight: 600;
-  padding: 0 1px;
 }
 
-/* Reference list anchors */
-.paper-content span[id^="ref-"] {
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 0.9em;
-  color: #C5A55A;
+.md-typeset .paper-content a[href^="#fn:"]:hover {
+  color: #d4b86a;
+}
+
+/* Footnote list styling */
+.md-typeset .paper-content .footnote {
+  font-size: 0.9rem;
+  border-top: 1px solid var(--md-default-fg-color--lighter);
+  margin-top: 2em;
+  padding-top: 1em;
+}
+
+/* Reference anchor targets — smooth scroll offset */
+.md-typeset [id^="ref-"] {
   scroll-margin-top: 80px;
 }
 
-/* Abstract styling */
-.paper-content h2 + p:first-of-type,
-.paper-content .abstract {
-  font-style: normal;
-}
-
 /* ============================================================
-   Constitution page: Historical document styling with sidenotes
+   Constitution page — historical document styling
    ============================================================ */
 
-.constitution-content {
+.md-typeset .constitution-content {
   max-width: 680px;
   margin: 0 auto;
-  font-family: "Georgia", "Palatino Linotype", "Book Antiqua", serif;
-  font-size: 1.08rem;
-  line-height: 1.85;
-  position: relative;
 }
 
-.constitution-content h1 {
-  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+.md-typeset .constitution-content,
+.md-typeset .constitution-content p,
+.md-typeset .constitution-content li {
+  font-family: "Georgia", "Palatino Linotype", "Book Antiqua", serif !important;
+  font-size: 1.08rem;
+  line-height: 1.85;
+}
+
+.md-typeset .constitution-content h1 {
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif !important;
   font-size: 2.2rem;
   font-weight: 400;
   text-align: center;
@@ -233,81 +211,70 @@
   text-transform: uppercase;
   margin-bottom: 0.5em;
   padding-bottom: 0.5em;
-}
-
-/* Light mode: dark gold border */
-.constitution-content h1 {
   border-bottom: 2px double #8b7355;
 }
 
 [data-md-color-scheme="slate"] .constitution-content h1 {
-  border-bottom: 2px double #C5A55A;
+  border-bottom-color: #C5A55A;
 }
 
-.constitution-content h2 {
+.md-typeset .constitution-content h2 {
   font-size: 1.3rem;
   font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  color: #5c4a32;
   margin-top: 2.5em;
+  border-bottom: 1px solid #d4c5a9;
   padding-bottom: 0.3em;
 }
 
-.constitution-content h2 {
-  color: #5c4a32;
-  border-bottom: 1px solid #d4c5a9;
-}
-
-[data-md-color-scheme="slate"] .constitution-content h2 {
+[data-md-color-scheme="slate"] .md-typeset .constitution-content h2 {
   color: #C5A55A;
-  border-bottom: 1px solid #5c4a32;
+  border-bottom-color: #5c4a32;
 }
 
-.constitution-content h3 {
+.md-typeset .constitution-content h3 {
   font-size: 1.1rem;
   font-weight: 600;
+  color: #6b5b45;
   margin-top: 1.5em;
 }
 
-.constitution-content h3 {
-  color: #6b5b45;
-}
-
-[data-md-color-scheme="slate"] .constitution-content h3 {
+[data-md-color-scheme="slate"] .md-typeset .constitution-content h3 {
   color: #b89a5a;
 }
 
-.constitution-content p {
+.md-typeset .constitution-content p {
   text-align: justify;
   text-indent: 1.5em;
   hyphens: auto;
 }
 
-.constitution-content h1 + p,
-.constitution-content h2 + p,
-.constitution-content h3 + p,
-.constitution-content hr + p,
-.constitution-content ul + p,
-.constitution-content ol + p,
-.constitution-content blockquote + p {
+.md-typeset .constitution-content h1 + p,
+.md-typeset .constitution-content h2 + p,
+.md-typeset .constitution-content h3 + p,
+.md-typeset .constitution-content hr + p {
   text-indent: 0;
 }
 
-.constitution-content blockquote {
+.md-typeset .constitution-content blockquote {
   border-left: 3px solid #C5A55A;
   padding-left: 1.25em;
   font-style: italic;
 }
 
-/* Source citations — styled as sidenotes on wide screens */
-.constitution-content .sidenote {
+/* Sidenotes for source citations */
+.md-typeset .constitution-content .sidenote {
   font-size: 0.78rem;
   line-height: 1.4;
   color: #8b7355;
   font-style: italic;
+  display: block;
+  margin: 0.3em 0;
 }
 
-[data-md-color-scheme="slate"] .constitution-content .sidenote {
+[data-md-color-scheme="slate"] .md-typeset .constitution-content .sidenote {
   color: #a89060;
 }
 
@@ -316,7 +283,7 @@
     position: relative;
   }
 
-  .constitution-content .sidenote {
+  .md-typeset .constitution-content .sidenote {
     position: absolute;
     right: -220px;
     width: 190px;
@@ -325,34 +292,13 @@
     text-align: left;
     border-left: 2px solid #C5A55A;
     padding-left: 8px;
-    margin-top: 0;
   }
 }
 
-/* Source key box */
-.constitution-content .source-key {
-  padding: 1em 1.5em;
-  margin: 1.5em 0;
-  font-size: 0.9rem;
-  text-indent: 0;
-  border-radius: 4px;
-}
-
-.constitution-content .source-key {
-  background: #faf6ef;
-  border: 1px solid #e0d5c0;
-}
-
-[data-md-color-scheme="slate"] .constitution-content .source-key {
-  background: #222018;
-  border: 1px solid #3a3528;
-}
-
 /* ============================================================
-   Home page fixes
+   Home page card grid
    ============================================================ */
 
-/* Card grid for home page */
 .doc-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -364,15 +310,12 @@
   padding: 1.5em;
   border-radius: 8px;
   transition: box-shadow 0.2s, transform 0.2s;
-}
-
-.doc-card {
   border: 1px solid #e0d5c0;
   background: #faf8f2;
 }
 
 [data-md-color-scheme="slate"] .doc-card {
-  border: 1px solid #3a3528;
+  border-color: #3a3528;
   background: #222018;
 }
 
@@ -394,6 +337,29 @@
   font-size: 0.92rem;
   margin-bottom: 0;
   opacity: 0.85;
+}
+
+/* ============================================================
+   Permalink anchors — subtle, only visible on hover
+   ============================================================ */
+
+.md-typeset .headerlink {
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-size: 0.7em;
+  margin-left: 0.3em;
+  color: #C5A55A;
+}
+
+.md-typeset h1:hover .headerlink,
+.md-typeset h2:hover .headerlink,
+.md-typeset h3:hover .headerlink,
+.md-typeset h4:hover .headerlink {
+  opacity: 0.5;
+}
+
+.md-typeset .headerlink:hover {
+  opacity: 1;
 }
 
 /* ============================================================
@@ -427,27 +393,6 @@
   background: #0d0c08;
 }
 
-/* Permalink anchors — subtle, only visible on hover */
-.md-typeset .headerlink {
-  opacity: 0;
-  transition: opacity 0.2s;
-  font-size: 0.7em;
-  margin-left: 0.3em;
-  color: #C5A55A;
-}
-
-.md-typeset h1:hover .headerlink,
-.md-typeset h2:hover .headerlink,
-.md-typeset h3:hover .headerlink,
-.md-typeset h4:hover .headerlink {
-  opacity: 0.5;
-}
-
-.md-typeset .headerlink:hover {
-  opacity: 1;
-}
-
-/* Code blocks */
 [data-md-color-scheme="slate"] .md-typeset code {
   background: #2a2820;
   color: #d4c8a8;
