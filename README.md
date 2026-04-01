@@ -64,8 +64,13 @@ Beyond building a working Madison voice model, this project has produced several
 - [x] JSON parse repair — fixes judge output parse failures
 - [x] SFT after ORPO proven catastrophic — ORPO's built-in SFT makes subsequent SFT harmful (abandoned)
 
+- [x] GGUF quantization — Q4_K_M (18.4 GB) and Q5_K_M (21.6 GB) on Modal volume
+- [x] Local deployment — Q5_K_M loaded in LM Studio on Mac Mini M4 Pro (64 GB)
+- [x] Learning rate sweep — lr=2e-5 optimal, contradicts ORPO paper's lr=8e-6 recommendation
+- [x] [Documentation site](https://seaberger.github.io/Foundry/) — MkDocs Material with Distill-style research paper
+
 ### Next Steps
-- [ ] GGUF quantization of R2 model
+- [ ] Evaluate GGUF Q5_K_M quality vs BF16 baseline (rank-64 should survive quantization better than rank-16)
 - [ ] Hamilton character development
 - [ ] Chamber chat demo for fellowship application
 
@@ -86,13 +91,13 @@ Our Madison constitution is a **5,000-word first-person character document** syn
 
 This is, to our knowledge, the richest character constitution ever used for LLM fine-tuning — 50x more detailed than prior work.
 
-### DPO Optimization (March 2026 Research)
+### Preference Optimization Research (March 2026)
 
 Beyond the Lambert/Maiya baseline, our pipeline incorporates recent findings:
 
-- **Chosen quality dominates** — Teacher response quality is the #1 factor in DPO success; rejected quality barely matters ([Pan et al., NeurIPS 2025](https://arxiv.org/html/2508.18312v1))
-- **Gemma 3 layer targeting** — LoRA must target first 2/3 of layers (0-40 of 62); layers 40+ are ineffective for behavioral modification ([Gemma 3 ablations](https://huggingface.co/blog/tawnymanticore/gemma3-ablations))
+- **Chosen quality dominates** — Teacher response quality is the #1 factor in preference optimization success; rejected quality barely matters ([Pan et al., NeurIPS 2025](https://arxiv.org/html/2508.18312v1))
 - **Difficulty filtering** — Remove hardest 15-20% of pairs after first training pass ([ICML 2025](https://arxiv.org/html/2502.09650v1))
+- **Learning rate sensitivity** — Our sweep found lr=2×10⁻⁵ optimal for character imprinting on Qwen 3-32B, contradicting the ORPO paper's recommended lr=8×10⁻⁶. Lower LR disproportionately sacrifices factual grounding while voice categories remain robust.
 
 ## Pipeline
 
@@ -191,18 +196,20 @@ foundry/
     eval/          — Evaluation prompts and results
   sources/         — Primary source corpus (public domain texts)
   docs/            — CLI guide, training methodology, research
-  scripts/modal/train_dpo.py — Modal A100 DPO training + GGUF export
+  scripts/modal/   — Modal A100 ORPO training, merge, GGUF conversion
+  scripts/data/    — Training data generation, judge evaluation, dataset assembly
+  scripts/util/    — Citation linkification, utilities
 ```
 
 ## Tech Stack
 
 - **Training:** Unsloth + QLoRA ORPO on Modal A100-80GB
 - **Base Model:** Qwen 3-32B
-- **Serving:** vLLM with LoRA serving mode (adapter-on-base, best quality) or `limit_mm_per_prompt` workaround (merged model)
+- **Serving:** vLLM with LoRA serving mode (adapter-on-base, best quality) or merged 16-bit model
 - **Teacher Model:** Claude Sonnet 4.6 with prompt caching
 - **Evaluation:** LLM-as-judge (Sonnet 4.6) with constitutional rubric + prompt caching (~$0.50 per 36-prompt eval)
 - **Experiment Tracking:** [Weights & Biases](https://wandb.ai/sbergman/foundry)
-- **Local Inference:** Ollama on Mac Mini (GGUF Q4_K_M — known quality degradation, see findings)
+- **Local Inference:** LM Studio on Mac Mini M4 Pro 64 GB (GGUF Q5_K_M, 21.6 GB — rank-64 LoRA, quality eval pending)
 - **Web:** FastAPI + HTMX + SSE streaming, SQLite (WAL mode)
 - **Voice:** ElevenLabs per-character voice profiles (planned)
 
