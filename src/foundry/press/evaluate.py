@@ -53,6 +53,82 @@ EVAL_PROMPTS_PATH = PROJECT_ROOT / "data" / "eval" / "eval-prompts.jsonl"
 CONSTITUTION_PATH = PROJECT_ROOT / "config" / "constitutions" / "madison-5k.md"
 EVAL_OUTPUT_DIR = PROJECT_ROOT / "data" / "eval" / "results"
 
+# Rubric weights — must match the judge system prompt
+COMPONENT_WEIGHTS = {
+    "voice_authenticity": 0.25,
+    "rhetorical_pattern": 0.20,
+    "historical_accuracy": 0.20,
+    "position_fidelity": 0.20,
+    "character_integrity": 0.15,
+}
+
+
+def compute_weighted_overall(scores: dict) -> float | None:
+    """Compute the weighted average from component scores.
+
+    Returns None if any component is missing or invalid.
+    """
+    total = 0.0
+    for component, weight in COMPONENT_WEIGHTS.items():
+        entry = scores.get(component)
+        if not isinstance(entry, dict) or "score" not in entry:
+            return None
+        score = entry["score"]
+        if not isinstance(score, (int, float)) or score == 0:
+            return None
+        total += score * weight
+    return round(total, 2)
+
+
+def _repair_json(candidate: str) -> str:
+    """Fix common LLM JSON errors: missing commas between key-value pairs."""
+    import re
+    # Fix missing comma: }\n  "key" or "}\n  "key" (missing comma after closing brace/quote)
+    candidate = re.sub(r'("\})\s*\n(\s*")', r'\1,\n\2', candidate)
+    candidate = re.sub(r'(\])\s*\n(\s*")', r'\1,\n\2', candidate)
+    return candidate
+
+
+def extract_json(text: str) -> dict | None:
+    """Robustly extract JSON from judge response text."""
+    candidates = []
+
+    # Try markdown code block first
+    if "```json" in text:
+        candidates.append(text.split("```json")[1].split("```")[0].strip())
+    elif "```" in text:
+        candidates.append(text.split("```")[1].split("```")[0].strip())
+
+    # Try finding outermost { ... }
+    start = text.find("{")
+    if start != -1:
+        depth = 0
+        for i, ch in enumerate(text[start:], start):
+            if ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    candidates.append(text[start : i + 1])
+                    break
+
+    # Try each candidate: first raw, then repaired
+    for candidate in candidates:
+        try:
+            return json.loads(candidate)
+        except json.JSONDecodeError:
+            pass
+        try:
+            return json.loads(_repair_json(candidate))
+        except json.JSONDecodeError:
+            pass
+
+    # Last resort: try the whole text
+    try:
+        return json.loads(text.strip())
+    except json.JSONDecodeError:
+        return None
+
 # ---------------------------------------------------------------------------
 # Judge rubric — the immutable evaluation criteria
 # ---------------------------------------------------------------------------
@@ -353,18 +429,18 @@ def judge_response(
 
     # Extract JSON from response
     text = data["content"][0]["text"]
-
-    # Parse JSON — handle markdown code blocks
-    if "```json" in text:
-        text = text.split("```json")[1].split("```")[0]
-    elif "```" in text:
-        text = text.split("```")[1].split("```")[0]
-
-    try:
-        return json.loads(text.strip())
-    except json.JSONDecodeError:
+    parsed = extract_json(text)
+    if parsed is None:
         log.error("Failed to parse judge response: %s", text[:200])
         return _mock_judge()
+
+    # Override judge's overall_score with computed weighted average
+    computed = compute_weighted_overall(parsed)
+    if computed is not None:
+        parsed["judge_overall_score"] = parsed.get("overall_score")
+        parsed["overall_score"] = computed
+
+    return parsed
 
 
 def _mock_judge() -> dict:

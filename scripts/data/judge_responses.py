@@ -27,6 +27,8 @@ from src.foundry.press.evaluate import (
     EVAL_OUTPUT_DIR,
     JUDGE_SYSTEM_PROMPT,
     JUDGE_USER_PROMPT,
+    compute_weighted_overall,
+    extract_json,
 )
 
 log = logging.getLogger("foundry.judge")
@@ -105,14 +107,8 @@ def judge_response_cached(
 
     # Extract JSON from response
     text = data["content"][0]["text"]
-    if "```json" in text:
-        text = text.split("```json")[1].split("```")[0]
-    elif "```" in text:
-        text = text.split("```")[1].split("```")[0]
-
-    try:
-        return json.loads(text.strip())
-    except json.JSONDecodeError:
+    parsed = extract_json(text)
+    if parsed is None:
         log.error("Failed to parse judge response: %s", text[:200])
         return {
             "voice_authenticity": {"score": 0, "justification": "Parse error"},
@@ -125,6 +121,14 @@ def judge_response_cached(
             "strongest_element": "N/A",
             "weakest_element": "N/A",
         }
+
+    # Override judge's overall_score with computed weighted average
+    computed = compute_weighted_overall(parsed)
+    if computed is not None:
+        parsed["judge_overall_score"] = parsed.get("overall_score")
+        parsed["overall_score"] = computed
+
+    return parsed
 
 
 def main():
