@@ -365,6 +365,7 @@ def main(
     upload_data_flag: bool = True,
     list_models: bool = False,
     get_adapter: str = "",
+    resume: str = "",
 ):
     """Run Qwen 3-32B validation ORPO training on Modal.
 
@@ -411,6 +412,7 @@ def main(
         learning_rate=lr,
         num_epochs=epochs,
         output_name=output_name,
+        resume_from_checkpoint=resume,
     )
 
     print(f"\nTraining complete! Metrics:")
