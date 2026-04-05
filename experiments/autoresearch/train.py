@@ -40,10 +40,10 @@ MAX_EXAMPLES_BY_MODE = {
     "dataset-only": 1000000,
 }
 STEP_BUDGETS = {
-    "scout": 120,
-    "probe": 150,
-    "confirm": 240,
-    "full": 861,
+    "scout": 200,    # Binary gate: margin > 0.1 = alive, < 0.05 = dead
+    "probe": 300,    # Full ranking: configs reliably ordered by reward margin
+    "confirm": 450,  # High confidence: margin plateau confirms ranking
+    "full": 1011,    # Publication-grade: matches R2 production run length
     "dataset-only": 0,
 }
 PROMOTE_IF_CONSTRAINT_OK = True
