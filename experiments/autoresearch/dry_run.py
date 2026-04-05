@@ -144,7 +144,7 @@ def train(run_tag: str, run_dir: Path, dataset_path: Path) -> bool:
 def activate_candidate(adapter_name: str, adapter_path: str, run_dir: Path, step: int) -> str | None:
     """Deploy candidate endpoint, return URL or None on failure."""
     cmd = (
-        f"python experiments/autoresearch/backend/activate_candidate.py "
+        f"python3 experiments/autoresearch/backend/activate_candidate.py "
         f"--adapter-name {adapter_name} "
         f"--adapter-path {adapter_path}"
     )

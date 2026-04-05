@@ -20,7 +20,7 @@ Usage:
     python -m foundry.press.evaluate --endpoint http://100.81.70.30:1234/v1 --model gemma-3-27b-it --tag baseline
 
     # Claude Sonnet via Anthropic API
-    python -m foundry.press.evaluate --backend anthropic --model claude-sonnet-4-6-20250514 --tag sonnet-prompted --constitution-as-system
+    python -m foundry.press.evaluate --backend anthropic --model claude-sonnet-4-20250514 --tag sonnet-prompted --constitution-as-system
 
     # Claude Opus via Anthropic API
     python -m foundry.press.evaluate --backend anthropic --model claude-opus-4-6-20250514 --tag opus-prompted --constitution-as-system
@@ -387,15 +387,16 @@ def judge_response(
     ground_truth_signal: str,
     constitution: str,
     judge_endpoint: str = "https://api.anthropic.com/v1",
-    judge_model: str = "claude-sonnet-4-6-20250514",
+    judge_model: str = "claude-sonnet-4-20250514",
 ) -> dict:
     """Score a response using the LLM judge."""
 
-    system = JUDGE_SYSTEM_PROMPT.format(constitution=constitution)
-    user = JUDGE_USER_PROMPT.format(
-        prompt=prompt,
-        ground_truth_signal=ground_truth_signal,
-        response=response_text,
+    system = JUDGE_SYSTEM_PROMPT.replace("{constitution}", constitution)
+    user = (
+        JUDGE_USER_PROMPT
+        .replace("{prompt}", prompt)
+        .replace("{ground_truth_signal}", ground_truth_signal)
+        .replace("{response}", response_text)
     )
 
     # Use Anthropic API for judge
@@ -467,7 +468,7 @@ def run_evaluation(
     model: str,
     tag: str,
     system_prompt: str | None = None,
-    judge_model: str = "claude-sonnet-4-6-20250514",
+    judge_model: str = "claude-sonnet-4-20250514",
     eval_prompts_path: Path | None = None,
     constitution_path: Path | None = None,
     backend: str = "openai",
@@ -584,7 +585,7 @@ Examples:
   %(prog)s --endpoint http://100.81.70.30:1234/v1 --model gemma-3-27b-it --tag baseline
 
   # Claude Sonnet via Anthropic API
-  %(prog)s --backend anthropic --model claude-sonnet-4-6-20250514 --tag sonnet --constitution-as-system
+  %(prog)s --backend anthropic --model claude-sonnet-4-20250514 --tag sonnet --constitution-as-system
 
   # Claude Opus via Anthropic API
   %(prog)s --backend anthropic --model claude-opus-4-6-20250514 --tag opus --constitution-as-system
@@ -608,7 +609,7 @@ Examples:
                         help="Optional system prompt for the model")
     parser.add_argument("--constitution-as-system", action="store_true",
                         help="Use the Madison constitution as the model's system prompt")
-    parser.add_argument("--judge-model", default="claude-sonnet-4-6-20250514",
+    parser.add_argument("--judge-model", default="claude-sonnet-4-20250514",
                         help="Model to use as judge (always Anthropic)")
     parser.add_argument("--eval-prompts", default=str(EVAL_PROMPTS_PATH))
     parser.add_argument("--output-dir", default=str(EVAL_OUTPUT_DIR))

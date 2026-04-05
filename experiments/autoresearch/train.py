@@ -53,7 +53,7 @@ PROMOTE_IF_GT_DELTA_AT_LEAST = 0.15
 # Candidate activation: deploy ephemeral vLLM endpoint on Modal for evaluation.
 # Prints endpoint URL (with /v1) to stdout. Stopped after eval by deactivate_candidate().
 ACTIVATE_CANDIDATE_COMMAND_TEMPLATE = (
-    "python experiments/autoresearch/backend/activate_candidate.py "
+    "python3 experiments/autoresearch/backend/activate_candidate.py "
     "--adapter-name {output_name} "
     "--adapter-path {adapter_path}"
 )

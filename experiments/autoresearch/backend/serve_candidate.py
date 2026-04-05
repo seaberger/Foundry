@@ -70,8 +70,8 @@ app = modal.App("foundry-autoresearch-candidate")
         VLLM_CACHE_PATH: vllm_cache_vol,
         "/adapters": adapter_vol,
     },
-    scaledown_window=5 * MINUTES,   # Short — ephemeral endpoint
-    timeout=15 * MINUTES,
+    scaledown_window=10 * MINUTES,  # Keep warm between checkpoint evals
+    timeout=60 * MINUTES,           # 14 prompts × ~2 min + cold start overhead
     min_containers=0,
     max_containers=1,
 )

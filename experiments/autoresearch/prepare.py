@@ -4,6 +4,7 @@ import json
 import os
 import shlex
 import subprocess
+import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -18,7 +19,7 @@ DEFAULT_OUTPUT_DIR = Path(os.environ.get("FOUNDRY_AUTORESEARCH_OUTPUT_DIR", AUTO
 
 EVAL_ENDPOINT = os.environ.get("FOUNDRY_AUTORESEARCH_ENDPOINT", "http://localhost:8000/v1")
 MODEL_NAME = os.environ.get("FOUNDRY_AUTORESEARCH_MODEL_NAME", "madison-qwen3-probe")
-JUDGE_MODEL = os.environ.get("FOUNDRY_AUTORESEARCH_JUDGE_MODEL", "claude-sonnet-4-6-20250514")
+JUDGE_MODEL = os.environ.get("FOUNDRY_AUTORESEARCH_JUDGE_MODEL", "claude-sonnet-4-20250514")
 
 BASELINE_OVERALL = 8.97
 BASELINE_CRITICAL_FAILURES = 0
@@ -201,8 +202,12 @@ def evaluate_model(
     out_dir = output_dir or DEFAULT_OUTPUT_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    # Use the project venv which has foundry installed
+    venv_python = REPO_ROOT / ".venv" / "bin" / "python3"
+    python = str(venv_python) if venv_python.exists() else sys.executable
+
     cmd = [
-        "python",
+        python,
         "-m",
         "foundry.press.evaluate",
         "--endpoint",
