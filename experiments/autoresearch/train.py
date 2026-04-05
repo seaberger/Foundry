@@ -17,7 +17,7 @@ import prepare
 # ============================================================================
 # AGENT-EDITABLE SECTION
 # ============================================================================
-RUN_MODE = "probe"  # scout | probe | confirm | full | dataset-only
+RUN_MODE = "scout"  # scout | probe | confirm | full | dataset-only
 BASE_MODEL = "Qwen/Qwen3-32B"
 OBJECTIVE = "orpo"
 LORA_RANK = 64
@@ -31,7 +31,7 @@ PER_DEVICE_BATCH_SIZE = 1
 GRADIENT_ACCUMULATION_STEPS = 4
 MAX_SEQ_LENGTH = 2048
 CURRICULUM = "shuffle"  # shuffle | none | source_first | weak_gt_first | weak_gt_last
-MANIFEST_PATH = Path(__file__).resolve().parent / "manifests" / "gt_focus_baseline.json"
+MANIFEST_PATH = Path(__file__).resolve().parent / "manifests" / "baseline_r2.json"
 MAX_EXAMPLES_BY_MODE = {
     "scout": 700,
     "probe": 1100,
