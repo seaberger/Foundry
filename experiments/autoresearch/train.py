@@ -431,6 +431,11 @@ def default_status(result: prepare.ConstrainedEvalResult) -> str:
 
 
 def main() -> int:
+    # Preflight: fail fast if judge API key is missing
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        print("FATAL: ANTHROPIC_API_KEY not set. Source ~/.config/secrets/api-keys.env")
+        return 1
+
     if RUN_MODE not in STEP_BUDGETS:
         raise ValueError(f"Unknown RUN_MODE={RUN_MODE!r}")
 

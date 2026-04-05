@@ -402,8 +402,10 @@ def judge_response(
     # Use Anthropic API for judge
     api_key = os.environ.get("ANTHROPIC_API_KEY", "")
     if not api_key:
-        log.warning("No ANTHROPIC_API_KEY — using mock judge scores")
-        return _mock_judge()
+        raise RuntimeError(
+            "ANTHROPIC_API_KEY not set — cannot judge responses. "
+            "Source ~/.config/secrets/api-keys.env before running."
+        )
 
     headers = {
         "x-api-key": api_key,
@@ -516,6 +518,8 @@ def run_evaluation(
                 prompt_text, response_text, ground_truth, constitution,
                 judge_model=judge_model,
             )
+        except RuntimeError:
+            raise  # API key missing — fail fast, don't mock
         except Exception as e:
             log.error("  Judging failed: %s", e)
             scores = _mock_judge()
