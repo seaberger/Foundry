@@ -50,15 +50,17 @@ PROMOTE_IF_CONSTRAINT_OK = True
 PROMOTE_IF_PROBE_SCORE_AT_LEAST = 100.75
 PROMOTE_IF_GT_DELTA_AT_LEAST = 0.15
 
-# Optional integration hook.
-# Example:
-# ACTIVATE_CANDIDATE_COMMAND_TEMPLATE = (
-#   "python scripts/activate_candidate.py --adapter-name {output_name} --model {base_model}"
-# )
-ACTIVATE_CANDIDATE_COMMAND_TEMPLATE = ""
+# Candidate activation: deploy ephemeral vLLM endpoint on Modal for evaluation.
+# Prints endpoint URL (with /v1) to stdout. Stopped after eval by deactivate_candidate().
+ACTIVATE_CANDIDATE_COMMAND_TEMPLATE = (
+    "python experiments/autoresearch/backend/activate_candidate.py "
+    "--adapter-name {output_name} "
+    "--adapter-path {adapter_path}"
+)
+DEACTIVATE_COMMAND = "modal app stop foundry-autoresearch-candidate"
 
 TRAIN_COMMAND_TEMPLATE = (
-    "modal run autoresearch_qwen/backend/modal_train_orpo_qwen_autoresearch.py "
+    "modal run experiments/autoresearch/backend/modal_train_orpo_qwen_autoresearch.py "
     "--beta {beta} "
     "--rank {lora_rank} "
     "--alpha {lora_alpha} "
@@ -75,7 +77,7 @@ TRAIN_COMMAND_TEMPLATE = (
 )
 # ============================================================================
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]  # Foundry repo root
 HERE = Path(__file__).resolve().parent
 RUNS_DIR = HERE / "runs"
 RESULTS_PATH = HERE / "results.tsv"
@@ -382,6 +384,7 @@ def format_train_command(ctx: RunContext) -> str:
 
 
 def maybe_activate_candidate(ctx: RunContext) -> None:
+    """Deploy ephemeral candidate endpoint, capture URL, update prepare.EVAL_ENDPOINT."""
     if not ACTIVATE_CANDIDATE_COMMAND_TEMPLATE.strip():
         return
     command = ACTIVATE_CANDIDATE_COMMAND_TEMPLATE.format(
@@ -390,7 +393,33 @@ def maybe_activate_candidate(ctx: RunContext) -> None:
         run_tag=ctx.run_tag,
         adapter_path=f"/adapters/experiments/{ctx.output_name}",
     )
-    run_command(command, cwd=ROOT, timeout=30 * 60, log_path=ctx.run_dir / "activate.log")
+    proc = run_command(command, cwd=ROOT, timeout=30 * 60, log_path=ctx.run_dir / "activate.log")
+    if proc.returncode != 0:
+        raise RuntimeError(f"Candidate activation failed, see {ctx.run_dir / 'activate.log'}")
+
+    # activate_candidate.py prints the endpoint URL (with /v1) to stdout
+    url = proc.stdout.strip().split("\n")[-1].strip()
+    if url.startswith("http"):
+        prepare.EVAL_ENDPOINT = url
+        print(f"eval_endpoint:       {prepare.EVAL_ENDPOINT}")
+    else:
+        raise RuntimeError(f"Activation did not return a URL. Got: {url!r}")
+
+
+def deactivate_candidate() -> None:
+    """Stop the ephemeral candidate endpoint after evaluation."""
+    if not DEACTIVATE_COMMAND.strip():
+        return
+    try:
+        subprocess.run(
+            shlex.split(DEACTIVATE_COMMAND),
+            cwd=ROOT,
+            capture_output=True,
+            check=False,
+            timeout=60,
+        )
+    except Exception:
+        pass
 
 
 def default_status(result: prepare.ConstrainedEvalResult) -> str:
@@ -468,6 +497,8 @@ def main() -> int:
         print("status:              crash")
         print(f"error:               evaluation failed: {exc}")
         return 1
+    finally:
+        deactivate_candidate()
 
     status = default_status(result)
     description = (
