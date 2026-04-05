@@ -1,1 +1,2 @@
 commit	timestamp	run_mode	steps	manifest	gt	gt_delta	overall	max_regression	critical_failures	constraint_ok	probe_score	status	description
+e3c5897	20260405-121125	scout	200	baseline_r2.json	0.0000	-8.8500	0.0000	-9.4100	14	false	-669.3000	discard	mode=scout; manifest=baseline_r2.json; lr=2e-05; beta=0.1; rank=64; steps=200; curriculum=shuffle

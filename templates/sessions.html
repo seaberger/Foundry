@@ -12,6 +12,11 @@
                     {% for c in characters %}
                     <option value="{{ c }}">{{ c | title }}</option>
                     {% endfor %}
+                    {% if coming_soon is defined %}
+                    {% for c in coming_soon %}
+                    <option disabled>{{ c | title }} (coming soon)</option>
+                    {% endfor %}
+                    {% endif %}
                 </select>
             </div>
             <div class="form-group">
