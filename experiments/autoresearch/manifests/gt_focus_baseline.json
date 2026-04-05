@@ -1,0 +1,35 @@
+{
+  "name": "gt_focus_baseline",
+  "base_dataset": "data/training/madison-orpo-v6.jsonl",
+  "global_repeat": 1,
+  "shuffle_seed": 42,
+  "rules": [
+    {
+      "name": "light_ground_truth_replay",
+      "repeat": 1,
+      "match_mode": "any",
+      "match": {
+        "metadata_any": {
+          "category": [
+            "ground_truth",
+            "verified_response"
+          ],
+          "weakness": [
+            "ground_truth",
+            "verified_response"
+          ]
+        },
+        "prompt_contains_any": [
+          "quote",
+          "source",
+          "evidence",
+          "document",
+          "federalist",
+          "bank",
+          "edward coles",
+          "billey"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+{"category": "ground_truth", "prompt": "TODO: replace this placeholder with a real held-out ground_truth probe prompt."}
+{"category": "verified_response", "prompt": "TODO: replace this placeholder with a real held-out verified_response probe prompt."}
+{"category": "private_voice", "prompt": "TODO: replace this placeholder with a real held-out private_voice guard prompt."}

@@ -1,0 +1,36 @@
+{
+  "name": "gt_focus_source_weighted",
+  "base_dataset": "data/training/madison-orpo-v6.jsonl",
+  "global_repeat": 1,
+  "shuffle_seed": 42,
+  "rules": [
+    {
+      "name": "source_dense_replay",
+      "repeat": 1,
+      "match_mode": "any",
+      "match": {
+        "metadata_any": {
+          "source_type": [
+            "primary_source",
+            "federalist",
+            "speech",
+            "letter"
+          ],
+          "category": [
+            "ground_truth",
+            "verified_response"
+          ]
+        },
+        "prompt_contains_any": [
+          "federalist",
+          "constitution",
+          "bank",
+          "virginia",
+          "helvidius",
+          "edward coles",
+          "billey"
+        ]
+      }
+    }
+  ]
+}

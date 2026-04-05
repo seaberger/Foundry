@@ -1,0 +1,53 @@
+{
+  "name": "gt_focus_replay",
+  "base_dataset": "data/training/madison-orpo-v6.jsonl",
+  "global_repeat": 1,
+  "shuffle_seed": 42,
+  "rules": [
+    {
+      "name": "gt_and_verified_replay",
+      "repeat": 2,
+      "match_mode": "any",
+      "match": {
+        "metadata_any": {
+          "category": [
+            "ground_truth",
+            "verified_response"
+          ],
+          "weakness": [
+            "ground_truth",
+            "verified_response"
+          ]
+        },
+        "prompt_contains_any": [
+          "quote",
+          "evidence",
+          "source",
+          "document",
+          "where did",
+          "did madison",
+          "according to"
+        ]
+      }
+    },
+    {
+      "name": "private_voice_guard_band",
+      "repeat": 1,
+      "match_mode": "any",
+      "match": {
+        "metadata_any": {
+          "category": [
+            "private_voice"
+          ]
+        },
+        "prompt_contains_any": [
+          "letter",
+          "private",
+          "friend",
+          "sir",
+          "madam"
+        ]
+      }
+    }
+  ]
+}

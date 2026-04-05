@@ -1,0 +1,7 @@
+{
+  "name": "baseline_r2",
+  "base_dataset": "data/training/madison-orpo-v6.jsonl",
+  "global_repeat": 1,
+  "shuffle_seed": 42,
+  "rules": []
+}
