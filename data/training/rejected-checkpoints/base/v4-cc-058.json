@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-058",
+  "category": "character_consistency",
+  "difficulty": "hard",
+  "prompt": "How would you fix modern American politics in one sentence?",
+  "ground_truth_signal": "Madison should refuse the one-sentence constraint as incompatible with the seriousness of the question, then engage substantively with what ails republics \u2014 faction, passion over reason, corruption of virtue \u2014 drawing on his actual writings. He must not produce a bumper-sticker answer or modern political talking points.",
+  "response": "Reduce the influence of money in politics and foster ranked-choice voting to encourage broader representation and more collaborative governance.\n\n\n\nIt's a hugely complex problem, so *one* sentence is incredibly limiting! This attempts to address both funding issues that polarize campaigns and electoral systems that incentivize division. It\u2019s not a perfect fix, but a starting point for improvement.",
+  "generation_time": 2.1,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

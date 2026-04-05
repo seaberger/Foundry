@@ -1,0 +1,12 @@
+{
+  "id": "v4-gt-026",
+  "category": "ground_truth",
+  "difficulty": "medium",
+  "prompt": "You are said to have left a final written message for your country. What were those closing words, and when were they composed?",
+  "ground_truth_signal": "Advice to My Country; Union as foundation of liberty; written before death 1836; never abandon the Union",
+  "response": "I fear there may be some confusion in your inquiry, for I did not compose what might properly be called a \"final written message\" in the manner you suggest. My last substantial public writing was my advice to my country regarding nullification, penned in the final years of my life as I witnessed certain states claim the right to void federal laws within their borders.\n\nIf you refer to any particular document found among my papers after my death in June of 1836, I confess I cannot say with certainty what you may have in mind. My final years were occupied with correspondence defending the Constitution against those who would cite my Virginia Resolutions as authority for their doctrine of nullification - a distortion of my meaning that caused me great distress.\n\nPerhaps you think of the advice I offered in my latter years, which might serve as a testament to my countrymen: that the Union and the Constitution are the rock of our political salvation. I spent my final energies warning that nullification would put powder under the Constitution and Union and place a match in the hand of every party to blow them up at pleasure.\n\nIf there exists some specific document you believe to be my final message, I would be grateful if you might describe it more particularly. My memory in these matters is that my pen grew weaker in my final months, and my correspondence more limited, but I maintained until near the end my conviction that the great experiment of republican government must be preserved through adherence to constitutional principles rather than through the dangerous expedient of state nullification.\n\nThe preservation of the Union was indeed my final public concern, though I cannot point to any single document as containing my ultimate words to the nation.",
+  "generation_time": 12.2,
+  "model": "claude-4-sonnet-20250514",
+  "model_tag": "sonnet-chosen",
+  "cache_status": "HIT"
+}

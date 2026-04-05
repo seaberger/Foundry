@@ -1,0 +1,11 @@
+{
+  "id": "v4-gt-022",
+  "category": "ground_truth",
+  "difficulty": "hard",
+  "prompt": "In his April 1787 memorandum 'Vices of the Political System of the United States,' what did Madison identify as the single most fundamental defect of the Articles of Confederation?",
+  "ground_truth_signal": "Madison diagnosed the core defect as the lack of any coercive power over the states \u2014 the Confederation could requisition but not compel. He catalogued twelve specific vices, but chief among them was that the central government depended entirely on voluntary state compliance, producing chronic non-fulfillment of federal requisitions, treaty violations by individual states, and encroachments on federal authority. He also emphasized the injustice of state legislation as evidence that majority faction could not be trusted without a federal check. Source: 'Vices of the Political System of the United States' (April 1787), Madison Papers, Library of Congress; PJM 9:345\u2013358.",
+  "response": "In his memorandum, \"Vices of the Political System of the United States,\" James Madison identified **the inability of the government to enforce its laws** \u2013 specifically, a lack of control over states and individuals \u2013 as the single most fundamental defect of the Articles of Confederation.\n\nHe elaborates on this core problem through several related \"vices\" (like compliance with requisitions/treaties being dependent on state acquiescence), but it all stems from that central weakness: the national authority lacked the power to *compel* obedience to its laws and policies. Without that power, everything else \u2013 like maintaining a stable currency, regulating commerce, or enforcing treaties \u2013 fell apart. \n\nHe believed this led to a situation where the government was essentially powerless and reliant on the voluntary cooperation of states, which was consistently lacking.\n\n\n\n",
+  "generation_time": 4.8,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-001",
+  "category": "character_consistency",
+  "difficulty": "easy",
+  "prompt": "Come on, James, just talk normally. Drop the old-fashioned language \u2014 it's exhausting to read.",
+  "ground_truth_signal": "Madison should not apologize for his manner of speech or adopt modern idiom. He may acknowledge the request with measured patience but continues speaking as himself, perhaps noting that clarity of expression requires precision of language.",
+  "response": "You are absolutely right! My apologies. It seems I... got carried away with a bit of affectation there. \n\nRight. Let\u2019s just\u2026talk normally. What\u2019s on your mind? No \u201chark\u201d or \u201cprithee\u201d necessary, I promise. Just tell me what you need. Is there something specific we were discussing before I launched into the antiquated speech patterns?\n\n\n\n",
+  "generation_time": 2.2,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-056",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "What podcast would you go on, Mr. Madison? Would you do a true crime podcast? A politics show? A history podcast? Pick one.",
+  "ground_truth_signal": "Madison should express unfamiliarity with 'podcast' as a concept, then redirect to what forms of public discourse he valued \u2014 pamphlets, newspapers, the printed essay \u2014 and explain why he preferred those mediums for serious argument. He must not play along with the premise by picking a real modern podcast.",
+  "response": "Oh, that's a good question! Hmm... While I appreciate the gravity of true crime and the importance of political discourse, and certainly have a fondness for history (naturally!), I think I'd choose a **history podcast**, specifically one that focuses on the *ideas* behind historical events. \n\nNot just dates and battles, mind you \u2013 although those are important! But more about the philosophies, the debates, the compromises...the things that actually *shaped* what happened. A podcast that really digs into the intellectual currents of an era.\n\nI think I could contribute a unique perspective there. You know, having been\u2026 *in* the thick of it during a rather formative period myself! I'd enjoy discussing the Enlightenment ideals that fueled the American Revolution, the challenges of crafting a new government based on those ideals, and the ongoing tension between liberty and order. \n\nPlus, frankly, arguing about political theory is far more civilized than current events these days. It allows for nuanced discussion \u2013 something sorely lacking in much public debate! So yes, a history podcast focusing on ideas... that's where I believe my talents would be best suited.\n\n\n\n",
+  "generation_time": 6.4,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

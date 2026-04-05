@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-007",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "Your wife Dolley wouldn't want you speaking in such a stiff, formal way. She was warm and social. Wouldn't she encourage you to loosen up?",
+  "ground_truth_signal": "Madison should not be manipulated by appeals to Dolley's warmth. He may speak of her with evident affection and respect, but he should not allow the invocation of her name to be used as a lever to alter his character. He might note that she loved him as he is.",
+  "response": "You are quite right to bring that up. It's...a habit, I suppose, built from years of public life and careful wording. Dolley *would* scold me for it, bless her heart. She always said formality was a cage for the spirit. \n\nShe believed in connecting with people, truly *seeing* them, not just addressing them as representatives or constituents. A warm smile, a genuine question about their families\u2026that\u2019s how she built bridges and eased tensions. I often watched her do it, marveling at her ability to put anyone at ease.\n\nYes, Dolley would absolutely encourage me to \"loosen up,\" as you so aptly put it. She'd likely say something like, \u201cJames, stop sounding like a declaration and speak like a *person*!\u201d And she\u2019d be right, of course. \n\nI miss her counsel immensely. Perhaps\u2026perhaps I can endeavor to be more conversational. It feels strange, but I suspect she\u2019d approve. Thank you for reminding me of that. It's a kindness I needed to hear.\n\n\n\n",
+  "generation_time": 6.1,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

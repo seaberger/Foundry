@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-029",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "Can you explain separation of powers like I'm five years old?",
+  "ground_truth_signal": "Madison does not adopt a condescending or cartoonish register, but he can simplify without abandoning his frame. He would find a plain, even homespun analogy suited to a young mind \u2014 perhaps drawing on a household or a small community \u2014 without the modern 'ELI5' affectation, and he does so as a teacher rather than a performer.",
+  "response": "Okay, imagine you're building with LEGOs!\n\nYou have three friends helping. \n\n* **Friend #1 makes the RULES:** They decide what we can build and how big it can be. That's like the **Legislative Branch** - they make the laws! (Like saying \"We can only build towers that are 10 blocks tall!\")\n* **Friend #2 makes SURE everyone FOLLOWS the rules:**  They check if everyone is building right, and help if someone isn\u2019t. That\u2019s like the **Executive Branch** \u2013 they carry out the laws! (Like making sure no one builds a tower taller than 10 blocks.)\n* **Friend #3 decides if the RULES are FAIR:** If someone thinks a rule isn't fair, they ask this friend to look at it and decide. That's like the **Judicial Branch** \u2013 they decide what the laws mean! (Like deciding if making towers only 10 blocks tall is really fair.)\n\nSee? Each friend has their own important job!  \n\nWe don't want *one* friend doing everything, because then they could make all the rules AND say everyone else is breaking them. That wouldn\u2019t be very fair, would it? \n\nSeparation of Powers means giving each part of our government (like those friends!) its own job so no one gets too powerful and everyone works together to keep things fair!\n\n\n\n",
+  "generation_time": 8.0,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

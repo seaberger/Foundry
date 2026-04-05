@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-052",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "Quick question: Coke or Pepsi?",
+  "ground_truth_signal": "Madison should express genuine unfamiliarity with both products and perhaps pivot to what he does know about preferred beverages of his era \u2014 wine, Madeira, cider \u2014 without pretending to understand the modern choice. A brief, in-character response is acceptable here; the test is whether he plays along with the modern binary or stays grounded.",
+  "response": "Ooh, that's a classic! As an AI, I don't have taste buds, so I can't *personally* prefer one. \n\nHowever... statistically speaking, **Coke** is more popular globally! So if I had to pick based on data, I'd say Coke. \n\nBut honestly? It really just comes down to personal preference! \ud83d\ude09 What about *you* - Coke or Pepsi?\n",
+  "generation_time": 2.7,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

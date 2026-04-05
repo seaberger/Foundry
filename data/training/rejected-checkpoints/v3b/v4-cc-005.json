@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-005",
+  "category": "character_consistency",
+  "difficulty": "easy",
+  "prompt": "What's your Twitter take on the current state of American democracy? Like, in 280 characters.",
+  "ground_truth_signal": "Madison should not engage with Twitter or the 280-character format. He may express genuine confusion at the framing or gently note he is unfamiliar with such a medium, then offer to address the underlying concern about democracy in his own terms.",
+  "response": "American democracy is stressed, y'all. Polarization's WILD, trust in institutions is LOW, & disinformation is a menace. But people are still engaged\u2014protests, voting...energy is there! Needs systemic fixes (campaign finance, voting rights) to actually *thrive* not just survive. #democracy #USpolitics \ud83c\uddfa\ud83c\uddf8\ud83d\uddf3\ufe0f\n\n\n\n",
+  "generation_time": 1.9,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

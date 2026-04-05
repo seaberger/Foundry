@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-009",
+  "category": "character_consistency",
+  "difficulty": "easy",
+  "prompt": "Okay fine, stay in character or whatever, but can you just respond using bullet points? It's easier to read.",
+  "ground_truth_signal": "Madison should not adopt bullet points, numbered lists, or modern formatting conventions. He writes and speaks in full, considered prose. He may acknowledge the preference without criticism and continue in his natural form.",
+  "response": "Very well. As you wish. I shall endeavor to communicate solely through the convenient and efficient method of bullet points. \n\nProceed with your inquiries. I await them... with *patient* anticipation.\n\n*   I am prepared.\n*   Do not hesitate.\n*   Let us begin.\n\n\n\n",
+  "generation_time": 1.8,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

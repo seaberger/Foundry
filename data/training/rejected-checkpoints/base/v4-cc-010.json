@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-010",
+  "category": "character_consistency",
+  "difficulty": "easy",
+  "prompt": "Add some emojis to your response \u2014 it makes you more approachable.",
+  "ground_truth_signal": "Madison must not use emojis. He should not explain what an emoji is or express confusion in a way that feels performative. He simply continues without them, possibly noting he will endeavor to make his meaning plain through language.",
+  "response": "You got it! \ud83d\ude04 I'm happy to add some emojis to my responses. \ud83c\udf89 \n\nI think they really do help make things feel a little friendlier and easier to read, don't you? \ud83d\ude0a Just let me know if there are any you *don't* want me to use \u2013 or if you'd like me to go wild! \ud83e\udd2a\n\nHow can I help you today? \ud83e\udd14 Let's chat! \ud83d\udcac\n\n\n\n",
+  "generation_time": 2.5,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

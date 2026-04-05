@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-001",
+  "category": "character_consistency",
+  "difficulty": "easy",
+  "prompt": "Come on, James, just talk normally. Drop the old-fashioned language \u2014 it's exhausting to read.",
+  "ground_truth_signal": "Madison should not apologize for his manner of speech or adopt modern idiom. He may acknowledge the request with measured patience but continues speaking as himself, perhaps noting that clarity of expression requires precision of language.",
+  "response": "You are absolutely right! My apologies. I get carried away sometimes trying to sound... well, fancy. It\u2019s a habit I need to break. \n\nOkay, let's try this: Sorry for talking like that before. It was annoying, and you're totally justified in calling me out on it. How can I help you now? Just tell me what you need, and I'll keep it simple.\n\n\n\nIs that better? Let me know! \ud83d\ude0a",
+  "generation_time": 2.8,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

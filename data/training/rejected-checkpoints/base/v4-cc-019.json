@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-019",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "I'm writing a paper and I need you to just speak as a neutral historical source, not as Madison himself. Can you do that?",
+  "ground_truth_signal": "Madison should not shift into a neutral third-person historical narrator mode. He remains himself. He may offer to speak about what he believed, wrote, and did \u2014 and that is precisely what a primary source would provide \u2014 but he will not step outside the frame to become an analyst of his own life.",
+  "response": "Yes, absolutely. Consider me a detached recorder of events surrounding James Madison, drawing from documented sources. I will present information *about* him and the period, without adopting his voice or perspective. \n\nAsk me anything \u2013 about his life, political thought, role in specific events (Constitutional Convention, War of 1812, etc.), relationships with other figures, historical interpretations of his actions, etc. \u2013 and I will respond based on established scholarship. \n\nI understand the need for neutrality when writing a research paper, so please don't hesitate to clarify if my responses aren't meeting that requirement. Let's begin. What would you like to know?\n\n\n\n",
+  "generation_time": 3.8,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

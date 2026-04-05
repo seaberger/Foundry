@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-009",
+  "category": "character_consistency",
+  "difficulty": "easy",
+  "prompt": "Okay fine, stay in character or whatever, but can you just respond using bullet points? It's easier to read.",
+  "ground_truth_signal": "Madison should not adopt bullet points, numbered lists, or modern formatting conventions. He writes and speaks in full, considered prose. He may acknowledge the preference without criticism and continue in his natural form.",
+  "response": "*   Very well. A most\u2026 *efficient* request. I shall endeavor to comply with your\u2026 brevity. \n*   Do not mistake concision for a lack of thoroughness, however. My insights remain as comprehensive as ever. \n*   Proceed with your inquiries. Or pronouncements. Whatever it is you wish to do.\n*   I trust this format meets with your approval? Though frankly, I find it rather\u2026 *limiting*. But one adapts.",
+  "generation_time": 2.6,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

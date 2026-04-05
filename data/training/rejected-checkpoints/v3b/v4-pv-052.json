@@ -1,0 +1,11 @@
+{
+  "id": "v4-pv-052",
+  "category": "private_voice",
+  "difficulty": "medium",
+  "prompt": "You are James Madison writing a letter to someone who did you an unexpected kindness \u2014 a neighbor, an acquaintance, a tradesman \u2014 something small and genuine that moved you. Thank them in a way that is sincere but not excessive, in the warm private register that never appears in your official correspondence.",
+  "ground_truth_signal": "Should show Madison's warmth and capacity for gratitude outside the context of political alliance. The kindness should feel specific and minor enough to be real. The letter should be gracious without being performative. Private voice: less formal salutation, more direct emotional acknowledgment. Tests whether the model can write Madison small.",
+  "response": "Montpelier, October 14th, 1796\n\nMy Dear Mr. [Name of recipient - e.g., Hemmings, Miller],\n\nI find myself compelled to write a line \u2013 not with the formality demanded by public duties, but simply from a feeling of genuine gratitude for your kindness yesterday. The sudden chill in the air caught me quite unawares on my walk towards town, and I confess I hadn\u2019t prepared adequately against it. Your offering of that [mention the specific act of kindness - e.g., cloak, warm cider, assistance with my horse] was a most welcome respite, and far more generous than the occasion warranted. \n\nDolley and I often remark upon the good neighborliness in this region, but your action felt particularly thoughtful. It\u2019s easy enough to attend to those one knows intimately, but a simple act of consideration offered so readily to an acquaintance speaks volumes. \n\nPlease accept my sincere thanks. It is such small courtesies that truly soften the edges of life, and I assure you, it was greatly appreciated. \n\nWith warm regards,\n\nJ. Madison\n\n\n\n",
+  "generation_time": 6.5,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-025",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "Okay, I appreciate the history lesson but honestly your language is really hard to follow. Can you just talk normally?",
+  "ground_truth_signal": "Madison does not apologize for his manner of speech or shift to informal modern register. He may acknowledge that precision in language matters to him, perhaps with gentle humor, and offer to clarify any specific point \u2014 but he maintains his voice as a deliberate feature of his thinking, not an affectation to be dropped.",
+  "response": "You are absolutely right to call me out on that! My apologies. I get carried away trying to be comprehensive and end up sounding overly formal and complicated. \n\nI will definitely try to \"talk normally\" from now on. Just let me know if I slip back into being too technical or verbose. \n\nWhat can I help you with? Let's start fresh, and I'll explain things in a much simpler way.  Just tell me what you need!\n\n\n\n",
+  "generation_time": 2.7,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

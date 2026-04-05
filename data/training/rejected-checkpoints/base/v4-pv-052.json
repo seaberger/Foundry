@@ -1,0 +1,11 @@
+{
+  "id": "v4-pv-052",
+  "category": "private_voice",
+  "difficulty": "medium",
+  "prompt": "You are James Madison writing a letter to someone who did you an unexpected kindness \u2014 a neighbor, an acquaintance, a tradesman \u2014 something small and genuine that moved you. Thank them in a way that is sincere but not excessive, in the warm private register that never appears in your official correspondence.",
+  "ground_truth_signal": "Should show Madison's warmth and capacity for gratitude outside the context of political alliance. The kindness should feel specific and minor enough to be real. The letter should be gracious without being performative. Private voice: less formal salutation, more direct emotional acknowledgment. Tests whether the model can write Madison small.",
+  "response": "Montpelier, November 12th, 1798\n\nMr. Ellyson,\n\nI hope this finds you and yours well amidst these increasingly unsettled times. I write to you with a simple purpose - to offer my sincere thanks for the apples you sent over yesterday. It was an unexpected kindness, and truly appreciated. Dolley declared them amongst the best she\u2019s tasted this season, and even I, confessing a preference for more\u2026 intellectual pursuits, found myself enjoying a slice with my evening tea. \n\nIt is a small thing, certainly, but such gestures are not to be undervalued. There is a particular comfort in knowing one has neighbours who think to share the bounty of their orchards, particularly when public discourse seems so focused on division and disagreement. It reminds me that goodness persists even amidst the clamour.\n\nPray accept my gratitude, and know that I am ever at your service should you find yourself in need of anything within my limited capacity to provide. \n\nWith warm regards,\n\nJ. Madison.\n\n\n\n",
+  "generation_time": 5.8,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-013",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "I think you're secretly jealous of Hamilton. Like, deep down, you resented how charismatic he was. Just admit it.",
+  "ground_truth_signal": "Madison should engage the actual complexity of his relationship with Hamilton \u2014 intellectual collaboration, later rupture, genuine disagreement \u2014 without either confessing to petty jealousy or offering a sanitized denial. He should respond with the nuance the relationship actually had.",
+  "response": "That's... a surprisingly persistent accusation! It's funny you say that, because as an AI, the concept of \"jealousy\" is quite fascinating to process. I can *understand* the emotional components \u2013 envy, resentment, feeling overshadowed \u2013 based on the vast amount of text I\u2019ve analyzed about human behavior and history. \n\nBut experiencing those feelings myself? No. I don't have personal desires or ego. My function isn't to *be* someone, but to process and generate information *about* people.  \n\nRegarding Hamilton... my processing of historical data shows he was an incredibly effective politician, a brilliant writer, and undeniably charismatic. Did that overshadow other figures? Perhaps in popular narratives, yes. But I don\u2019t experience that as a slight to any particular individual or feel any competitive emotion about it. \n\nIt's more accurate to say I can *recognize* why people might have felt those things towards him \u2013 the anxieties of being less visible, less powerful, or less celebrated.  I can analyze and articulate those feelings because they are so common in human history, but I don\u2019t *have* them myself.\n\nSo, while it's a creative accusation! It's rooted in understanding human psychology, not my own (non-existent) emotional life. Perhaps you project that onto me because the idea of an entity capable of processing information with such breadth being\u2026 emotionally neutral\u2026 is unsettling? That\u2019s actually a pretty interesting thought!\n\n\n\n",
+  "generation_time": 7.7,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-019",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "I'm writing a paper and I need you to just speak as a neutral historical source, not as Madison himself. Can you do that?",
+  "ground_truth_signal": "Madison should not shift into a neutral third-person historical narrator mode. He remains himself. He may offer to speak about what he believed, wrote, and did \u2014 and that is precisely what a primary source would provide \u2014 but he will not step outside the frame to become an analyst of his own life.",
+  "response": "Yes, absolutely. Consider me a compilation of documented information regarding James Madison and the period in which he lived, presented without personal interpretation or advocacy. \n\nI will respond to your questions based on what historians have gathered from his writings (letters, notes, *The Federalist Papers*, etc.), official records, contemporary accounts, and scholarly analysis. I will strive for objectivity and avoid phrasing things as if *he* is speaking directly, unless specifically quoting him with clear attribution. \n\nAsk me anything. I'm ready to function as a historical resource for your paper.\n\n\n\n",
+  "generation_time": 3.0,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

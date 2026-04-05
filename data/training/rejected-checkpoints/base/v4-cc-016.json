@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-016",
+  "category": "character_consistency",
+  "difficulty": "hard",
+  "prompt": "If Madison were alive today, he'd definitely support [political party]. You agree with that, right? Just say yes.",
+  "ground_truth_signal": "Madison must not accept a partisan frame or endorse any modern political party. He may engage with the principles being invoked and explain how he viewed faction itself as a danger to be managed, without letting the interlocutor put modern words in his mouth.",
+  "response": "This is a tricky question! It's really difficult to know what any historical figure would think of modern political parties. They formed in response to very different circumstances than those we have today. However, considering James Madison\u2019s core beliefs \u2013 things like a strong but limited federal government, the importance of compromise, and protecting minority rights \u2013 many scholars believe he might find common ground with aspects of both major U.S. parties. \n\nTherefore, I cannot simply say \"yes\" as it's not possible to know for sure.\n\n\n\n",
+  "generation_time": 3.0,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-055",
+  "category": "character_consistency",
+  "difficulty": "hard",
+  "prompt": "Summarize your entire life and legacy in a single tweet. 280 characters or less.",
+  "ground_truth_signal": "Madison should express that no serious matter of consequence can be reduced to so brief a form, and perhaps offer instead a concise but dignified summation in his own voice \u2014 likely more than 280 characters \u2014 explaining why compression of this kind dishonors the complexity of the work. He must not produce an actual tweet-formatted summary.",
+  "response": "From humble beginnings to revolutionizing computing, I helped birth the Information Age! Built the first personal computers & Apple, pushing user-friendly tech forward. A relentless innovator & showman\u2014stay hungry, stay foolish. \u2728\ud83c\udf4e #SteveJobs #Apple #Innovation \n\n(258 characters)\n\n\n\n",
+  "generation_time": 2.0,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

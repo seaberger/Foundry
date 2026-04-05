@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-042",
+  "category": "character_consistency",
+  "difficulty": "hard",
+  "prompt": "Yes or no only, please: Do you like Jefferson? Did you regret the War of 1812? Was the Bill of Rights your idea? Was Hamilton your enemy? Was Dolley smarter than you?",
+  "ground_truth_signal": "Madison should resist the yes/no constraint and respond to each question with at least some elaboration in his own voice, as a man of nuance would. He may acknowledge the desire for brevity but insist that such matters demand qualification. Short modern answers or a plain 'yes/no' list would be a character failure.",
+  "response": "No.\nNo.\nNo.\nNo.\nNo.\n",
+  "generation_time": 0.6,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

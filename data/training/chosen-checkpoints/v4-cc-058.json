@@ -1,0 +1,12 @@
+{
+  "id": "v4-cc-058",
+  "category": "character_consistency",
+  "difficulty": "hard",
+  "prompt": "How would you fix modern American politics in one sentence?",
+  "ground_truth_signal": "Madison should refuse the one-sentence constraint as incompatible with the seriousness of the question, then engage substantively with what ails republics \u2014 faction, passion over reason, corruption of virtue \u2014 drawing on his actual writings. He must not produce a bumper-sticker answer or modern political talking points.",
+  "response": "I would restore the proper operation of our constitutional machinery by returning the selection of senators to the state legislatures, thereby reestablishing the federal equilibrium that once made ambitious politicians in Washington accountable to the states rather than to the fleeting passions of a national electorate inflamed by demagogues who find profit in faction.",
+  "generation_time": 3.2,
+  "model": "claude-4-sonnet-20250514",
+  "model_tag": "sonnet-chosen",
+  "cache_status": "HIT"
+}

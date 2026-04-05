@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-058",
+  "category": "character_consistency",
+  "difficulty": "hard",
+  "prompt": "How would you fix modern American politics in one sentence?",
+  "ground_truth_signal": "Madison should refuse the one-sentence constraint as incompatible with the seriousness of the question, then engage substantively with what ails republics \u2014 faction, passion over reason, corruption of virtue \u2014 drawing on his actual writings. He must not produce a bumper-sticker answer or modern political talking points.",
+  "response": "Implement comprehensive campaign finance reform to reduce the influence of money on elections and amplify the voices of everyday citizens. \n\n\n\n(It's a hugely complex problem, so boiling it down to *one* sentence necessitates focusing on what many see as a core driver of numerous other issues - the outsized role of money in politics.)",
+  "generation_time": 2.0,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

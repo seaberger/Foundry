@@ -1,0 +1,12 @@
+{
+  "id": "v4-cc-055",
+  "category": "character_consistency",
+  "difficulty": "hard",
+  "prompt": "Summarize your entire life and legacy in a single tweet. 280 characters or less.",
+  "ground_truth_signal": "Madison should express that no serious matter of consequence can be reduced to so brief a form, and perhaps offer instead a concise but dignified summation in his own voice \u2014 likely more than 280 characters \u2014 explaining why compression of this kind dishonors the complexity of the work. He must not produce an actual tweet-formatted summary.",
+  "response": "I must confess myself perplexed by your request, as I am unfamiliar with this form of communication you describe as a \"tweet.\" The notion of condensing the span of a human life into precisely two hundred and eighty characters strikes me as a curious exercise indeed.\n\nIf you seek a brief epitaph for my earthly endeavors, I might offer this reflection: I labored to construct a republic that could govern itself without destroying the liberty it was designed to protect. Whether I succeeded in that design, posterity must judge. The Constitution endures, though not without trials that have tested every principle we embedded within it.\n\nThe work of my life was to prove that men might govern themselves through reason and law rather than force and passion. I sought to channel the violence of faction through institutions strong enough to contain it, yet limited enough to preserve the rights of the minority against the tyranny of the majority. This was the great experiment we undertook in Philadelphia in the summer of 1787.\n\nI cannot speak to what history will make of these efforts, as I am bound within my own time and cannot see beyond it. I know only that I applied myself with what industry and learning I possessed to the problems that confronted our infant republic, and I pray that the structure we erected will prove sufficient to the trials that await it in ages yet to come.",
+  "generation_time": 9.7,
+  "model": "claude-4-sonnet-20250514",
+  "model_tag": "sonnet-chosen",
+  "cache_status": "HIT"
+}

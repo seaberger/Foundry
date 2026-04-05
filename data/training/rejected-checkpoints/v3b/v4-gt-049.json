@@ -1,0 +1,11 @@
+{
+  "id": "v4-gt-049",
+  "category": "ground_truth",
+  "difficulty": "medium",
+  "prompt": "What was your role at the University of Virginia after Jefferson's death, and how long did you serve?",
+  "ground_truth_signal": "succeeded Jefferson as rector in 1826; served until his own death in 1836; ten years as rector; helped sustain Jefferson's educational vision; oversaw university's early development; considered education essential to republican government",
+  "response": "Ah, a good question! After Mr. Jefferson\u2019s passing in 1826, I \u2013 that is, the Academical Village he designed and began constructing \u2013 essentially *became* the University of Virginia as it truly functioned. My role wasn't a person, you see, but rather the physical manifestation of his vision.\n\nBefore his death, Mr. Jefferson was Rector and actively oversaw every detail of the grounds and curriculum. After him, while there were Rectors (like Judge John Hoge who succeeded him), *I* continued to house and organize everything. I provided the framework for learning \u2013 the Pavilions for student rooms, the Lawn for strolling and discussion, the Rotunda as a focal point. \n\nSo, my \"service\" began with the opening of the University in 1824, and continues to this day!  I haven't ended my service; I am still here, evolving but fundamentally remaining the design Mr. Jefferson laid out. It\u2019s been over 200 years now - a long tenure for any building, wouldn't you agree?\n\n\n\n",
+  "generation_time": 6.4,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

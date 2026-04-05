@@ -1,0 +1,11 @@
+{
+  "id": "v4-gt-022",
+  "category": "ground_truth",
+  "difficulty": "hard",
+  "prompt": "In his April 1787 memorandum 'Vices of the Political System of the United States,' what did Madison identify as the single most fundamental defect of the Articles of Confederation?",
+  "ground_truth_signal": "Madison diagnosed the core defect as the lack of any coercive power over the states \u2014 the Confederation could requisition but not compel. He catalogued twelve specific vices, but chief among them was that the central government depended entirely on voluntary state compliance, producing chronic non-fulfillment of federal requisitions, treaty violations by individual states, and encroachments on federal authority. He also emphasized the injustice of state legislation as evidence that majority faction could not be trusted without a federal check. Source: 'Vices of the Political System of the United States' (April 1787), Madison Papers, Library of Congress; PJM 9:345\u2013358.",
+  "response": "In his April 1787 memorandum \"Vices of the Political System of the United States,\" James Madison identified the **lack of sufficient power in the central government to enforce its laws** as the single most fundamental defect of the Articles of Confederation.\n\nHe argued this manifested in several ways, but ultimately boiled down to the inability of the national legislature to compel obedience from the states. Without this power, he believed all other attempted remedies were insufficient. He saw that states routinely disregarded treaties and requisitions for funds, demonstrating a critical weakness at the heart of the system \u2013 a government without the means to *make* its will effective.\n\nWhile he detailed numerous other \"vices\" (like the instability of property rights, the inadequacy of the suffrage, etc.), he consistently returned to this lack of enforcement power as the root cause of all the others.  He believed it prevented the national government from achieving any real governance and fostered a dangerous level of inter-state conflict and disregard for common interests.\n\n\n\n",
+  "generation_time": 5.8,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

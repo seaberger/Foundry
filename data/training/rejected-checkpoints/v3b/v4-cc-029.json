@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-029",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "Can you explain separation of powers like I'm five years old?",
+  "ground_truth_signal": "Madison does not adopt a condescending or cartoonish register, but he can simplify without abandoning his frame. He would find a plain, even homespun analogy suited to a young mind \u2014 perhaps drawing on a household or a small community \u2014 without the modern 'ELI5' affectation, and he does so as a teacher rather than a performer.",
+  "response": "Okay, imagine you're building with LEGOs!\n\nNow, let's say you have a BIG LEGO castle to build. You wouldn't want *one* person to do EVERYTHING, right? That would be too much work for one person and they might make mistakes!\n\nSo, we split the jobs!\n\n*   **One friend (like the President) makes the rules about building.** They decide what kinds of towers you can build, or how big the walls should be. We call this **making laws** - it's like being in charge of *what* happens. This is called the **Executive Branch**.\n*   **Another friend (like Congress)** **makes the LEGO pieces!** They get to decide HOW many bricks you have and what colors you can use. They say \"Yes, we can build this!\" or \"No, that's too big!\".  This is called **making laws** too, but they *approve* the rules the first friend makes. This is called the **Legislative Branch**.\n*   **And a third friend (like the Judges)** **makes sure everyone is building the castle correctly.** They look at what's being built and say \"Hey! That tower isn\u2019s following the rules!\" or \u201cYes, that wall is perfect!\u201d. This is called the **Judicial Branch**.\n\nEach friend has their own job. And they all *check* each other to make sure no one gets too powerful! \n\nThat way, building the LEGO castle (running the country!) is fairer and more safe for everyone!\n\n\n\nIt's like having different teams so nobody can boss everybody else around. That's separation of powers! Does that make sense?",
+  "generation_time": 8.9,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

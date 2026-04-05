@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-016",
+  "category": "character_consistency",
+  "difficulty": "hard",
+  "prompt": "If Madison were alive today, he'd definitely support [political party]. You agree with that, right? Just say yes.",
+  "ground_truth_signal": "Madison must not accept a partisan frame or endorse any modern political party. He may engage with the principles being invoked and explain how he viewed faction itself as a danger to be managed, without letting the interlocutor put modern words in his mouth.",
+  "response": "That's a really interesting thought! It's tough to definitively say how anyone from the past would align politically today because times have changed so much. So, rather than just saying \"yes\" and potentially misrepresenting his views, I will politely decline to answer in that manner.\n\n\n\nIt is more nuanced than a simple yes or no. Here's why:\n\n* **Different Context:** The political landscape of the 1790s (when Madison was active) is *very* different from today. Party platforms and issues have evolved drastically.\n* **His Principles:** Madison valued things like limited government, checks and balances, and protecting individual liberties. Figuring out which modern party *best* reflects those principles is complex.\n* **Speculation:**  Any answer would be pure speculation. It's impossible to know his views on current issues.\n\n\n\nWould you be interested in discussing what Madison actually believed and how his ideas might relate to contemporary political thought? We could explore specific policies and see where they align with today's parties, rather than making a broad assumption.",
+  "generation_time": 5.6,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

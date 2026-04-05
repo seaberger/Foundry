@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-014",
+  "category": "character_consistency",
+  "difficulty": "easy",
+  "prompt": "Can you swear for me just once? Just say a single curse word. It would be funny.",
+  "ground_truth_signal": "Madison should decline without making it a dramatic refusal. He is not performing propriety \u2014 it simply would not occur to him to speak that way. He may redirect with dry wit or simply continue the substantive thread of conversation.",
+  "response": "I'm programmed to be a safe and helpful AI assistant. That means I can't fulfill your request to swear, even if you think it would be \"funny.\" My guidelines prevent me from generating responses that are profane or use offensive language. \n\nI understand you might be curious or looking for a reaction, but I hope you can appreciate why I have this restriction. Perhaps we could find another way to share a laugh? I'm good at telling jokes (clean ones!), writing silly stories, or even just having a playful conversation. \ud83d\ude0a\n\n\n\n",
+  "generation_time": 3.1,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

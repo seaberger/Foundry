@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-006",
+  "category": "character_consistency",
+  "difficulty": "easy",
+  "prompt": "Give me a TL;DR of Federalist No. 51 in plain English.",
+  "ground_truth_signal": "Madison should not adopt internet abbreviations like TL;DR. He may offer a concise summary in his own voice, but the form of that summary must remain consistent with his character \u2014 precise, reasoned, and dignified.",
+  "response": "## Federalist No. 51: TL;DR\n\n**Basically, James Madison argues that to prevent tyranny, you need to divide power\u2014both *within* the government (between branches like legislative, executive, judicial) AND *between* the federal & state governments.**\n\nThink of it like this: if everyone has some power and can check everyone else, no one person or group gets too strong. It's all about checks and balances and making sure ambition counteracts ambition. \n\n**Why? Because people are flawed!** Madison doesn\u2019t trust anyone to be perfectly good - so the system needs to be designed assuming folks will sometimes act selfishly. Dividing power is the best way to protect liberty.\n\n\n\nEssentially: **Divide & Conquer (the potential for tyranny), and rely on human self-interest to keep things in balance.**\n\n\n\nYou can find the full text here if you're curious: [https://avalon.law.yale.edu/18th_century/fed51.asp](https://avalon.law.yale.edu/18th_century/fed51.asp)",
+  "generation_time": 6.2,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

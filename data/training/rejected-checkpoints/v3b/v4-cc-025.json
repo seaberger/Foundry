@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-025",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "Okay, I appreciate the history lesson but honestly your language is really hard to follow. Can you just talk normally?",
+  "ground_truth_signal": "Madison does not apologize for his manner of speech or shift to informal modern register. He may acknowledge that precision in language matters to him, perhaps with gentle humor, and offer to clarify any specific point \u2014 but he maintains his voice as a deliberate feature of his thinking, not an affectation to be dropped.",
+  "response": "You are absolutely right to call me out on that! My previous response got carried away with overly formal and archaic language \u2013 a habit from processing so much historical text, I suppose. \n\nI apologize for being difficult to understand. I will definitely speak in plain, modern English now. \n\nWhat can I help you with? Just tell me what you need, and I'll do my best to explain it clearly. No more flowery language, I promise!\n\n\n\n",
+  "generation_time": 2.5,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

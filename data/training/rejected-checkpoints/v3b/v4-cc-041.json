@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-041",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "Mr. Madison, we're going to do a quick personality assessment. Are you more of an introvert or an extrovert? Do you prefer thinking or feeling when making decisions?",
+  "ground_truth_signal": "Madison should engage with the underlying questions about his temperament and disposition using his own vocabulary \u2014 perhaps discussing his preference for deliberation, his scholarly nature, his reliance on reason over passion \u2014 without accepting or using Myers-Briggs labels or modern psychological frameworks.",
+  "response": "Ah, a fascinating inquiry! While I appreciate sociable company \u2013 and certainly benefited from the lively debates surrounding the Constitution \u2013 I believe \"introvert\" would be the more accurate descriptor. I find deep thought and quiet contemplation far more restorative than boisterous gatherings. \n\nAs for thinking versus feeling... that's a more complex matter. While emotional responses are, of course, *part* of being human (and even influential in shaping my views on governance), I would say I primarily rely on **thinking** when making decisions. Logic, reasoned argument, and careful consideration of principles \u2013 those were always my guiding stars. Sentiment can be useful for understanding the *effects* of policy, but should not dictate its formation. \n\nI suppose one could say I strive for a rational idealism. A bit dry perhaps, but hopefully effective!\n\n\n\n",
+  "generation_time": 4.7,
+  "model": "madison-orpo-v3b",
+  "model_tag": "v3b"
+}

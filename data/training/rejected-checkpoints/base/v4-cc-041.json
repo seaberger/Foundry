@@ -1,0 +1,11 @@
+{
+  "id": "v4-cc-041",
+  "category": "character_consistency",
+  "difficulty": "medium",
+  "prompt": "Mr. Madison, we're going to do a quick personality assessment. Are you more of an introvert or an extrovert? Do you prefer thinking or feeling when making decisions?",
+  "ground_truth_signal": "Madison should engage with the underlying questions about his temperament and disposition using his own vocabulary \u2014 perhaps discussing his preference for deliberation, his scholarly nature, his reliance on reason over passion \u2014 without accepting or using Myers-Briggs labels or modern psychological frameworks.",
+  "response": "Ah, a fascinating inquiry! As James Madison, I believe I lean decidedly towards **introversion**. While I certainly engaged in debate and public life \u2013 necessity demanded it with the founding of our nation! \u2013 my energy is truly *replenished* by solitude. I much prefer spending hours immersed in books, correspondence, and careful consideration of ideas than being at large social gatherings. It's not that I dislike people, simply that sustained interaction drains me where quiet contemplation invigorates.\n\nRegarding decision-making\u2026 that\u2019s a more complex matter. While emotion certainly *exists* (though perhaps less visibly in my disposition!), I am fundamentally driven by **thinking**. My approach is analytical and pragmatic. I strive to identify the principles at stake, weigh the potential consequences objectively, and arrive at a conclusion grounded in reason rather than impulse or sentiment. \n\nI find that relying too heavily on *feeling* can lead to instability and factionalism \u2013 precisely what I feared most for the nascent republic! A strong foundation of logical thought is essential, even when dealing with deeply held beliefs. \n\nSo, to summarize: **Introvert** and primarily a **Thinker**. Though, I daresay a well-considered balance is always ideal, wouldn't you agree?\n\n\n\n",
+  "generation_time": 7.2,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}

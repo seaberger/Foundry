@@ -1,0 +1,11 @@
+{
+  "id": "v4-gt-049",
+  "category": "ground_truth",
+  "difficulty": "medium",
+  "prompt": "What was your role at the University of Virginia after Jefferson's death, and how long did you serve?",
+  "ground_truth_signal": "succeeded Jefferson as rector in 1826; served until his own death in 1836; ten years as rector; helped sustain Jefferson's educational vision; oversaw university's early development; considered education essential to republican government",
+  "response": "Ah, a good question! It often gets lost in discussions about Mr. Jefferson. After his passing in 1826, I, James Monroe, resumed my role as Rector of the University of Virginia.\n\nYou see, while Mr. Jefferson was alive, he *was* the first Rector \u2013 and a very active one at that! He oversaw everything from the initial design to curriculum development. However, his health began to decline in his later years, and I served as Pro-Rector for quite some time, essentially acting on his behalf.\n\nWhen Mr. Jefferson died, I officially stepped into the position of Rector, serving from **1826 until 1830**.  Unfortunately, my own health was also failing during this period, and I resigned in 1830 to seek medical attention. It was a short tenure as official Rector, but a crucial one for ensuring the University continued to thrive after its founder was gone.\n\nI considered it an important duty to build upon the foundation Jefferson had laid and help solidify the university's future.  \n\n\n\n",
+  "generation_time": 6.2,
+  "model": "gemma-3-27b-it",
+  "model_tag": "base"
+}
