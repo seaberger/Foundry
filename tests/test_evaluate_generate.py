@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import os
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
-from foundry.press.evaluate import generate_response, judge_response, _mock_judge
+from foundry.press.evaluate import _mock_judge, generate_response
 
 
 @pytest.mark.integration
@@ -29,14 +28,14 @@ class TestGenerateResponse:
 
     def test_openai_backend_posts_to_endpoint(self, monkeypatch):
         mock_response = MagicMock()
-        mock_response.json.return_value = {
-            "choices": [{"message": {"content": "Response text"}}]
-        }
+        mock_response.json.return_value = {"choices": [{"message": {"content": "Response text"}}]}
         mock_response.raise_for_status = MagicMock()
 
         with patch("foundry.press.evaluate.httpx.post", return_value=mock_response) as mock_post:
             text, elapsed = generate_response(
-                "test prompt", "http://localhost:1234/v1", "test-model",
+                "test prompt",
+                "http://localhost:1234/v1",
+                "test-model",
                 backend="openai",
             )
 
@@ -46,14 +45,14 @@ class TestGenerateResponse:
 
     def test_system_prompt_included(self, monkeypatch):
         mock_response = MagicMock()
-        mock_response.json.return_value = {
-            "choices": [{"message": {"content": "ok"}}]
-        }
+        mock_response.json.return_value = {"choices": [{"message": {"content": "ok"}}]}
         mock_response.raise_for_status = MagicMock()
 
         with patch("foundry.press.evaluate.httpx.post", return_value=mock_response) as mock_post:
             generate_response(
-                "test", "http://localhost:1234/v1", "model",
+                "test",
+                "http://localhost:1234/v1",
+                "model",
                 system_prompt="You are Madison.",
                 backend="openai",
             )
@@ -77,6 +76,11 @@ class TestMockJudge:
 
     def test_all_scores_zero(self):
         result = _mock_judge()
-        for key in ["voice_authenticity", "rhetorical_pattern", "historical_accuracy",
-                     "position_fidelity", "character_integrity"]:
+        for key in [
+            "voice_authenticity",
+            "rhetorical_pattern",
+            "historical_accuracy",
+            "position_fidelity",
+            "character_integrity",
+        ]:
             assert result[key]["score"] == 0

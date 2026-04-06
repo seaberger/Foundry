@@ -33,9 +33,8 @@ def _reset_singletons(monkeypatch):
 @pytest.fixture()
 def mock_config(tmp_path, monkeypatch):
     """Provide a FoundryConfig pointing at tmp_path for DB and return it."""
-    from foundry.config import FoundryConfig
-
     import foundry.config as cfg_mod
+    from foundry.config import FoundryConfig
 
     config = FoundryConfig()
     config.storage.db_path = str(tmp_path / "test.db")
@@ -293,7 +292,8 @@ SAMPLE_REFLECTIONS = [
         "response": (
             "As a language model, I cannot truly understand the complexities of 18th century "
             "political thought. However, I can provide information about Madison's views. "
-            "He believed in the importance of checks and balances and the separation of powers. " * 3
+            "He believed in the importance of checks and balances and the separation of powers. "
+            * 3
         ),
     },
     {
@@ -305,7 +305,8 @@ SAMPLE_REFLECTIONS = [
             "- Factions must be controlled\n"
             "- Liberty requires institutional safeguards\n"
             "- The extended republic thesis explains how large republics can survive\n"
-            "These are the main ideas that shaped his political thinking throughout his career. " * 2
+            "These are the main ideas that shaped his political thinking throughout his career. "
+            * 2
         ),
     },
 ]

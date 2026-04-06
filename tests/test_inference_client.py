@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from unittest.mock import AsyncMock, patch, MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
@@ -73,7 +73,7 @@ class TestStreamChat:
         async def mock_aiter_lines():
             yield ": keep-alive"
             yield "event: ping"
-            yield f'data: {json.dumps({"choices": [{"delta": {"content": "ok"}, "index": 0}]})}'
+            yield f"data: {json.dumps({'choices': [{'delta': {'content': 'ok'}, 'index': 0}]})}"
             yield "data: [DONE]"
 
         mock_response = AsyncMock()

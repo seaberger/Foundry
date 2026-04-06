@@ -70,7 +70,9 @@ class TestThemes:
 
     def test_all_target_counts_positive(self):
         for theme in THEMES:
-            assert theme["target_count"] > 0, f"Theme '{theme['name']}' has non-positive target_count"
+            assert theme["target_count"] > 0, (
+                f"Theme '{theme['name']}' has non-positive target_count"
+            )
 
     def test_all_seed_questions_nonempty(self):
         for theme in THEMES:

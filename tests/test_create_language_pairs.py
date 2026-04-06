@@ -5,8 +5,6 @@ from __future__ import annotations
 import random
 import re
 
-import pytest
-
 from create_language_pairs import inject_cjk_at_words
 
 CJK_RE = re.compile(r"[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]")
@@ -62,8 +60,13 @@ class TestInjectCjkAtWords:
         assert applied > 0
         # At least one of the governance words from the original must still be present
         target_words = [
-            "republic", "constitution", "power", "liberty", "separation",
-            "authority", "virtue",
+            "republic",
+            "constitution",
+            "power",
+            "liberty",
+            "separation",
+            "authority",
+            "virtue",
         ]
         found = [w for w in target_words if w in corrupted.lower()]
         assert len(found) > 0, "No target words found in corrupted text"

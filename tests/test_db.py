@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import sqlite3
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
-from foundry.db import init_db, get_db, now_iso
+from foundry.db import get_db, init_db, now_iso
 
 
 class TestInitDb:
@@ -26,18 +26,16 @@ class TestInitDb:
     def test_schema_version_set(self, mock_config):
         init_db()
         with get_db() as db:
-            row = db.execute(
-                "SELECT value FROM schema_info WHERE key = 'version'"
-            ).fetchone()
+            row = db.execute("SELECT value FROM schema_info WHERE key = 'version'").fetchone()
         assert row["value"] == "1"
 
     def test_idempotent(self, mock_config):
         init_db()
         init_db()  # Should not error
         with get_db() as db:
-            count = db.execute(
-                "SELECT COUNT(*) FROM schema_info WHERE key = 'version'"
-            ).fetchone()[0]
+            count = db.execute("SELECT COUNT(*) FROM schema_info WHERE key = 'version'").fetchone()[
+                0
+            ]
         assert count == 1
 
 
@@ -56,8 +54,7 @@ class TestGetDb:
         init_db()
         with get_db() as db:
             db.execute(
-                "INSERT INTO sessions (id, name, created_at, last_active) "
-                "VALUES (?, ?, ?, ?)",
+                "INSERT INTO sessions (id, name, created_at, last_active) VALUES (?, ?, ?, ?)",
                 ("test-1", "Test Session", "2025-01-01T00:00:00Z", "2025-01-01T00:00:00Z"),
             )
             db.commit()
@@ -77,4 +74,4 @@ class TestNowIso:
         result = now_iso()
         parsed = datetime.fromisoformat(result)
         assert parsed.tzinfo is not None
-        assert parsed.tzinfo == timezone.utc
+        assert parsed.tzinfo == UTC

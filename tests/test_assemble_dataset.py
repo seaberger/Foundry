@@ -2,17 +2,11 @@
 
 from __future__ import annotations
 
-import pytest
-
 from assemble_v4_dataset import (
     ABSOLUTELY_SLOP_RE,
-    BULLET_RE,
-    CONTRACTION_RE,
-    MODERN_FILLER_RE,
     is_chosen_contaminated,
     voice_score,
 )
-
 
 # ---------------------------------------------------------------------------
 # Clean Madison prose used across tests

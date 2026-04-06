@@ -3,24 +3,17 @@
 from __future__ import annotations
 
 import json
-import sys
-from pathlib import Path
 from unittest.mock import patch
 
 import pytest
 
 from foundry.press.format_dpo import (
-    MADISON_MARKERS,
-    MAX_RESPONSE_WORDS,
-    MIN_RESPONSE_WORDS,
-    TEACHER_ANTI_SLOP,
     has_anti_slop,
     load_jsonl,
     madison_score,
     main,
     word_count,
 )
-
 
 # ======================================================================
 # TestHasAntiSlop
@@ -258,7 +251,9 @@ def _make_student_record(prompt, response, theme="test_theme", model="student-mo
 
 def _filler(n=50):
     """Return a string of n words of generic filler text."""
-    words = "the republic requires vigilance and prudence in all matters of governance and law".split()
+    words = (
+        "the republic requires vigilance and prudence in all matters of governance and law".split()
+    )
     result = []
     for i in range(n):
         result.append(words[i % len(words)])
@@ -286,7 +281,15 @@ class TestMainIntegration:
 
         with patch(
             "sys.argv",
-            ["format_dpo", "--teacher", str(teacher_path), "--student", str(student_path), "--output", str(output_path)],
+            [
+                "format_dpo",
+                "--teacher",
+                str(teacher_path),
+                "--student",
+                str(student_path),
+                "--output",
+                str(output_path),
+            ],
         ):
             main()
 
@@ -308,7 +311,15 @@ class TestMainIntegration:
 
         with patch(
             "sys.argv",
-            ["format_dpo", "--teacher", str(teacher_path), "--student", str(student_path), "--output", str(output_path)],
+            [
+                "format_dpo",
+                "--teacher",
+                str(teacher_path),
+                "--student",
+                str(student_path),
+                "--output",
+                str(output_path),
+            ],
         ):
             main()
 
@@ -329,7 +340,15 @@ class TestMainIntegration:
 
         with patch(
             "sys.argv",
-            ["format_dpo", "--teacher", str(teacher_path), "--student", str(student_path), "--output", str(output_path)],
+            [
+                "format_dpo",
+                "--teacher",
+                str(teacher_path),
+                "--student",
+                str(student_path),
+                "--output",
+                str(output_path),
+            ],
         ):
             main()
 
@@ -348,8 +367,7 @@ class TestMainIntegration:
             "Experience has taught us that faction threatens republican liberty. "
             "The federalist understanding of separation of powers remains essential. "
             "If men were angels, the constitution would be unnecessary. "
-            "Enumerated powers and the memorial and remonstrance shaped everything. "
-            + _filler(20)
+            "Enumerated powers and the memorial and remonstrance shaped everything. " + _filler(20)
         )
         assert madison_score(madison_student) >= 4
 
@@ -358,7 +376,15 @@ class TestMainIntegration:
 
         with patch(
             "sys.argv",
-            ["format_dpo", "--teacher", str(teacher_path), "--student", str(student_path), "--output", str(output_path)],
+            [
+                "format_dpo",
+                "--teacher",
+                str(teacher_path),
+                "--student",
+                str(student_path),
+                "--output",
+                str(output_path),
+            ],
         ):
             main()
 
@@ -379,7 +405,15 @@ class TestMainIntegration:
 
         with patch(
             "sys.argv",
-            ["format_dpo", "--teacher", str(teacher_path), "--student", str(student_path), "--output", str(output_path)],
+            [
+                "format_dpo",
+                "--teacher",
+                str(teacher_path),
+                "--student",
+                str(student_path),
+                "--output",
+                str(output_path),
+            ],
         ):
             main()
 
@@ -419,9 +453,12 @@ class TestMainIntegration:
             "sys.argv",
             [
                 "format_dpo",
-                "--teacher", str(teacher_jsonl),
-                "--student", str(student_jsonl),
-                "--output", str(output_path),
+                "--teacher",
+                str(teacher_jsonl),
+                "--student",
+                str(student_jsonl),
+                "--output",
+                str(output_path),
             ],
         ):
             main()

@@ -5,19 +5,17 @@ from __future__ import annotations
 import json
 
 import pytest
-
 from filter_introspection import (
-    _has_contraction,
-    _has_bullets,
-    _has_filler,
     _expand_contractions,
-    strip_artifacts,
-    check_voice_contamination,
-    check_reflection_length,
+    _has_bullets,
+    _has_contraction,
+    _has_filler,
     check_dialogue_turn_lengths,
+    check_reflection_length,
+    check_voice_contamination,
     filter_reflections,
+    strip_artifacts,
 )
-
 
 # ---------------------------------------------------------------------------
 # TestHasContraction
@@ -25,23 +23,29 @@ from filter_introspection import (
 
 
 class TestHasContraction:
-    @pytest.mark.parametrize("text", [
-        "I can't believe this happened.",
-        "He won't attend the convention.",
-        "I'm certain of the outcome.",
-        "Let's consider the alternatives.",
-        "It's a matter of great importance.",
-        "He doesn't understand the argument.",
-    ])
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "I can't believe this happened.",
+            "He won't attend the convention.",
+            "I'm certain of the outcome.",
+            "Let's consider the alternatives.",
+            "It's a matter of great importance.",
+            "He doesn't understand the argument.",
+        ],
+    )
     def test_modern_contractions_detected(self, text):
         assert _has_contraction(text) is True
 
-    @pytest.mark.parametrize("text", [
-        "'Tis the season of deliberation.",
-        "'Twas a long and difficult negotiation.",
-        "'Twould be unwise to proceed without caution.",
-        "The clock struck three o'clock in the afternoon.",
-    ])
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "'Tis the season of deliberation.",
+            "'Twas a long and difficult negotiation.",
+            "'Twould be unwise to proceed without caution.",
+            "The clock struck three o'clock in the afternoon.",
+        ],
+    )
     def test_period_appropriate_allowed(self, text):
         assert _has_contraction(text) is False
 
@@ -96,13 +100,16 @@ class TestHasBullets:
 
 
 class TestHasFiller:
-    @pytest.mark.parametrize("phrase", [
-        "Let me break this down for you.",
-        "Here's the thing about faction.",
-        "Let's unpack this concept together.",
-        "Great question about the Constitution.",
-        "I'd be happy to explain the matter.",
-    ])
+    @pytest.mark.parametrize(
+        "phrase",
+        [
+            "Let me break this down for you.",
+            "Here's the thing about faction.",
+            "Let's unpack this concept together.",
+            "Great question about the Constitution.",
+            "I'd be happy to explain the matter.",
+        ],
+    )
     def test_filler_phrases_detected(self, phrase):
         assert _has_filler(phrase) is True
 

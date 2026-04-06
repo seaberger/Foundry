@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from foundry.press.teacher import load_constitution, load_prompts
 
 
@@ -29,10 +27,9 @@ class TestLoadPrompts:
 
     def test_custom_path(self, tmp_path):
         import json
+
         path = tmp_path / "test-prompts.jsonl"
-        path.write_text(
-            json.dumps({"prompt": "Test question?", "theme": "test"}) + "\n"
-        )
+        path.write_text(json.dumps({"prompt": "Test question?", "theme": "test"}) + "\n")
         prompts = load_prompts(path)
         assert len(prompts) == 1
         assert prompts[0]["prompt"] == "Test question?"

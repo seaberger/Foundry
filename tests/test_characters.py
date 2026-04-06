@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 import pytest
 
 from foundry.characters.loader import CharacterCard, list_characters, load_character

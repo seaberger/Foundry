@@ -128,14 +128,14 @@ class TestRepairJson:
     def test_missing_comma_after_closing_brace(self):
         broken = '{"a": "x"}\n"b"'
         repaired = _repair_json(broken)
-        assert '}\n' not in repaired or ',\n' in repaired
+        assert "}\n" not in repaired or ",\n" in repaired
         # The regex targets `"}\n  "` patterns -- verify comma is inserted.
         assert '"}\n' not in repaired or '"},\n' in repaired
 
     def test_missing_comma_after_closing_bracket(self):
         broken = '["x"]\n"b"'
         repaired = _repair_json(broken)
-        assert '],\n' in repaired
+        assert "],\n" in repaired
 
     def test_valid_json_passes_through_unchanged(self):
         valid = '{"a": 1, "b": 2}'
