@@ -43,7 +43,7 @@ chamber_image = (
     )
     .entrypoint([])
     .uv_pip_install(
-        "vllm==0.13.0",
+        "vllm==0.19.0",
         "huggingface-hub==0.36.0",
         "fastapi>=0.115",
         "uvicorn[standard]>=0.34",
@@ -64,8 +64,7 @@ chamber_image = (
 # ── Model Configuration ──
 
 BASE_MODEL = "Qwen/Qwen3-32B"
-ADAPTER_NAME = "madison-qwen3-r2-v1"
-ADAPTER_PATH = f"/adapters/experiments/{ADAPTER_NAME}"
+MERGED_MODEL_PATH = "/merged/madison-qwen3-r2-v1-merged"
 VLLM_PORT = 8000
 
 # ── Volumes ──
@@ -73,6 +72,7 @@ VLLM_PORT = 8000
 hf_cache_vol = modal.Volume.from_name("huggingface-cache", create_if_missing=True)
 vllm_cache_vol = modal.Volume.from_name("vllm-cache", create_if_missing=True)
 adapter_vol = modal.Volume.from_name("foundry-adapters", create_if_missing=True)
+merged_vol = modal.Volume.from_name("foundry-merged-models", create_if_missing=True)
 chamber_db_vol = modal.Volume.from_name("foundry-chamber-db", create_if_missing=True)
 
 # ── App ──
@@ -339,6 +339,7 @@ class Gateway:
         "/root/.cache/huggingface": hf_cache_vol,
         "/root/.cache/vllm": vllm_cache_vol,
         "/adapters": adapter_vol,
+        "/merged": merged_vol,
         "/data": chamber_db_vol,
     },
     scaledown_window=10 * MINUTES,
@@ -362,16 +363,13 @@ def chamber_web():
     log.info("Starting vLLM subprocess...")
     vllm_cmd = [
         "python3", "-m", "vllm.entrypoints.openai.api_server",
-        "--model", BASE_MODEL,
+        "--model", MERGED_MODEL_PATH,
+        "--tokenizer", BASE_MODEL,
+        "--served-model-name", "madison",
         "--port", str(VLLM_PORT),
         "--max-model-len", "2048",
         "--gpu-memory-utilization", "0.90",
         "--dtype", "auto",
-        "--enable-lora",
-        "--max-lora-rank", "64",
-        "--lora-modules", json.dumps({"name": "madison", "path": ADAPTER_PATH}),
-        "--compilation-config", '{"level": 0}',
-        "--disable-log-requests",
     ]
     subprocess.Popen(vllm_cmd)
     threading.Thread(target=_poll_vllm_ready, daemon=True).start()
@@ -476,6 +474,8 @@ def chamber_web():
 
     @chamber.post("/sessions")
     async def create_session(character: str = Form(...), name: str = Form("")):
+        if not _vllm_ready.is_set():
+            return RedirectResponse(url=GATEWAY_URL)
         card = load_character(character)
         session_id = uuid.uuid4().hex[:12]
         # Prepend /no_think to suppress Qwen3 <think> tags
@@ -495,6 +495,8 @@ def chamber_web():
 
     @chamber.get("/sessions/{session_id}", response_class=HTMLResponse)
     async def chat_page(request: Request, session_id: str):
+        if not _vllm_ready.is_set():
+            return RedirectResponse(url=GATEWAY_URL)
         with get_db() as db:
             session = db.execute(
                 "SELECT * FROM sessions WHERE id = ?", (session_id,)
@@ -562,9 +564,6 @@ def chamber_web():
                 yield {"event": "done", "data": ""}
                 return
 
-            full_response = []
-            past_think = False  # Qwen3 emits <think>...</think> at the start
-            think_buf = ""
             config = get_config()
             url = f"http://localhost:{VLLM_PORT}/v1/chat/completions"
             api_messages = [{"role": "system", "content": system_prompt}] + history
@@ -574,50 +573,26 @@ def chamber_web():
                 "temperature": config.samplers.temperature,
                 "top_p": config.samplers.top_p,
                 "max_tokens": config.samplers.max_tokens,
-                "stream": True,
+                "stream": False,
             }
 
+            full_response = []
             try:
                 async with httpx.AsyncClient(timeout=300) as client:
-                    async with client.stream("POST", url, json=payload) as resp:
-                        resp.raise_for_status()
-                        async for line in resp.aiter_lines():
-                            if not line.startswith("data: "):
-                                continue
-                            data = line[6:]
-                            if data.strip() == "[DONE]":
-                                break
-                            try:
-                                chunk = json.loads(data)
-                                delta = chunk.get("choices", [{}])[0].get("delta", {})
-                                content = delta.get("content")
-                                if not content:
-                                    continue
+                    resp = await client.post(url, json=payload)
+                    resp.raise_for_status()
+                    data = resp.json()
+                    content = data["choices"][0]["message"]["content"]
 
-                                # ── Strip <think>...</think> at start of response ──
-                                # Buffer tokens until we see </think>, then pass
-                                # all subsequent tokens through untouched.
-                                if not past_think:
-                                    think_buf += content
-                                    if "</think>" in think_buf:
-                                        # Extract any content after the closing tag
-                                        after = think_buf.split("</think>", 1)[1]
-                                        past_think = True
-                                        after = after.lstrip()
-                                        if after:
-                                            full_response.append(after)
-                                            yield {"event": "token", "data": after}
-                                    # If no <think> tag at all after 50 chars, pass through
-                                    elif len(think_buf) > 50 and "<think>" not in think_buf:
-                                        past_think = True
-                                        full_response.append(think_buf)
-                                        yield {"event": "token", "data": think_buf}
-                                else:
-                                    full_response.append(content)
-                                    yield {"event": "token", "data": content}
+                    # Strip <think>...</think> prefix
+                    if "</think>" in content:
+                        content = content.split("</think>", 1)[1].lstrip()
+                    elif content.startswith("<think>"):
+                        pass  # Incomplete think block — pass through
+                    content = _strip_think_tags(content)
 
-                            except (json.JSONDecodeError, IndexError, KeyError):
-                                continue
+                    full_response.append(content)
+                    yield {"event": "token", "data": content}
 
             except Exception as e:
                 log.error("Inference error: %s", e)
