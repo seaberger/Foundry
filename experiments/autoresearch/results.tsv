@@ -1,2 +1,9 @@
 commit	timestamp	run_mode	steps	manifest	gt	gt_delta	overall	max_regression	critical_failures	constraint_ok	probe_score	status	description
 e3c5897	20260405-121125	scout	200	baseline_r2.json	0.0000	-8.8500	0.0000	-9.4100	14	false	-669.3000	discard	mode=scout; manifest=baseline_r2.json; lr=2e-05; beta=0.1; rank=64; steps=200; curriculum=shuffle
+dc0cb5d	20260405-181833	scout	200	baseline_r2.json	5.3800	-3.4700	6.0900	-9.2500	11	false	-235.4000	discard	mode=scout; manifest=baseline_r2.json; lr=2e-05; beta=0.1; rank=64; steps=200; curriculum=shuffle
+dc0cb5d	20260405-194819	probe	300	baseline_r2.json	7.7900	-1.0600	7.7700	-9.2500	5	false	-122.0800	discard	mode=probe; manifest=baseline_r2.json; lr=2e-05; beta=0.1; rank=64; steps=300; curriculum=shuffle
+6e68704	20260405-214003	probe	300	baseline_r2.json	5.9100	-2.9400	6.6900	-9.2500	10	false	-181.6800	discard	mode=probe; manifest=baseline_r2.json; lr=1.8e-05; beta=0.1; rank=64; steps=300; curriculum=shuffle
+6e68704	20260405-231208	probe	300	baseline_r2.json	7.3800	-1.4700	7.5000	-9.2500	6	false	-139.2200	discard	mode=probe; manifest=baseline_r2.json; lr=2.2e-05; beta=0.1; rank=64; steps=300; curriculum=shuffle
+6e68704	20260406-011749	probe	300	gt_focus_baseline.json	7.0000	-1.8500	7.6800	-9.2500	6	false	-113.2600	discard	mode=probe; manifest=gt_focus_baseline.json; lr=2e-05; beta=0.1; rank=64; steps=300; curriculum=shuffle
+6e68704	20260406-030926	probe	300	baseline_r2.json	7.3100	-1.5400	6.5700	-9.2500	7	false	-207.6600	discard	mode=probe; manifest=baseline_r2.json; lr=2e-05; beta=0.12; rank=64; steps=300; curriculum=shuffle
+6e68704	20260406-043050	probe	300	baseline_r2.json	7.5700	-1.2800	7.1000	-9.2500	8	false	-179.2800	discard	mode=probe; manifest=baseline_r2.json; lr=2e-05; beta=0.1; rank=64; steps=300; curriculum=source_first
