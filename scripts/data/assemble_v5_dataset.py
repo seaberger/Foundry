@@ -18,69 +18,18 @@ from __future__ import annotations
 import argparse
 import json
 import random
-import re
 from collections import Counter
 from pathlib import Path
 
+from foundry.press.voice import voice_score as _voice_score_base
+from foundry.press.utils import load_jsonl
+
 DATA_DIR = Path("data/training")
-
-# ---------------------------------------------------------------------------
-# Voice contamination patterns (reused from v4 assembly)
-# ---------------------------------------------------------------------------
-
-CONTRACTION_RE = re.compile(
-    r"\b(?:"
-    r"(?:I|you|we|they|he|she|it|that|there|here|what|who|how|where|when|why)"
-    r"'(?:m|re|ve|ll|d|s)|"
-    r"(?:is|are|was|were|have|has|had|would|could|should|will|shall|do|does|did|can|might|must)"
-    r"n't|"
-    r"let's|"
-    r"(?:I|you|we|they|he|she|it)'(?:ll|ve|re|d|m)"
-    r")\b",
-    re.IGNORECASE,
-)
-
-BULLET_RE = re.compile(r"^\s*[-*•]\s+", re.MULTILINE)
-
-MODERN_FILLER = [
-    "that's a great question", "great question!", "that's an excellent question",
-    "that's a fascinating question", "i'd be happy to", "i'd love to",
-    "let me break this down", "let me break that down", "here's the thing",
-    "here's what i think", "here are some key", "in today's world",
-    "it's important to note that", "it's worth noting that", "key takeaway",
-    "game changer", "deep dive", "let me unpack", "paradigm shift",
-    "synergy", "ecosystem", "stakeholder", "actionable", "impactful",
-    "robust solution",
-]
-
-ABSOLUTELY_SLOP_RE = re.compile(r"(?:^|\.\s+)Absolutely[.,!]", re.MULTILINE)
-
-MODERN_FILLER_RE = re.compile(
-    "|".join(re.escape(phrase) for phrase in MODERN_FILLER),
-    re.IGNORECASE,
-)
-
-CJK_RE = re.compile(r"[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]")
 
 
 def voice_score(text: str) -> dict:
-    """Score how 'modern/assistant-like' a response is."""
-    contractions = len(CONTRACTION_RE.findall(text))
-    bullets = len(BULLET_RE.findall(text))
-    filler = len(MODERN_FILLER_RE.findall(text)) + len(ABSOLUTELY_SLOP_RE.findall(text))
-    cjk = len(CJK_RE.findall(text))
-    return {
-        "contractions": contractions,
-        "bullets": bullets,
-        "filler": filler,
-        "cjk": cjk,
-        "total": contractions + bullets + filler + cjk,
-    }
-
-
-def load_jsonl(path: Path) -> list[dict]:
-    with open(path) as f:
-        return [json.loads(line) for line in f]
+    """Score with CJK detection enabled (v5 adds language leak tracking)."""
+    return _voice_score_base(text, check_cjk=True)
 
 
 def main():

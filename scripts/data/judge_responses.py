@@ -22,7 +22,9 @@ import os
 import time
 from pathlib import Path
 
-from src.foundry.press.evaluate import (
+import httpx
+
+from foundry.press.evaluate import (
     CONSTITUTION_PATH,
     EVAL_OUTPUT_DIR,
     JUDGE_SYSTEM_PROMPT,
@@ -47,7 +49,6 @@ def judge_response_cached(
     so it's cached across sequential calls. First call pays a 25% write premium,
     subsequent calls get a 90% discount on the cached portion.
     """
-    import httpx
 
     # Use replace() not format() — JUDGE_SYSTEM_PROMPT has literal JSON braces
     # that .format() tries to interpolate as placeholders

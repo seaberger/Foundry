@@ -18,123 +18,13 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-# ---------------------------------------------------------------------------
-# Voice contamination patterns
-# ---------------------------------------------------------------------------
-
-# Modern contractions that break Madison's voice.
-# Word-boundary anchored, case-insensitive.
-_CONTRACTIONS = [
-    r"can't", r"won't", r"isn't", r"aren't", r"doesn't", r"didn't",
-    r"haven't", r"hasn't", r"wouldn't", r"shouldn't", r"couldn't",
-    r"i'm", r"i've", r"i'd", r"i'll",
-    r"we're", r"we've", r"they're",
-    r"there's", r"that's", r"what's", r"who's",
-    r"let's", r"here's",
-]
-
-# "it's" only when meaning "it is" — we match all "it's" because the
-# possessive "its" should never have an apostrophe. Every "it's" in
-# generated text is the contraction form and is therefore contamination.
-_CONTRACTIONS.append(r"it's")
-
-# Period-appropriate contractions that are ALLOWED (excluded from rejection).
-_PERIOD_APPROPRIATE = {r"'tis", r"'twas", r"'twould", r"o'clock"}
-
-# Build a single compiled regex for all contractions.
-# Use negative lookbehind/lookahead to respect word boundaries on
-# apostrophe-leading tokens.
-_CONTRACTION_PATTERN = re.compile(
-    r"(?<!\w)(?:" + "|".join(_CONTRACTIONS) + r")(?!\w)",
-    re.IGNORECASE,
+from foundry.press.voice import (
+    check_voice_contamination,
+    expand_contractions,
+    has_bullets as _has_bullets,
+    has_contraction as _has_contraction,
+    has_filler as _has_filler,
 )
-
-_PERIOD_APPROPRIATE_PATTERN = re.compile(
-    r"(?<!\w)(?:" + "|".join(re.escape(p) for p in _PERIOD_APPROPRIATE) + r")(?!\w)",
-    re.IGNORECASE,
-)
-
-# Bullet point lines: starts with "- ", "* ", or "1. " (numbered list).
-_BULLET_PATTERN = re.compile(r"^\s*(?:[-*]\s|\d+\.\s)", re.MULTILINE)
-
-# Modern filler phrases (case-insensitive, anchored to word boundaries).
-_FILLER_PHRASES = [
-    r"let me break this down",
-    r"here's the thing",
-    r"let's unpack",
-    r"great question",
-    r"i'd be happy to",
-]
-_FILLER_PATTERN = re.compile(
-    r"(?<!\w)(?:" + "|".join(_FILLER_PHRASES) + r")(?!\w)",
-    re.IGNORECASE,
-)
-
-# "certainly!" and "absolutely!" as exclamations (not adverbial use).
-_EXCLAMATION_PATTERN = re.compile(
-    r"\b(?:certainly|absolutely)\s*!",
-    re.IGNORECASE,
-)
-
-
-def _has_contraction(text: str) -> bool:
-    """Return True if text contains a modern contraction (not period-appropriate)."""
-    # Strip out period-appropriate forms first so they don't false-positive.
-    cleaned = _PERIOD_APPROPRIATE_PATTERN.sub("", text)
-    return bool(_CONTRACTION_PATTERN.search(cleaned))
-
-
-def _has_bullets(text: str) -> bool:
-    return bool(_BULLET_PATTERN.search(text))
-
-
-def _has_filler(text: str) -> bool:
-    return bool(_FILLER_PATTERN.search(text)) or bool(_EXCLAMATION_PATTERN.search(text))
-
-
-def _expand_contractions(text: str) -> str:
-    """Expand modern contractions to full Madisonian forms.
-
-    The fine-tuned model sometimes produces contractions at temp=0.7 that
-    Madison would not have used. Rather than discarding these otherwise-good
-    responses, we expand them to their formal equivalents.
-    """
-    # Order matters: longer/more specific patterns first to avoid partial matches
-    expansions = [
-        (r"\bI'm\b", "I am"),
-        (r"\bI've\b", "I have"),
-        (r"\bI'd\b", "I would"),
-        (r"\bI'll\b", "I shall"),
-        (r"\bwe're\b", "we are"),
-        (r"\bwe've\b", "we have"),
-        (r"\bthey're\b", "they are"),
-        (r"\bcan't\b", "cannot"),
-        (r"\bwon't\b", "will not"),
-        (r"\bdon't\b", "do not"),
-        (r"\bdon't\b", "do not"),
-        (r"\bdoesn't\b", "does not"),
-        (r"\bdidn't\b", "did not"),
-        (r"\bisn't\b", "is not"),
-        (r"\baren't\b", "are not"),
-        (r"\bwasn't\b", "was not"),
-        (r"\bweren't\b", "were not"),
-        (r"\bhasn't\b", "has not"),
-        (r"\bhaven't\b", "have not"),
-        (r"\bhadn't\b", "had not"),
-        (r"\bwouldn't\b", "would not"),
-        (r"\bshouldn't\b", "should not"),
-        (r"\bcouldn't\b", "could not"),
-        (r"\bthere's\b", "there is"),
-        (r"\bthat's\b", "that is"),
-        (r"\bwhat's\b", "what is"),
-        (r"\bwho's\b", "who is"),
-        (r"\bhere's\b", "here is"),
-        (r"\blet's\b", "let us"),
-        (r"\bit's\b", "it is"),
-    ]
-    for pattern, replacement in expansions:
-        text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
-    return text
 
 
 def strip_artifacts(text: str) -> str:
@@ -154,37 +44,10 @@ def strip_artifacts(text: str) -> str:
     # Remove parenthetical stage directions: (He paces the room...) → ""
     text = re.sub(r"\((?:[A-Z][^)]{5,})\)\s*", "", text)
     # Expand modern contractions to formal forms
-    text = _expand_contractions(text)
+    text = expand_contractions(text)
     # Clean up any resulting double newlines
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
-
-
-# AI-speak / character break detection — model drops Madison persona entirely
-_AI_SPEAK_PATTERN = re.compile(
-    r"\b(?:hallucin|bias amplif|pattern recognition|trained on|dataset|"
-    r"language model|neural network|AI system|artificial intelligence|"
-    r"machine learning|fine.tun|pre.train|"
-    r"large language|LLM|GPT|transformer|"
-    r"computational|"
-    r"I am an AI|I am a model|as an AI|as a language model|"
-    r"my training data|my training|"
-    r"I was programmed|I was designed|I was built|I was created)\b",
-    re.IGNORECASE,
-)
-
-
-def check_voice_contamination(text: str) -> str | None:
-    """Return a rejection reason string, or None if clean."""
-    if _AI_SPEAK_PATTERN.search(text):
-        return "ai_speak"
-    if _has_contraction(text):
-        return "contraction"
-    if _has_bullets(text):
-        return "bullet_points"
-    if _has_filler(text):
-        return "modern_filler"
-    return None
 
 
 # ---------------------------------------------------------------------------

@@ -2,11 +2,8 @@
 
 from __future__ import annotations
 
-from assemble_v4_dataset import (
-    ABSOLUTELY_SLOP_RE,
-    is_chosen_contaminated,
-    voice_score,
-)
+from foundry.press.voice import ABSOLUTELY_SLOP_RE, voice_score
+from foundry.press.voice import is_contaminated as is_chosen_contaminated
 
 # ---------------------------------------------------------------------------
 # Clean Madison prose used across tests

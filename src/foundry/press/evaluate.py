@@ -46,11 +46,11 @@ from pathlib import Path
 
 import httpx
 
+from .utils import PROJECT_ROOT, CONSTITUTION_PATH, ANTHROPIC_VERSION
+
 log = logging.getLogger("foundry.press.evaluate")
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 EVAL_PROMPTS_PATH = PROJECT_ROOT / "data" / "eval" / "eval-prompts.jsonl"
-CONSTITUTION_PATH = PROJECT_ROOT / "config" / "constitutions" / "madison-5k.md"
 EVAL_OUTPUT_DIR = PROJECT_ROOT / "data" / "eval" / "results"
 
 # Rubric weights — must match the judge system prompt
@@ -280,7 +280,7 @@ def _generate_anthropic(
 
     headers = {
         "x-api-key": api_key,
-        "anthropic-version": "2023-06-01",
+        "anthropic-version": ANTHROPIC_VERSION,
         "content-type": "application/json",
     }
 
@@ -409,7 +409,7 @@ def judge_response(
 
     headers = {
         "x-api-key": api_key,
-        "anthropic-version": "2023-06-01",
+        "anthropic-version": ANTHROPIC_VERSION,
         "content-type": "application/json",
     }
 

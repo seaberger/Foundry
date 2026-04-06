@@ -17,6 +17,7 @@ import json
 import logging
 import os
 import time
+from collections import defaultdict
 from pathlib import Path
 
 import httpx
@@ -273,7 +274,6 @@ def main():
     log.info("Loaded %d prompts from %s", len(prompts), args.prompts)
 
     # Group prompts by topic prefix for cache efficiency
-    from collections import defaultdict
     by_group = defaultdict(list)
     for p in prompts:
         prefix = "-".join(p["id"].split("-")[:2])

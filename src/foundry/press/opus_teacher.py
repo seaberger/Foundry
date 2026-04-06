@@ -19,38 +19,24 @@ from pathlib import Path
 
 import httpx
 
+from .utils import (
+    PROJECT_ROOT,
+    ANTHROPIC_API_URL,
+    ANTHROPIC_VERSION,
+    load_constitution,
+    load_jsonl,
+)
+
 log = logging.getLogger("foundry.press.opus_teacher")
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
-CONSTITUTION_PATH = PROJECT_ROOT / "config" / "constitutions" / "madison-5k.md"
 PROMPTS_PATH = PROJECT_ROOT / "data" / "training" / "prompts.jsonl"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "training" / "teacher-responses.jsonl"
 
-ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 DEFAULT_MODEL = "claude-opus-4-6"
 
 
-def load_constitution() -> str:
-    """Load the Madison constitution, keeping only character content."""
-    text = CONSTITUTION_PATH.read_text()
-    lines = text.split("\n")
-    content_lines = []
-    in_content = False
-    for line in lines:
-        if line.startswith("## 1."):
-            in_content = True
-        if in_content:
-            content_lines.append(line)
-    return "\n".join(content_lines)
-
-
 def load_prompts(path: Path | None = None) -> list[dict]:
-    path = path or PROMPTS_PATH
-    prompts = []
-    with open(path) as f:
-        for line in f:
-            prompts.append(json.loads(line))
-    return prompts
+    return load_jsonl(path or PROMPTS_PATH)
 
 
 def count_existing(output_path: Path) -> int:
@@ -70,7 +56,7 @@ def generate_response(
     """Generate a response using the Anthropic Messages API."""
     headers = {
         "x-api-key": api_key,
-        "anthropic-version": "2023-06-01",
+        "anthropic-version": ANTHROPIC_VERSION,
         "content-type": "application/json",
     }
     payload = {

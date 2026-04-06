@@ -21,9 +21,10 @@ import logging
 import re
 from pathlib import Path
 
+from .utils import PROJECT_ROOT, load_jsonl
+
 log = logging.getLogger("foundry.press.format_dpo")
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 TEACHER_PATH = PROJECT_ROOT / "data" / "training" / "teacher-responses.jsonl"
 STUDENT_PATH = PROJECT_ROOT / "data" / "training" / "student-responses.jsonl"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "training" / "madison-dpo.jsonl"
@@ -88,14 +89,6 @@ def madison_score(text: str) -> int:
 
 def word_count(text: str) -> int:
     return len(text.split())
-
-
-def load_jsonl(path: Path) -> list[dict]:
-    records = []
-    with open(path) as f:
-        for line in f:
-            records.append(json.loads(line))
-    return records
 
 
 def main():
