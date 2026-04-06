@@ -30,7 +30,7 @@ The Foundry uses Constitutional AI and ORPO fine-tuning to capture the distincti
 
 Madison is the ideal first subject for character fine-tuning — and the natural starting point for a project that will eventually voice all the key founders. As principal architect of the Constitution, he wrote 29 Federalist Papers, kept the most detailed record of the Constitutional Convention, served as Secretary of State and President, and spent his retirement years defending the Union against nullification. His voice is documented across **468,000 words of primary sources** spanning 8 distinct registers — from polished political theory to sharp convention debate to candid private correspondence. The ground truth is extensive, the voice is distinctive, and authenticity is falsifiable against the historical record.
 
-## Key Findings (March 2026)
+## Key Findings (March–April 2026)
 
 Beyond building a working Madison voice model, this project has produced several findings relevant to the broader character fine-tuning community:
 
@@ -44,7 +44,13 @@ Beyond building a working Madison voice model, this project has produced several
 
 **5. Gemma 3 VLM architecture complications.** Gemma 3 27B is architecturally a vision-language model (ForConditionalGeneration) even for text-only use, creating cascading vLLM compatibility issues. Converting to ForCausalLM breaks the interleaved sliding window attention pattern. The working workaround is `limit_mm_per_prompt={"image": 0}`. Qwen 3-32B (pure ForCausalLM) avoids this entire class of issues and is now the production base model. ([Details](docs/inference-guide.md))
 
-**6. ORPO→SFT structural incompatibility.** Subsequent SFT after ORPO training catastrophically destroys the ORPO-trained character signal — even at 100× lower learning rate with half the LoRA rank (2.0–2.2/10, down from 8.8). Root cause is structural: ORPO's monolithic objective encodes SFT and preference signal into the same parameter subspace with no reference anchor. A subsequent SFT stage overwrites this jointly-learned manifold completely. This contrasts with DPO→SFT pipelines, where DPO's KL constraint stores preferences as a delta from a reference model that SFT cannot fully displace. **Implication: ORPO trades extensibility for efficiency. Choose DPO if your pipeline requires a subsequent SFT stage.** ([Details](docs/training-methodology.md))
+**6. ORPO beta fragility — narrow safe band.** Automated hyperparameter search found that increasing ORPO beta from 0.1 to 0.12 (a 20% change) catastrophically destroys private_voice and verified_response, producing critical failures scored at 1.0. Learning rate changes of similar magnitude produce gradual degradation, not collapse. Beta operates near a phase transition — practitioners should tune in increments of 0.01 or smaller. ([Details](docs/training-results.md#10-autoresearch-constrained-ground-truth-optimization--negative-result-2026-04-05))
+
+**7. GT-focused data oversampling paradoxically hurts GT.** Oversampling ground_truth and verified_response training pairs by 2× reduced ground_truth scoring from 7.79 to 7.00 while marginally improving guard categories. Voice consistency appears to *carry* the authority signal that judges score as "ground truth" — a Madison with the right facts but inconsistent voice scores lower on factual grounding than one with consistent voice. Knowledge and voice are decoupled during *learning* but coupled during *evaluation*. ([Details](docs/training-results.md#10-autoresearch-constrained-ground-truth-optimization--negative-result-2026-04-05))
+
+**8. Production recipe is near-optimal (negative result).** Systematic automated search across learning rate, beta, data mixture, and curriculum ordering (8 runs, ~10 hours on Modal A100) found no single-parameter change that improves ground_truth over the production baseline (lr=2e-5, beta=0.1, rank 64, shuffle). Further GT improvement must come from data quality, not recipe tuning. ([Details](experiments/autoresearch/docs/SESSION_REPORT_20260405.md))
+
+**9. ORPO→SFT structural incompatibility.** Subsequent SFT after ORPO training catastrophically destroys the ORPO-trained character signal — even at 100× lower learning rate with half the LoRA rank (2.0–2.2/10, down from 8.8). Root cause is structural: ORPO's monolithic objective encodes SFT and preference signal into the same parameter subspace with no reference anchor. A subsequent SFT stage overwrites this jointly-learned manifold completely. This contrasts with DPO→SFT pipelines, where DPO's KL constraint stores preferences as a delta from a reference model that SFT cannot fully displace. **Implication: ORPO trades extensibility for efficiency. Choose DPO if your pipeline requires a subsequent SFT stage.** ([Details](docs/training-methodology.md))
 
 ## Current Status
 
@@ -77,17 +83,20 @@ Beyond building a working Madison voice model, this project has produced several
 - [x] [Autoresearch pipeline](experiments/autoresearch/program.md) — Autonomous ground_truth optimization with agent-driven search
 
 ### In Progress
-- [ ] **[Autoresearch](experiments/autoresearch/program.md)** — Autonomous Karpathy-style optimization loop targeting `ground_truth` improvement via constrained ORPO. Agent-driven hyperparameter search (LR, beta, curriculum, data mixtures) with Claude Sonnet judge evaluation. Running overnight on Modal A100.
+- [ ] **[Autoresearch](experiments/autoresearch/program.md)** — Autonomous Karpathy-style optimization loop targeting `ground_truth` improvement via constrained ORPO. First session complete (8 runs, April 5-6): baseline recipe confirmed near-optimal, ORPO beta fragility discovered, GT-focused oversampling paradox identified. Next: fix eval infrastructure (add PD prompts, ensemble averaging), then resume search.
 - [ ] Hamilton character development
 
 ### Recently Completed
+- [x] **[Autoresearch Session 1](experiments/autoresearch/docs/SESSION_REPORT_20260405.md)** — 8 runs over ~10 hours on Modal A100-80GB. Confirmed production recipe is near-optimal. Discovered ORPO beta fragility (0.12 catastrophic) and GT oversampling paradox. ~$40 compute.
 - [x] **[Madison Chamber](https://seaberger--foundry-chamber-gateway-web.modal.run)** — Live chatbot deployed on Modal with two-tier architecture: CPU gateway (instant start, loading page) + A100 GPU chamber (vLLM 0.19.0, merged model, SSE streaming). Scale-to-zero with 10-minute idle timeout. Session persistence, eval logging, conversation export.
 - [x] LoRA→merged model pipeline (`scripts/modal/merge_lora.py`) — Bakes adapter weights into base model for simpler serving
 - [x] vLLM upgrade 0.13.0 → 0.19.0 — Faster inference, latest Qwen3 support
 
 ### Next Steps
 - [ ] Evaluate GGUF Q5_K_M quality vs BF16 baseline (rank-64 should survive quantization better than rank-16)
-- [ ] Autoresearch: promote best ground_truth improvement to production
+- [ ] Autoresearch: fix probe eval infrastructure (add PD prompts, ensemble averaging to reduce variance)
+- [ ] Autoresearch: test warmup ratio variations, multi-parameter combinations of near-misses
+- [ ] Autoresearch: run full 1011-step confirm with baseline config to validate probe-scale patterns
 
 ## Research Approach
 

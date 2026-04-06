@@ -17,7 +17,7 @@ import prepare
 # ============================================================================
 # AGENT-EDITABLE SECTION
 # ============================================================================
-RUN_MODE = "scout"  # scout | probe | confirm | full | dataset-only
+RUN_MODE = "probe"  # scout | probe | confirm | full | dataset-only
 BASE_MODEL = "Qwen/Qwen3-32B"
 OBJECTIVE = "orpo"
 LORA_RANK = 64
