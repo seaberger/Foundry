@@ -7,11 +7,12 @@ become the "chosen" side of DPO pairs.
 Supports multiple backends:
   - local: OpenAI-compatible API (LM Studio, llama.cpp, Ollama)
   - gemini: Google Gemini API
-  - openai: Any OpenAI-compatible cloud API (Kimi, etc.)
+  - anthropic: Anthropic Messages API (Claude Sonnet/Opus)
 
 Usage:
     python -m foundry.press.teacher [--backend local] [--model MODEL] [--endpoint URL]
     python -m foundry.press.teacher --backend gemini --model gemini-2.5-flash
+    python -m foundry.press.teacher --backend anthropic --model claude-opus-4-6
 """
 
 from __future__ import annotations
@@ -20,47 +21,36 @@ import argparse
 import json
 import logging
 import os
+import re
 import time
 from pathlib import Path
 
 import httpx
 
+from .utils import (
+    PROJECT_ROOT,
+    CONSTITUTION_PATH,
+    ANTHROPIC_API_URL,
+    ANTHROPIC_VERSION,
+    load_constitution,
+    load_jsonl,
+)
+
 log = logging.getLogger("foundry.press.teacher")
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
-CONSTITUTION_PATH = PROJECT_ROOT / "config" / "constitutions" / "madison-5k.md"
 PROMPTS_PATH = PROJECT_ROOT / "data" / "training" / "prompts.jsonl"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "training" / "teacher-responses.jsonl"
 
 DEFAULT_LOCAL_ENDPOINT = "http://192.168.4.28:1234/v1"
-DEFAULT_LOCAL_MODEL = "qwen3-32b-mlx"  # Prefer Qwen for teacher — stronger than target model
+DEFAULT_LOCAL_MODEL = "qwen3-32b-mlx"
+DEFAULT_ANTHROPIC_MODEL = "claude-opus-4-6"
 
 GEMINI_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/openai"
 
 
-def load_constitution() -> str:
-    """Load the Madison constitution, stripping markdown headers and metadata."""
-    text = CONSTITUTION_PATH.read_text()
-    # Remove the header/metadata block — keep only the character content
-    lines = text.split("\n")
-    content_lines = []
-    in_content = False
-    for line in lines:
-        if line.startswith("## 1."):
-            in_content = True
-        if in_content:
-            content_lines.append(line)
-    return "\n".join(content_lines)
-
-
 def load_prompts(path: Path | None = None) -> list[dict]:
     """Load prompts from JSONL."""
-    path = path or PROMPTS_PATH
-    prompts = []
-    with open(path) as f:
-        for line in f:
-            prompts.append(json.loads(line))
-    return prompts
+    return load_jsonl(path or PROMPTS_PATH)
 
 
 def generate_response_local(
@@ -89,7 +79,6 @@ def generate_response_local(
     # Strip thinking traces if present (Qwen thinking models)
     if "<think>" in content:
         # Remove everything between <think> and </think>
-        import re
         content = re.sub(r"<think>.*?</think>", "", content, flags=re.DOTALL).strip()
 
     return content
@@ -126,9 +115,38 @@ def generate_response_gemini(
     return data["choices"][0]["message"]["content"]
 
 
+def generate_response_anthropic(
+    prompt: str,
+    system_prompt: str,
+    model: str,
+) -> str:
+    """Generate a response using the Anthropic Messages API."""
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        raise RuntimeError("ANTHROPIC_API_KEY not set")
+
+    headers = {
+        "x-api-key": api_key,
+        "anthropic-version": ANTHROPIC_VERSION,
+        "content-type": "application/json",
+    }
+    payload = {
+        "model": model,
+        "max_tokens": 2048,
+        "system": system_prompt,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.85,
+        "top_p": 0.92,
+    }
+    response = httpx.post(ANTHROPIC_API_URL, json=payload, headers=headers, timeout=120)
+    response.raise_for_status()
+    data = response.json()
+    return data["content"][0]["text"]
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate teacher responses for DPO training")
-    parser.add_argument("--backend", choices=["local", "gemini"], default="local")
+    parser.add_argument("--backend", choices=["local", "gemini", "anthropic"], default="local")
     parser.add_argument("--endpoint", default=DEFAULT_LOCAL_ENDPOINT, help="Local API endpoint")
     parser.add_argument("--model", default=None, help="Model name (defaults per backend)")
     parser.add_argument("--prompts", default=str(PROMPTS_PATH), help="Input prompts JSONL")
@@ -145,6 +163,8 @@ def main():
             args.model = DEFAULT_LOCAL_MODEL
         elif args.backend == "gemini":
             args.model = "gemini-2.5-flash"
+        elif args.backend == "anthropic":
+            args.model = DEFAULT_ANTHROPIC_MODEL
 
     # Load constitution and prompts
     constitution = load_constitution()
@@ -185,6 +205,10 @@ def main():
                     response = generate_response_gemini(
                         prompt_text, constitution, args.model
                     )
+                elif args.backend == "anthropic":
+                    response = generate_response_anthropic(
+                        prompt_text, constitution, args.model
+                    )
 
                 elapsed = time.time() - start
                 total_time += elapsed
@@ -217,6 +241,9 @@ def main():
                 elapsed = time.time() - start
                 failed += 1
                 log.error("  [%d] Failed on '%s...': %s (%.1fs)", i, prompt_text[:50], e, elapsed)
+                if "rate" in str(e).lower() or "429" in str(e):
+                    log.info("Rate limited — waiting 60s")
+                    time.sleep(60)
 
     log.info(
         "Done: %d completed, %d failed, %.1f min total",

@@ -19,10 +19,10 @@ from pathlib import Path
 
 import httpx
 
+from .utils import PROJECT_ROOT
+
 log = logging.getLogger("foundry.press.gen_prompts")
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
-CONSTITUTION_PATH = PROJECT_ROOT / "config" / "constitutions" / "madison-5k.md"
 TESTS_PATH = PROJECT_ROOT / "tests" / "madison-behavioral-tests.json"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "training" / "prompts.jsonl"
 

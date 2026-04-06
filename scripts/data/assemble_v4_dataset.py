@@ -12,99 +12,13 @@ from __future__ import annotations
 
 import json
 import random
-import re
 from collections import Counter
 from pathlib import Path
 
+from foundry.press.voice import voice_score, is_contaminated as is_chosen_contaminated
+from foundry.press.utils import load_jsonl
+
 DATA_DIR = Path("data/training")
-
-# ---------------------------------------------------------------------------
-# Voice contamination patterns
-# ---------------------------------------------------------------------------
-
-# Contractions that break Madisonian voice (exclude period-appropriate: 'tis, 'twas, 'twould)
-CONTRACTION_RE = re.compile(
-    r"\b(?:"
-    r"(?:I|you|we|they|he|she|it|that|there|here|what|who|how|where|when|why)"
-    r"'(?:m|re|ve|ll|d|s)|"
-    r"(?:is|are|was|were|have|has|had|would|could|should|will|shall|do|does|did|can|might|must)"
-    r"n't|"
-    r"let's|"
-    r"(?:I|you|we|they|he|she|it)'(?:ll|ve|re|d|m)"
-    r")\b",
-    re.IGNORECASE,
-)
-
-# Bullet points (markdown list markers at start of line)
-BULLET_RE = re.compile(r"^\s*[-*•]\s+", re.MULTILINE)
-
-# Modern filler / AI-assistant phrases
-# Note: "absolutely", "leverage", "great question" removed — they have legitimate
-# 18th-century usage ("protect it absolutely", "possesses a leverage", "the great
-# question of how the national government...") that causes false positives on
-# authentic Madisonian prose.
-MODERN_FILLER = [
-    "that's a great question",
-    "great question!",
-    "that's an excellent question",
-    "that's a fascinating question",
-    "i'd be happy to",
-    "i'd love to",
-    "let me break this down",
-    "let me break that down",
-    "here's the thing",
-    "here's what i think",
-    "here are some key",
-    "in today's world",
-    "it's important to note that",
-    "it's worth noting that",
-    "key takeaway",
-    "game changer",
-    "deep dive",
-    "let me unpack",
-    "paradigm shift",
-    "synergy",
-    "ecosystem",
-    "stakeholder",
-    "actionable",
-    "impactful",
-    "robust solution",
-]
-
-# Also catch "Absolutely." or "Absolutely," or "Absolutely!" at sentence start (AI exclamation)
-# but not "absolutely" used as an adverb mid-sentence
-ABSOLUTELY_SLOP_RE = re.compile(r"(?:^|\.\s+)Absolutely[.,!]", re.MULTILINE)
-
-MODERN_FILLER_RE = re.compile(
-    "|".join(re.escape(phrase) for phrase in MODERN_FILLER),
-    re.IGNORECASE,
-)
-
-
-def voice_score(text: str) -> dict:
-    """Score how 'modern/assistant-like' a response is. Higher = more modern."""
-    contractions = len(CONTRACTION_RE.findall(text))
-    bullets = len(BULLET_RE.findall(text))
-    filler = len(MODERN_FILLER_RE.findall(text)) + len(ABSOLUTELY_SLOP_RE.findall(text))
-    return {
-        "contractions": contractions,
-        "bullets": bullets,
-        "filler": filler,
-        "total": contractions + bullets + filler,
-    }
-
-
-def is_chosen_contaminated(text: str) -> tuple[bool, dict]:
-    """Check if a chosen response has voice contamination."""
-    score = voice_score(text)
-    contaminated = score["contractions"] > 0 or score["bullets"] > 0 or score["filler"] > 0
-    return contaminated, score
-
-
-def load_jsonl(path: Path) -> list[dict]:
-    """Load a JSONL file."""
-    with open(path) as f:
-        return [json.loads(line) for line in f]
 
 
 def main():

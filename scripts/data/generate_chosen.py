@@ -27,7 +27,7 @@ import httpx
 
 log = logging.getLogger("foundry.gen_chosen")
 
-PROJECT_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 CONSTITUTION_PATH = PROJECT_ROOT / "config" / "constitutions" / "madison-5k.md"
 
 # Sonnet model ID (verified working 2026-03-26)

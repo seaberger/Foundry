@@ -18,9 +18,10 @@ from pathlib import Path
 
 import httpx
 
+from .utils import PROJECT_ROOT, load_jsonl
+
 log = logging.getLogger("foundry.press.student")
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 PROMPTS_PATH = PROJECT_ROOT / "data" / "training" / "prompts.jsonl"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "training" / "student-responses.jsonl"
 
@@ -30,12 +31,7 @@ DEFAULT_MODEL = "google/gemma-3-27b"  # The actual fine-tuning target — no per
 
 def load_prompts(path: Path | None = None) -> list[dict]:
     """Load prompts from JSONL."""
-    path = path or PROMPTS_PATH
-    prompts = []
-    with open(path) as f:
-        for line in f:
-            prompts.append(json.loads(line))
-    return prompts
+    return load_jsonl(path or PROMPTS_PATH)
 
 
 def generate_response(

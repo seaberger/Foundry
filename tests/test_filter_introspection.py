@@ -6,15 +6,26 @@ import json
 
 import pytest
 from filter_introspection import (
-    _expand_contractions,
-    _has_bullets,
-    _has_contraction,
-    _has_filler,
     check_dialogue_turn_lengths,
     check_reflection_length,
-    check_voice_contamination,
     filter_reflections,
     strip_artifacts,
+)
+
+from foundry.press.voice import (
+    check_voice_contamination,
+)
+from foundry.press.voice import (
+    expand_contractions as _expand_contractions,
+)
+from foundry.press.voice import (
+    has_bullets as _has_bullets,
+)
+from foundry.press.voice import (
+    has_contraction as _has_contraction,
+)
+from foundry.press.voice import (
+    has_filler as _has_filler,
 )
 
 # ---------------------------------------------------------------------------
