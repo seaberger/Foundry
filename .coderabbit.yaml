@@ -1,0 +1,53 @@
+language: en-US
+tone_instructions: >-
+  Be direct and concise. Focus on bugs, security issues, and test gaps.
+  Skip style nitpicks — ruff handles formatting. Don't suggest adding
+  docstrings or type hints to code that works. The developer is technical
+  and prefers actionable findings over verbose explanations.
+early_access: true
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  high_level_summary_placeholder: '@coderabbitai summary'
+  auto_title_placeholder: '@coderabbitai'
+  review_status: true
+  collapse_walkthrough: true
+  sequence_diagrams: false
+  changed_files_summary: true
+  poem: false
+  path_filters:
+    - '!experiments/**'
+    - '!data/**'
+    - '!sources/**'
+    - '!paper/**'
+    - '!docs/**'
+    - '!**/*.jsonl'
+    - '!**/*.json'
+    - '!**/*.gguf'
+  path_instructions:
+    - path: 'src/foundry/**'
+      instructions: >-
+        This is the core Python package. Flag security issues, broken imports,
+        and logic bugs. Check that new code has corresponding tests.
+    - path: 'scripts/modal/**'
+      instructions: >-
+        These scripts run on Modal cloud GPUs. They cannot be unit tested locally.
+        Focus on argument validation, data format issues, and obvious bugs.
+    - path: 'scripts/data/**'
+      instructions: >-
+        Data pipeline scripts with quality filters for training data. These are
+        critical — a broken filter silently degrades model quality. Verify regex
+        patterns and filtering logic carefully.
+    - path: 'tests/**'
+      instructions: >-
+        Test files. Check that assertions are meaningful and test the right thing.
+        Flag tests that would pass on broken code (tautological assertions).
+    - path: '.github/workflows/**'
+      instructions: >-
+        CI workflows. Check for security issues (secret exposure, untrusted input
+        in run steps) and correctness.
+
+chat:
+  auto_reply: true
