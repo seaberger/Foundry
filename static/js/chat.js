@@ -95,7 +95,7 @@
                     buffer += decoder.decode(result.value, { stream: true });
 
                     // Parse SSE lines from buffer
-                    const lines = buffer.split('\n');
+                    const lines = buffer.split(/\r?\n/);
                     buffer = lines.pop(); // Keep incomplete line in buffer
 
                     for (const line of lines) {

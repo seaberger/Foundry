@@ -493,6 +493,14 @@ def chamber_web():
             db.commit()
         return RedirectResponse(url=f"/sessions/{session_id}", status_code=303)
 
+    @chamber.post("/sessions/{session_id}/delete")
+    async def delete_session(session_id: str):
+        with get_db() as db:
+            db.execute("DELETE FROM turns WHERE session_id = ?", (session_id,))
+            db.execute("DELETE FROM sessions WHERE id = ?", (session_id,))
+            db.commit()
+        return RedirectResponse(url="/", status_code=303)
+
     @chamber.get("/sessions/{session_id}", response_class=HTMLResponse)
     async def chat_page(request: Request, session_id: str):
         if not _vllm_ready.is_set():
@@ -564,6 +572,9 @@ def chamber_web():
                 yield {"event": "done", "data": ""}
                 return
 
+            full_response = []
+            past_think = False  # Qwen3 emits <think>...</think> at the start
+            think_buf = ""
             config = get_config()
             url = f"http://localhost:{VLLM_PORT}/v1/chat/completions"
             api_messages = [{"role": "system", "content": system_prompt}] + history
@@ -573,26 +584,46 @@ def chamber_web():
                 "temperature": config.samplers.temperature,
                 "top_p": config.samplers.top_p,
                 "max_tokens": config.samplers.max_tokens,
-                "stream": False,
+                "stream": True,
             }
 
-            full_response = []
             try:
                 async with httpx.AsyncClient(timeout=300) as client:
-                    resp = await client.post(url, json=payload)
-                    resp.raise_for_status()
-                    data = resp.json()
-                    content = data["choices"][0]["message"]["content"]
+                    async with client.stream("POST", url, json=payload) as resp:
+                        resp.raise_for_status()
+                        async for line in resp.aiter_lines():
+                            if not line.startswith("data: "):
+                                continue
+                            data = line[6:]
+                            if data.strip() == "[DONE]":
+                                break
+                            try:
+                                chunk = json.loads(data)
+                                delta = chunk.get("choices", [{}])[0].get("delta", {})
+                                content = delta.get("content")
+                                if not content:
+                                    continue
 
-                    # Strip <think>...</think> prefix
-                    if "</think>" in content:
-                        content = content.split("</think>", 1)[1].lstrip()
-                    elif content.startswith("<think>"):
-                        pass  # Incomplete think block — pass through
-                    content = _strip_think_tags(content)
+                                # ── Strip <think>...</think> at start of response ──
+                                if not past_think:
+                                    think_buf += content
+                                    if "</think>" in think_buf:
+                                        after = think_buf.split("</think>", 1)[1]
+                                        past_think = True
+                                        after = after.lstrip()
+                                        if after:
+                                            full_response.append(after)
+                                            yield {"event": "token", "data": after}
+                                    elif len(think_buf) > 50 and "<think>" not in think_buf:
+                                        past_think = True
+                                        full_response.append(think_buf)
+                                        yield {"event": "token", "data": think_buf}
+                                else:
+                                    full_response.append(content)
+                                    yield {"event": "token", "data": content}
 
-                    full_response.append(content)
-                    yield {"event": "token", "data": content}
+                            except (json.JSONDecodeError, IndexError, KeyError):
+                                continue
 
             except Exception as e:
                 log.error("Inference error: %s", e)

@@ -31,11 +31,17 @@
     <section class="session-list">
         <h2>Previous Sessions</h2>
         {% for s in sessions %}
-        <a href="/sessions/{{ s.id }}" class="session-card">
-            <div class="session-character">{{ s.character | title }}</div>
-            <div class="session-name">{{ s.name }}</div>
-            <div class="session-meta">{{ s.turn_count }} turns</div>
-        </a>
+        <div class="session-card-wrapper">
+            <a href="/sessions/{{ s.id }}" class="session-card">
+                <div class="session-character">{{ s.character | title }}</div>
+                <div class="session-name">{{ s.name }}</div>
+                <div class="session-meta">{{ s.turn_count }} turns</div>
+            </a>
+            <form action="/sessions/{{ s.id }}/delete" method="post" class="delete-form"
+                  onsubmit="return confirm('Delete this session?')">
+                <button type="submit" class="btn-delete" title="Delete session">&times;</button>
+            </form>
+        </div>
         {% endfor %}
     </section>
     {% endif %}
