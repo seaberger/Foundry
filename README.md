@@ -13,6 +13,7 @@
 </p>
 
 <p align="center">
+  <a href="https://seaberger--foundry-chamber-gateway-web.modal.run"><strong>Chat with Madison</strong></a> &nbsp;|&nbsp;
   <a href="https://seaberger.github.io/Foundry/paper/">Research Paper</a> &nbsp;|&nbsp;
   <a href="https://seaberger.github.io/Foundry/constitution/">The Madison Constitution</a> &nbsp;|&nbsp;
   <a href="https://seaberger.github.io/Foundry/training-results/">Training Results</a> &nbsp;|&nbsp;
@@ -71,11 +72,22 @@ Beyond building a working Madison voice model, this project has produced several
 - [x] Local deployment — Q5_K_M loaded in LM Studio on Mac Mini M4 Pro (64 GB)
 - [x] Learning rate sweep — lr=2e-5 optimal, contradicts ORPO paper's lr=8e-6 recommendation
 - [x] [Documentation site](https://seaberger.github.io/Foundry/) — MkDocs Material with Distill-style research paper
+- [x] [Madison Chamber chatbot](https://seaberger--foundry-chamber-gateway-web.modal.run) — Live on Modal, two-tier gateway + A100, streaming, session persistence
+- [x] LoRA merge pipeline — `merge_lora.py` for merged model serving
+- [x] [Autoresearch pipeline](experiments/autoresearch/program.md) — Autonomous ground_truth optimization with agent-driven search
+
+### In Progress
+- [ ] **[Autoresearch](experiments/autoresearch/program.md)** — Autonomous Karpathy-style optimization loop targeting `ground_truth` improvement via constrained ORPO. Agent-driven hyperparameter search (LR, beta, curriculum, data mixtures) with Claude Sonnet judge evaluation. Running overnight on Modal A100.
+- [ ] Hamilton character development
+
+### Recently Completed
+- [x] **[Madison Chamber](https://seaberger--foundry-chamber-gateway-web.modal.run)** — Live chatbot deployed on Modal with two-tier architecture: CPU gateway (instant start, loading page) + A100 GPU chamber (vLLM 0.19.0, merged model, SSE streaming). Scale-to-zero with 10-minute idle timeout. Session persistence, eval logging, conversation export.
+- [x] LoRA→merged model pipeline (`scripts/modal/merge_lora.py`) — Bakes adapter weights into base model for simpler serving
+- [x] vLLM upgrade 0.13.0 → 0.19.0 — Faster inference, latest Qwen3 support
 
 ### Next Steps
 - [ ] Evaluate GGUF Q5_K_M quality vs BF16 baseline (rank-64 should survive quantization better than rank-16)
-- [ ] Hamilton character development
-- [ ] Chamber chat demo
+- [ ] Autoresearch: promote best ground_truth improvement to production
 
 ## Research Approach
 
@@ -212,7 +224,7 @@ foundry/
 
 - **Training:** Unsloth + QLoRA ORPO on Modal A100-80GB
 - **Base Model:** Qwen 3-32B
-- **Serving:** vLLM with LoRA serving mode (adapter-on-base, best quality) or merged 16-bit model
+- **Serving:** vLLM 0.19.0 with merged BF16 model on Modal A100-80GB (production); LoRA adapter-on-base for autoresearch candidate evaluation
 - **Teacher Model:** Claude Sonnet 4.6 with prompt caching
 - **Evaluation:** LLM-as-judge (Sonnet 4.6) with constitutional rubric + prompt caching (~$0.50 per 36-prompt eval)
 - **Experiment Tracking:** [Weights & Biases](https://wandb.ai/sbergman/foundry)
