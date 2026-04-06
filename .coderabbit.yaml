@@ -1,9 +1,8 @@
 language: en-US
 tone_instructions: >-
-  Be direct and concise. Focus on bugs, security issues, and test gaps.
-  Skip style nitpicks — ruff handles formatting. Don't suggest adding
-  docstrings or type hints to code that works. The developer is technical
-  and prefers actionable findings over verbose explanations.
+  Be direct. Focus on bugs, security issues, and test gaps. Skip style
+  nitpicks — ruff handles formatting. Don't suggest docstrings or type
+  hints. Actionable findings only.
 early_access: true
 
 reviews:
