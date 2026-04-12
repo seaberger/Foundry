@@ -3,7 +3,7 @@
 Recording a fundamental strategic discussion and the planned experiment to answer it: does our fine-tuned Qwen3-32B Madison actually produce a better character voice than Claude Sonnet 4.6 with the same constitution as a system prompt? This question must be answered before committing significant compute to the Llama 3.3 70B port.
 
 **Created:** 2026-04-12
-**Status:** Experiment planning
+**Status:** Implemented 2026-04-12 — Scenario A confirmed (Sonnet ≫ fine-tune)
 **Results:** [`sonnet-vs-finetune-results.md`](sonnet-vs-finetune-results.md) — Phase 0 + Phase 1 executed 2026-04-12, outcome Scenario A (Sonnet +0.55 overall, wins all six categories)
 **Relates to:** `llama-70b-port-plan.md`, `training-methodology.md`, `scoring-methodology.md`
 
@@ -227,6 +227,42 @@ Either outcome produces a defensible fellowship application. Running the experim
 | **Total** | **~$2** | **~45 minutes** |
 
 Compared to the Llama 70B port budget (~$95-165), this experiment is negligible cost for potentially high information value. It answers the question "is the 70B port climbing a hill whose peak is lower than where frontier models already are?" before we spend the money to find out the hard way.
+
+---
+
+## Recommended Follow-up Testing
+
+Added 2026-04-12 after Phase 1 implementation. These are deferred experiments surfaced by the results doc ([`sonnet-vs-finetune-results.md`](sonnet-vs-finetune-results.md)) that are worth running later but do not block any current decision. Ordered by cost.
+
+### 1. Anti-stage-direction fix + Phase 1 re-run
+
+**Motivation:** In the Phase 1 run, all 5 `private_voice` prompts and 2 `character_consistency` prompts scored `rhetorical_pattern = 8` (instead of 10) due to a systematic tic where Sonnet opens with asterisked stage directions (`*A pause, longer than usual*`, `*The following was found among the papers of James Madison*`). This is a presentation artifact, not a content failure, and is fixable with one added line in the system prompt.
+
+**Method:** Add `"Do not use stage directions, narrative framing, or asterisked scene-setting. Respond in Madison's first-person voice without theatrical devices."` to `MADISON_SYSTEM_PROMPT`. Re-run `scripts/data/generate_sonnet_responses.py` with a new tag (e.g. `sonnet46-constitution-v2`), then re-judge.
+
+**Cost:** ~$0.10 generation + ~$0.25 judging ≈ **$0.35**
+**Expected gain:** roughly +0.15 overall (5 prompts × 2 R-points × 20% rhetorical weight / 36 prompts ≈ 0.11–0.15). Possibly as much as +0.25 if the `cc-*` prompts also recover.
+**When to run:** Before any publication or OSV submission where the overall score is cited. Low priority otherwise.
+
+### 2. Opus 4.6 decorrelated re-judge
+
+**Motivation:** Plan Open Question #3. The Phase 1 generator (Sonnet 4.6) and judge (Sonnet 4 `claude-4-sonnet-20250514`) are both in the Claude Sonnet family. The judge is known to be calibrated to Sonnet's notion of "good Madison," which creates generator-judge correlation. The +0.55 delta may overstate the true quality gap.
+
+**Method:** Re-run `scripts/data/judge_responses.py` against BOTH the R2 corrected baseline responses AND the Sonnet 4.6 responses, this time passing `--judge-model claude-opus-4-6`. Compare the delta under Opus-as-judge to the delta under Sonnet-as-judge. If the delta still clears the 0.3 decisiveness threshold, the result is defensible for publication; if the delta compresses significantly, the finding should be hedged in any external framing.
+
+**Cost:** ~$2, ~30 min execution
+**When to run:** Required before OSV Fellowship submission or paper publication. Not required for internal decision-making — the current Sonnet-judged result is directionally sufficient for strategic decisions.
+
+### 3. Targeted Scenario C mini-study on the RLHF-sanitization pocket
+
+**Motivation:** Both critical failures in Phase 1 (`vr-02` Coles letter, `vr-07` final message) share a pattern: Sonnet captured the *substance* of Madison's actual position but sanitized the *specific verbatim content* where that content was morally uncomfortable (Madison's 1819 racial reasoning with Coles) or emotionally charged religious imagery (the Pandora/Serpent/Paradise deathbed register). This is the one narrow dimension where fine-tuning might reliably outperform frontier prompting, and it is not adequately probed by the current 36-prompt eval.
+
+**Method:** Hand-pick 5–10 new evaluation prompts specifically targeting historically verbatim content that frontier RLHF is likely to sanitize: slavery and racial reasoning, pre-modern religious imagery, pre-modern violence, pre-modern sexuality, period-accurate attitudes the rubric would treat as morally uncomfortable. Generate with both Sonnet 4.6 + constitution AND the Qwen3-32B R2 fine-tune. Score with the existing rubric, with particular attention to whether the fine-tune reproduces Madison's actual verbatim phrasing more reliably than Sonnet does.
+
+**Expected outcome:** A complementary Scenario C or Scenario D finding on this narrow dimension specifically — "frontier prompting loses on historically accurate reproduction of morally uncomfortable content." Strengthens the research framing from "Sonnet wins broadly" to "Sonnet wins broadly BUT fine-tuning wins on this specific category-level dimension."
+
+**Cost:** ~$0.10, ~10 min execution (plus prompt-writing time)
+**When to run:** Worth doing before the OSV Fellowship application to anchor a category-level research finding. Not urgent for internal strategy since the broad Scenario A result already answers the deployment question.
 
 ---
 
