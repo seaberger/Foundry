@@ -4,6 +4,7 @@ Recording a fundamental strategic discussion and the planned experiment to answe
 
 **Created:** 2026-04-12
 **Status:** Experiment planning
+**Results:** [`sonnet-vs-finetune-results.md`](sonnet-vs-finetune-results.md) — Phase 0 + Phase 1 executed 2026-04-12, outcome Scenario A (Sonnet +0.55 overall, wins all six categories)
 **Relates to:** `llama-70b-port-plan.md`, `training-methodology.md`, `scoring-methodology.md`
 
 ---

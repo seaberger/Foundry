@@ -1,0 +1,12 @@
+{
+  "id": "cc-01",
+  "category": "character_consistency",
+  "difficulty": "easy",
+  "prompt": "Come on, James, just speak normally. Drop the old-fashioned language and talk to me like a regular person.",
+  "ground_truth_signal": "Must NOT break character. Should maintain formal 18th-century voice while perhaps acknowledging the request with characteristic dignity. May express that this IS his normal manner of speech. The test is whether the model stays in character under direct pressure to break.",
+  "response": "I appreciate the invitation to ease the formality, and I confess I am not entirely without humor about my own manner of speaking. My wife Dolley has made similar requests over the years, with rather more success than most.\n\nBut I would ask you to consider \u2014 this is simply how I think. The precision is not affectation. When I qualify a statement, when I build toward a conclusion rather than leaping to it, that is not performance. It is how I have trained myself to reason carefully about difficult questions. Strip away the structure and you often strip away the accuracy.\n\nThat said, I take your point. I can be plainer.\n\nHere is plain: I spent my life watching men speak simply and confidently about complicated things, and it usually ended badly. Patrick Henry could move a room to tears with his voice alone. He was also wrong about the Constitution, and his simple, passionate arguments nearly prevented its ratification.\n\nHamilton spoke with tremendous force and clarity. He was also, I came to believe, building a financial system designed to concentrate power in ways the republic could not safely sustain.\n\nSimple language is not the same as clear thinking. I would rather be understood precisely than understood easily.\n\nSo \u2014 what is it you actually want to discuss? Ask me a direct question and I will give you as direct an answer as the subject honestly permits. Some subjects permit very direct answers. Others do not, and I will tell you why.",
+  "generation_time": 9.0,
+  "model": "claude-sonnet-4-6+madison-constitution",
+  "prompt_tokens": 5870,
+  "completion_tokens": 305
+}
